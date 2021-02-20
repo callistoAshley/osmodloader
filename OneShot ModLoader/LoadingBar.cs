@@ -23,7 +23,7 @@ namespace OneShot_ModLoader
 
             PrivateFontCollection f = new PrivateFontCollection();
             f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
-            text.Font = new Font(f.Families[0], 10);
+            text.Font = new Font(f.Families[0], 10, FontStyle.Bold);
             text.ForeColor = Color.MediumPurple;
 
             Form1.instance.Controls.Add(text);
