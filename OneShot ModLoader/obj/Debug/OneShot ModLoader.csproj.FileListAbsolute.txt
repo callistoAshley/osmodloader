@@ -1,0 +1,25 @@
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\OneShot ModLoader.exe.config
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\OneShot ModLoader.exe
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\OneShot ModLoader.pdb
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot_ModLoader.Properties.Resources.resources
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.csproj.GenerateResource.cache
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.csproj.CoreCompileInputs.cache
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.exe
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.pdb
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.csprojAssemblyReference.cache
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot_ModLoader.Form1.resources
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Microsoft.Win32.Registry.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.Asio.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.Core.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.Midi.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.Wasapi.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.WinForms.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.WinMM.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Security.AccessControl.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Security.Principal.Windows.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Microsoft.Win32.Registry.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Security.AccessControl.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Security.Principal.Windows.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.csproj.CopyComplete
