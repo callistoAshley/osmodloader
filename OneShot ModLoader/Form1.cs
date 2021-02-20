@@ -181,6 +181,8 @@ namespace OneShot_ModLoader
                     string message = zip.Name + " was detected as a possible zip file,\nbut an exception was encountered while trying to extract it:\n---------------\n"
                     + ex.Message + "\n---------------\n" + ex.ToString() +
                     "\nThis exception will be ignored but trying to use this mod may cause issues.";
+
+                    MessageBox.Show(message);
                 }
 
                 // delete the corresponding zip file
