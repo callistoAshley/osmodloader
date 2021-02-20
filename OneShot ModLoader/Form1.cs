@@ -442,7 +442,7 @@ namespace OneShot_ModLoader
                 }
                 // i use the DirectoryInfo class here and not in the above section because i didn't learn about it until i started writing this section
                 // and i didn't feel like changing it
-                // i still don't 
+                // i still don't
 
                 await loadingBar.SetLoadingStatus("finished up in temp");
 
