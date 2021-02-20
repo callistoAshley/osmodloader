@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Media;
 using NAudio;
 using NAudio.Wave;
+using System.Windows.Forms;
 
 namespace OneShot_ModLoader
 {
@@ -30,6 +31,8 @@ namespace OneShot_ModLoader
             {
                 string message = "An exception was encountered in the music player:\n---------------\n"
                     + ex.Message + "\n---------------\n" + ex.ToString();
+
+                MessageBox.Show(message);
             }
         }
 

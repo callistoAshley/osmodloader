@@ -17,16 +17,32 @@ namespace OneShot_ModLoader
 
         public LoadingBar()
         {
-            text.ForeColor = Color.MediumPurple;
-            text.Location = new Point(0, 190);
-            text.AutoSize = true;
+            try
+            {
+                text.ForeColor = Color.MediumPurple;
+                text.Location = new Point(0, 190);
+                text.AutoSize = true;
 
-            PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
-            text.Font = new Font(f.Families[0], 10, FontStyle.Bold);
-            text.ForeColor = Color.MediumPurple;
+                PrivateFontCollection f = new PrivateFontCollection();
+                f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+                text.Font = new Font(f.Families[0], 10);
+                text.ForeColor = Color.MediumPurple;
 
-            Form1.instance.Controls.Add(text);
+                Form1.instance.Controls.Add(text);
+            }
+            catch (ArgumentException)
+            {
+                text.ForeColor = Color.MediumPurple;
+                text.Location = new Point(0, 190);
+                text.AutoSize = true;
+
+                PrivateFontCollection f = new PrivateFontCollection();
+                f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+                text.Font = new Font(f.Families[0], 10, FontStyle.Bold);
+                text.ForeColor = Color.MediumPurple;
+
+                Form1.instance.Controls.Add(text);
+            }
         }
 
         public static string GetLoadingBGM()
