@@ -183,6 +183,7 @@ namespace OneShot_ModLoader
             if (!Verify(path)) // verify the installation
             {
                 MessageBox.Show("Could not find a valid OneShot installation at that location. Please double-check for typos in your path.");
+                Audio.Stop();
                 Form1.instance.Controls.Clear();
                 Form1.instance.InitSetupMenu();
                 return;
