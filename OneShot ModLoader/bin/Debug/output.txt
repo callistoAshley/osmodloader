@@ -1,2 +1,4 @@
 drawing start menu
 attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_decision.mp3
+drawing setup menu
