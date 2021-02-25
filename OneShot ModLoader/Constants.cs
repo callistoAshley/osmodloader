@@ -17,5 +17,7 @@ namespace OneShot_ModLoader
         public static readonly string fontsPath = Directory.GetCurrentDirectory() + "/Fonts/";
         public static readonly string modsPath = Directory.GetCurrentDirectory() + "/Mods/";
         public static readonly string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/OneShotModLoader/";
+
+        public static readonly Color wowPurple = Color.FromArgb(133, 63, 204);
     }
 }

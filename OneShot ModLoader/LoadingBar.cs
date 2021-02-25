@@ -32,6 +32,7 @@ namespace OneShot_ModLoader
             }
             catch (ArgumentException)
             {
+                Console.WriteLine("argument exception caught in loading bar cttor, attempting to render terminus in bold");
                 text.ForeColor = Color.MediumPurple;
                 text.Location = new Point(0, 190);
                 text.AutoSize = true;
@@ -45,9 +46,9 @@ namespace OneShot_ModLoader
             }
         }
 
-        public static string GetLoadingBGM()
+        public string GetLoadingBGM()
         {
-            return "bgm_0" + new Random().Next(1, 4) + ".mp3";
+            return "bgm_0" + new Random().Next(1, 5) + ".mp3";
         }
 
         public async Task SetLoadingStatus(string status)
@@ -68,7 +69,6 @@ namespace OneShot_ModLoader
             catch (Exception ex)
             {
                 string message = "exception encountered in loading bar: " + ex.Message;
-                text.Text = message;
 
                 Console.WriteLine(message + "\n---\n" + ex.ToString());
             }

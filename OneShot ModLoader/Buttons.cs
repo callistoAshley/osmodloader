@@ -152,9 +152,9 @@ namespace OneShot_ModLoader
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderColor = Color.MediumPurple;
+            FlatAppearance.BorderColor = Constants.wowPurple;
             FlatAppearance.BorderSize = 3;
-            ForeColor = Color.MediumPurple;
+            ForeColor = Constants.wowPurple;
         }
 
         protected override async void OnClick(EventArgs e)
@@ -177,8 +177,8 @@ namespace OneShot_ModLoader
         {
             runningSetup = true;
 
-            Audio.PlaySound(LoadingBar.GetLoadingBGM(), true);
             LoadingBar loadingBar = new LoadingBar();
+            Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
 
             if (!Verify(path)) // verify the installation
             {
@@ -268,9 +268,9 @@ namespace OneShot_ModLoader
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderColor = Color.MediumPurple;
+            FlatAppearance.BorderColor = Constants.wowPurple;
             FlatAppearance.BorderSize = 3;
-            ForeColor = Color.MediumPurple;
+            ForeColor = Constants.wowPurple;
         }
 
         protected override void OnClick(EventArgs e)
