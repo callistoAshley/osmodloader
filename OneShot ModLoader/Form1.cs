@@ -11,6 +11,7 @@ using System.IO;
 using System.Threading;
 using System.Drawing.Text;
 using System.IO.Compression;
+using System.Security.AccessControl;
 
 namespace OneShot_ModLoader
 {
@@ -105,7 +106,7 @@ namespace OneShot_ModLoader
             // first, initialize the instructions
             Label instructions = new Label();
             instructions.Text = "Please click on the textbox below and enter the path to your\nOneShot installation.\nEnsure that you have a clean installation with no mods.";
-            instructions.ForeColor = Color.MediumPurple;
+            instructions.ForeColor = Constants.wowPurple;
             instructions.AutoSize = true;
             instructions.Location = new Point(0, 20);
 
@@ -132,7 +133,7 @@ namespace OneShot_ModLoader
             // first, initalize the title
             Label title = new Label();
             title.Text = "Inactive Mods";
-            title.ForeColor = Color.MediumPurple;
+            title.ForeColor = Constants.wowPurple;
             title.Font = new Font(title.Font, FontStyle.Bold);
             title.Location = new Point(120, 35);
             title.Size = new Size(100, 15);
@@ -143,10 +144,15 @@ namespace OneShot_ModLoader
             Location = new Point(70, 50);
             Size = new Size(176, 175);
 
-            RefreshMods();
+            Cool();
         }
 
-        public async void RefreshMods ()
+        private async void Cool()
+        {
+            await RefreshMods();
+        }
+
+        public async Task RefreshMods ()
         {
             Nodes.Clear();
 
@@ -230,7 +236,7 @@ namespace OneShot_ModLoader
             // first, initalize the title
             Label title = new Label();
             title.Text = "Active Mods";
-            title.ForeColor = Color.MediumPurple;
+            title.ForeColor = Constants.wowPurple;
             title.Font = new Font(title.Font, FontStyle.Bold);
             title.Location = new Point(330, 35);
             title.Size = new Size(100, 15);
@@ -280,9 +286,9 @@ namespace OneShot_ModLoader
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderColor = Color.MediumPurple;
+            FlatAppearance.BorderColor = Constants.wowPurple;
             FlatAppearance.BorderSize = 3;
-            ForeColor = Color.MediumPurple;
+            ForeColor = Constants.wowPurple;
         }
 
         protected override void OnMouseEnter(EventArgs e)
@@ -320,9 +326,9 @@ namespace OneShot_ModLoader
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderColor = Color.MediumPurple;
+            FlatAppearance.BorderColor = Constants.wowPurple;
             FlatAppearance.BorderSize = 3;
-            ForeColor = Color.MediumPurple;
+            ForeColor = Constants.wowPurple;
         }
 
         protected override void OnMouseEnter(EventArgs e)
@@ -361,9 +367,9 @@ namespace OneShot_ModLoader
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderColor = Color.MediumPurple;
+            FlatAppearance.BorderColor = Constants.wowPurple;
             FlatAppearance.BorderSize = 3;
-            ForeColor = Color.MediumPurple;
+            ForeColor = Constants.wowPurple;
         }
 
         protected override void OnMouseEnter(EventArgs e)
@@ -382,7 +388,6 @@ namespace OneShot_ModLoader
             pb.Location = new Point(20, 20);
             Form1.instance.Controls.Add(pb);
 
-            Audio.PlaySound(LoadingBar.GetLoadingBGM(), true);
             await Task.Delay(1);
             try { await Apply(new LoadingBar()); }
             catch { }
@@ -392,6 +397,8 @@ namespace OneShot_ModLoader
 
         public async Task Apply (LoadingBar loadingBar)
         {
+            Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
+
             Console.WriteLine("applying changes");
             await Task.Delay(1);
 
@@ -533,9 +540,9 @@ namespace OneShot_ModLoader
             Text = "Refresh Mods";
         }
 
-        protected override void OnClick(EventArgs e)
+        protected override async void OnClick(EventArgs e)
         {
-            InactiveMods.instance.RefreshMods();
+            await InactiveMods.instance.RefreshMods();
         }
     }
 }
