@@ -48,7 +48,7 @@ namespace OneShot_ModLoader
 
         public string GetLoadingBGM()
         {
-            return "bgm_0" + new Random().Next(1, 5) + ".mp3";
+            return "bgm_0" + new Random().Next(1, 6) + ".mp3";
         }
 
         public async Task SetLoadingStatus(string status)
