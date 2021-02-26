@@ -23,3 +23,4 @@ C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Security.AccessControl.xml
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Security.Principal.Windows.xml
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.csproj.CopyComplete
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\WindowsBase.dll

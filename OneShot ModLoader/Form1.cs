@@ -12,6 +12,7 @@ using System.Threading;
 using System.Drawing.Text;
 using System.IO.Compression;
 using System.Security.AccessControl;
+using System.Windows.Input;
 
 namespace OneShot_ModLoader
 {
@@ -204,23 +205,7 @@ namespace OneShot_ModLoader
                     Nodes.Add(s2, s2);
             }
 
-            // try to read from the active mods file and add any of the mods found within to the active mods treeview
-            FileInfo activeModsFile = new FileInfo(Constants.appDataPath + "activemods.molly");
-            if (activeModsFile.Exists)
-            {
-                Console.WriteLine("active mods file exists");
-                string[] active = File.ReadAllLines(Constants.appDataPath + "activemods.molly");
-                foreach (string s in active)
-                {
-                    Console.WriteLine("found {0} in the active mods file", s);
-                    if (Nodes.ContainsKey(s))
-                    {
-                        Console.WriteLine("removing {0} from InactiveMods and adding it to ActiveMods", s);
-                        Nodes.RemoveByKey(s);
-                        ActiveMods.instance.ActivateMod(s);
-                    }
-                }
-            }
+            ActiveMods.instance.RefreshMods();
 
             loadingBar.text.Dispose();
         }
@@ -229,12 +214,15 @@ namespace OneShot_ModLoader
     public class ActiveMods : TreeView
     {
         public static ActiveMods instance;
+        public Label title;
+        public bool quickChange;
+
         public ActiveMods()
         {
             instance = this;
 
             // first, initalize the title
-            Label title = new Label();
+            title = new Label();
             title.Text = "Active Mods";
             title.ForeColor = Constants.wowPurple;
             title.Font = new Font(title.Font, FontStyle.Bold);
@@ -265,6 +253,45 @@ namespace OneShot_ModLoader
             // now readd the nodes from the cloned collection
             foreach (string s in currentActivatedMods)
                 Nodes.Add(s);
+        }
+
+        public async void ToggleQuickChange()
+        {
+            if (!quickChange)
+            {
+                title.Text = "Quick Changes";
+                Nodes.Clear();
+                await InactiveMods.instance.RefreshMods();
+            }
+            else
+            {
+                title.Text = "Active Mods";
+                Nodes.Clear();
+                RefreshMods();
+                await InactiveMods.instance.RefreshMods();
+            }
+            quickChange = !quickChange;
+        }
+
+        public void RefreshMods()
+        {
+            // try to read from the active mods file and add any of the mods found within to the active mods treeview
+            FileInfo activeModsFile = new FileInfo(Constants.appDataPath + "activemods.molly");
+            if (activeModsFile.Exists)
+            {
+                Console.WriteLine("active mods file exists");
+                string[] active = File.ReadAllLines(Constants.appDataPath + "activemods.molly");
+                foreach (string s in active)
+                {
+                    Console.WriteLine("found {0} in the active mods file", s);
+                    if (InactiveMods.instance.Nodes.ContainsKey(s))
+                    {
+                        Console.WriteLine("removing {0} from InactiveMods and adding it to ActiveMods", s);
+                        InactiveMods.instance.Nodes.RemoveByKey(s);
+                        ActivateMod(s);
+                    }
+                }
+            }
         }
     }
 }
