@@ -125,21 +125,6 @@ namespace OneShot_ModLoader
 
     public class SetupDone : Button
     {
-        public bool Verify(string path)
-        {
-            string[] check =
-            {
-                "oneshot.exe",
-                "_______.exe"
-            };
-
-            int amountFound = 0;
-            foreach (string s in check)
-                if (File.Exists(path + "/" + s)) amountFound++;
-
-            return amountFound == check.Length;
-        }
-
         public SetupDone()
         {
             Enabled = true;
@@ -169,88 +154,7 @@ namespace OneShot_ModLoader
             pb.Location = new Point(20, 20);
             Form1.instance.Controls.Add(pb);
 
-            await DoStuff(path);
-        }
-
-        public static bool runningSetup;
-        public async Task DoStuff(string path)
-        {
-            runningSetup = true;
-
-            LoadingBar loadingBar = new LoadingBar();
-            Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
-
-            if (!Verify(path)) // verify the installation
-            {
-                MessageBox.Show("Could not find a valid OneShot installation at that location. Please double-check for typos in your path.");
-                Audio.Stop();
-                Form1.instance.Controls.Clear();
-                Form1.instance.InitSetupMenu();
-                return;
-            }
-
-            try
-            {
-                Console.WriteLine("setup begin");
-
-                await loadingBar.SetLoadingStatus("working, please wait a moment");
-
-                // first we need to copy all of the directories
-                string[] dirs = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
-
-                Console.WriteLine("dirs.Length {0}", dirs.Length);
-
-                string shortDirCut = path; // shorten the directories ready to be cloned
-                string[] shortDirs = dirs;
-                for (int i = 0; i < shortDirs.Length; i++)
-                    shortDirs[i] = shortDirs[i].Replace(shortDirCut, "");
-
-                // create the new directory
-                foreach (string s in shortDirs)
-                {
-                    await loadingBar.SetLoadingStatus("setup: " + s);
-
-                    if (!Directory.Exists(Constants.modsPath + s))
-                        Directory.CreateDirectory(Constants.modsPath + "base oneshot/" + s);
-                }
-
-                // finally, copy the files to the new location
-                string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
-                string finalPath = Constants.modsPath + "base oneshot";
-
-                Console.WriteLine("files.Length {0}", files.Length);
-                for (int i = 0; i < files.Length; i++)
-                {
-                    string fileName = files[i].Replace(path, "");
-                    File.Copy(files[i], finalPath + fileName, true);
-
-                    await loadingBar.SetLoadingStatus("setup: " + fileName);
-                }
-
-                if (File.Exists(Constants.appDataPath + "path.molly"))
-                    File.Delete(Constants.appDataPath + "path.molly");
-                File.WriteAllText(Constants.appDataPath + "path.molly", path);
-
-                await loadingBar.SetLoadingStatus("almost done!");
-
-                Console.Beep();
-                MessageBox.Show("All done!");
-
-                Audio.Stop();
-
-                Form1.instance.Controls.Clear();
-                Form1.instance.InitStartMenu();
-
-                runningSetup = false;
-            }
-            catch (Exception ex)
-            {
-                string message = "An exception was encountered:\n" +
-                    ex.Message + "\n------------------\n" + ex.ToString() + "\nOneShot ModLoader will now close.";
-
-                MessageBox.Show(message);
-                Form1.instance.Close();
-            }
+            await SetupManage.DoStuff(path);
         }
     }
 
@@ -278,6 +182,153 @@ namespace OneShot_ModLoader
             Audio.PlaySound("sfx_back.mp3", false);
             Form1.instance.Controls.Clear();
             Form1.instance.InitStartMenu();
+        }
+    }
+
+    public class AddToList : Button
+    {
+        public static AddToList instance;
+
+        public AddToList()
+        {
+            instance = this;
+
+            Enabled = true;
+            Location = new Point(125, 230);
+            Size = new Size(50, 50);
+            Text = "Add to List";
+
+            PrivateFontCollection f = new PrivateFontCollection();
+            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            Font = new Font(f.Families[0], 8, FontStyle.Bold);
+
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderColor = Constants.wowPurple;
+            FlatAppearance.BorderSize = 3;
+            ForeColor = Constants.wowPurple;
+        }
+
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            Audio.PlaySound("sfx_select.mp3", false);
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            if (InactiveMods.instance.SelectedNode != null)
+            {
+                TreeNode node = InactiveMods.instance.SelectedNode;
+                ActiveMods.instance.ActivateMod(node.Text);
+                InactiveMods.instance.Nodes.Remove(node);
+
+                Audio.PlaySound("sfx_decision.mp3", false);
+            }
+        }
+    }
+
+    public class RemoveFromList : Button
+    {
+        public static RemoveFromList instance;
+        public RemoveFromList()
+        {
+            instance = this;
+
+            Enabled = true;
+            Location = new Point(230, 230);
+            Size = new Size(55, 50);
+            Text = "Remove from List";
+
+            PrivateFontCollection f = new PrivateFontCollection();
+            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            Font = new Font(f.Families[0], 8, FontStyle.Bold);
+
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderColor = Constants.wowPurple;
+            FlatAppearance.BorderSize = 3;
+            ForeColor = Constants.wowPurple;
+        }
+
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            Audio.PlaySound("sfx_select.mp3", false);
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            if (ActiveMods.instance.SelectedNode != null && ActiveMods.instance.SelectedNode.Text != "base oneshot")
+            {
+                TreeNode node = ActiveMods.instance.SelectedNode;
+
+                InactiveMods.instance.Nodes.Add((TreeNode)node.Clone());
+                ActiveMods.instance.Nodes.Remove(node);
+
+                Audio.PlaySound("sfx_back.mp3", false);
+            }
+        }
+    }
+
+    public class ApplyChanges : Button
+    {
+        public static ApplyChanges instance;
+        public ApplyChanges()
+        {
+            instance = this;
+
+            Enabled = true;
+            Location = new Point(335, 230);
+            Size = new Size(65, 50);
+            Text = "Apply\nChanges";
+
+            PrivateFontCollection f = new PrivateFontCollection();
+            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            Font = new Font(f.Families[0], 8, FontStyle.Bold);
+
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderColor = Constants.wowPurple;
+            FlatAppearance.BorderSize = 3;
+            ForeColor = Constants.wowPurple;
+        }
+
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            Audio.PlaySound("sfx_select.mp3", false);
+        }
+
+        protected override async void OnClick(EventArgs e)
+        {
+            Form1.instance.Controls.Clear();
+
+            // initialize loading box
+            PictureBox pb = new PictureBox();
+            pb.Image = Image.FromFile(Constants.spritesPath + "loading.png");
+            pb.Size = pb.Image.Size;
+            pb.Location = new Point(20, 20);
+            Form1.instance.Controls.Add(pb);
+
+            await Task.Delay(1);
+            try { await ChangesManage.Apply(new LoadingBar()); }
+            catch { }
+            Form1.instance.Controls.Clear();
+            Form1.instance.InitStartMenu();
+        }
+    }
+
+    public class RefreshMods : Button
+    {
+        public static RefreshMods instance;
+        public RefreshMods()
+        {
+            instance = this;
+
+            Enabled = true;
+            Location = new Point(5, 100);
+            Size = new Size(60, 50);
+            Text = "Refresh Mods";
+        }
+
+        protected override async void OnClick(EventArgs e)
+        {
+            await InactiveMods.instance.RefreshMods();
         }
     }
 }
