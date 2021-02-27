@@ -32,7 +32,7 @@ namespace OneShot_ModLoader
             }
             catch (ArgumentException)
             {
-                Console.WriteLine("argument exception caught in loading bar cttor, attempting to render terminus in bold");
+                Console.WriteLine("argument exception caught in loading bar ctor, attempting to render terminus in bold");
                 text.ForeColor = Color.MediumPurple;
                 text.Location = new Point(0, 190);
                 text.AutoSize = true;
