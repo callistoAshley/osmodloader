@@ -137,9 +137,9 @@ namespace OneShot_ModLoader
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderColor = Constants.wowPurple;
+            FlatAppearance.BorderColor = Color.MediumPurple;
             FlatAppearance.BorderSize = 3;
-            ForeColor = Constants.wowPurple;
+            ForeColor = Color.MediumPurple;
         }
 
         protected override async void OnClick(EventArgs e)
@@ -160,6 +160,8 @@ namespace OneShot_ModLoader
 
     public class BackButton : Button
     {
+        private bool stopAudio;
+
         public BackButton()
         {
             Enabled = true;
@@ -172,9 +174,27 @@ namespace OneShot_ModLoader
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderColor = Constants.wowPurple;
+            FlatAppearance.BorderColor = Color.MediumPurple;
             FlatAppearance.BorderSize = 3;
-            ForeColor = Constants.wowPurple;
+            ForeColor = Color.MediumPurple;
+        }
+        public BackButton(bool audioStop)
+        {
+            Enabled = true;
+            Location = new Point(0, 230);
+            Size = new Size(65, 50);
+            Text = "Back";
+
+            PrivateFontCollection f = new PrivateFontCollection();
+            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            Font = new Font(f.Families[0], 8, FontStyle.Bold);
+
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderColor = Color.MediumPurple;
+            FlatAppearance.BorderSize = 3;
+            ForeColor = Color.MediumPurple;
+
+            stopAudio = audioStop;
         }
 
         protected override void OnClick(EventArgs e)
@@ -182,6 +202,8 @@ namespace OneShot_ModLoader
             Audio.PlaySound("sfx_back.mp3", false);
             Form1.instance.Controls.Clear();
             Form1.instance.InitStartMenu();
+
+            if (stopAudio) Audio.Stop();
         }
     }
 
@@ -203,9 +225,9 @@ namespace OneShot_ModLoader
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderColor = Constants.wowPurple;
+            FlatAppearance.BorderColor = Color.MediumPurple;
             FlatAppearance.BorderSize = 3;
-            ForeColor = Constants.wowPurple;
+            ForeColor = Color.MediumPurple;
         }
 
         protected override void OnMouseEnter(EventArgs e)
@@ -243,9 +265,9 @@ namespace OneShot_ModLoader
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderColor = Constants.wowPurple;
+            FlatAppearance.BorderColor = Color.MediumPurple;
             FlatAppearance.BorderSize = 3;
-            ForeColor = Constants.wowPurple;
+            ForeColor = Color.MediumPurple;
         }
 
         protected override void OnMouseEnter(EventArgs e)
@@ -284,9 +306,9 @@ namespace OneShot_ModLoader
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderColor = Constants.wowPurple;
+            FlatAppearance.BorderColor = Color.MediumPurple;
             FlatAppearance.BorderSize = 3;
-            ForeColor = Constants.wowPurple;
+            ForeColor = Color.MediumPurple;
         }
 
         protected override void OnMouseEnter(EventArgs e)
@@ -329,6 +351,41 @@ namespace OneShot_ModLoader
         protected override async void OnClick(EventArgs e)
         {
             await InactiveMods.instance.RefreshMods();
+        }
+    }
+
+    public class CloverSecret : PictureBox
+    {
+        public CloverSecret()
+        {
+            Image = Image.FromFile(Constants.spritesPath + "clover.png");
+            Size = Image.Size;
+            Location = new Point(500, 290);
+            Enabled = true;
+            BackColor = Color.Transparent;
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            Form1.instance.Controls.Clear();
+
+            Label text = new Label();
+            text.Text = "Perhaps you should return here later.\nYou'll know when you need to.";
+            text.TextAlign = ContentAlignment.MiddleCenter;
+            text.Location = new Point(120, 140);
+            text.BackColor = Color.Transparent;
+            text.ForeColor = Color.MediumPurple;
+
+            PrivateFontCollection f = new PrivateFontCollection();
+            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            text.Font = new Font(f.Families[0], 12, FontStyle.Bold);
+            text.AutoSize = true;
+            text.Enabled = true;
+
+            Form1.instance.Controls.Add(text);
+            Form1.instance.Controls.Add(new BackButton(true));
+
+            Audio.PlaySound("bgm_countdown.mp3", false);
         }
     }
 }

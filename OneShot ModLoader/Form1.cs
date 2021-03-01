@@ -87,6 +87,9 @@ namespace OneShot_ModLoader
             new ModsButton();
             //new BrowseMods();
             new Setup();
+
+            // secret
+            Controls.Add(new CloverSecret());
         }
 
         public void InitModsMenu()
@@ -107,7 +110,7 @@ namespace OneShot_ModLoader
             // first, initialize the instructions
             Label instructions = new Label();
             instructions.Text = "Please click on the textbox below and enter the path to your\nOneShot installation.\nEnsure that you have a clean installation with no mods.";
-            instructions.ForeColor = Constants.wowPurple;
+            instructions.ForeColor = Color.MediumPurple;
             instructions.AutoSize = true;
             instructions.Location = new Point(0, 20);
 
@@ -134,7 +137,7 @@ namespace OneShot_ModLoader
             // first, initalize the title
             Label title = new Label();
             title.Text = "Inactive Mods";
-            title.ForeColor = Constants.wowPurple;
+            title.ForeColor = Color.MediumPurple;
             title.Font = new Font(title.Font, FontStyle.Bold);
             title.Location = new Point(120, 35);
             title.Size = new Size(100, 15);
@@ -224,7 +227,7 @@ namespace OneShot_ModLoader
             // first, initalize the title
             title = new Label();
             title.Text = "Active Mods";
-            title.ForeColor = Constants.wowPurple;
+            title.ForeColor = Color.MediumPurple;
             title.Font = new Font(title.Font, FontStyle.Bold);
             title.Location = new Point(330, 35);
             title.Size = new Size(100, 15);

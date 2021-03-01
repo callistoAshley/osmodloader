@@ -1,16 +1,13 @@
 drawing start menu
 attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
 attempting to play sound: sfx_decision.mp3
 drawing mods menu
 oneshot path is C:\Program Files (x86)\Steam\steamapps\common\OneShot
 active mods file exists
-found chapter-1 in the active mods file
-removing chapter-1 from InactiveMods and adding it to ActiveMods
 found base oneshot in the active mods file
 attempting to play sound: sfx_select.mp3
-attempting to play sound: sfx_back.mp3
-attempting to play sound: sfx_select.mp3
-attempting to play sound: bgm_02.mp3
+attempting to play sound: bgm_04.mp3
 applying changes
 mod name is base oneshot
 mod path C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug/Mods/base oneshot
@@ -1657,8 +1654,20 @@ activeMods.Count 1
 drawing start menu
 attempting to play sound: sfx_select.mp3
 attempting to play sound: sfx_select.mp3
-attempting to play sound: sfx_decision.mp3
-drawing mods menu
-oneshot path is C:\Program Files (x86)\Steam\steamapps\common\OneShot
-active mods file exists
-found base oneshot in the active mods file
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3

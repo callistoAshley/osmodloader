@@ -12,7 +12,7 @@ namespace OneShot_ModLoader
 {
     public class Audio
     {
-        public static WaveOutEvent activeWaveOut;
+        public static List<WaveOutEvent> activeWaveOuts = new List<WaveOutEvent>();
         public static void PlaySound(string sound, bool loop) // this used to use the System.Media.SoundPlayer class, which could loop tracks
         {
             Console.WriteLine("attempting to play sound: " + sound);
@@ -25,7 +25,7 @@ namespace OneShot_ModLoader
                 waveOut.Init(a);
                 waveOut.Play();
 
-                activeWaveOut = waveOut;
+                activeWaveOuts.Add(waveOut);
             }
             catch (Exception ex)
             {
@@ -38,7 +38,8 @@ namespace OneShot_ModLoader
 
         public static void Stop()
         {
-            activeWaveOut.Stop();
+            foreach (WaveOutEvent w in activeWaveOuts) w.Stop();
+            activeWaveOuts.Clear();
         }
     }
 }
