@@ -20,7 +20,6 @@ namespace OneShot_ModLoader
     {
         public static Form1 instance;
         public static readonly string modsPath = Directory.GetCurrentDirectory() + "/Mods";
-        public static bool debugMode;
         public static string baseOneShotPath;
         public static TextWriter consoleOut = Console.Out;
         public static StreamWriter consoleOutStream;
@@ -41,8 +40,6 @@ namespace OneShot_ModLoader
             consoleOutStream = new StreamWriter(Directory.GetCurrentDirectory() + "/output.txt");
             Console.SetOut(consoleOutStream);
             Console.SetError(consoleOutStream);
-            if (debugMode)
-                MessageBox.Show("debug mode is on");
 
             // init stuff
             instance = this;
@@ -163,8 +160,8 @@ namespace OneShot_ModLoader
             // create the mods directory if it doesn't exist
             if (!Directory.Exists(Form1.modsPath))
                 Directory.CreateDirectory(Form1.modsPath);
-            else if ((!Directory.Exists(Form1.modsPath + "/base oneshot") || !File.Exists(
-                Constants.appDataPath + "path.molly")) && !Form1.debugMode)
+            else if (!Directory.Exists(Form1.modsPath + "/base oneshot") || !File.Exists(
+                Constants.appDataPath + "path.molly"))
             {
                 MessageBox.Show("A base oneshot could not be found. Please open the setup page and follow the instructions.");
                 Form1.instance.Controls.Clear();
@@ -184,7 +181,8 @@ namespace OneShot_ModLoader
                 Console.WriteLine("attempting to extract {0}", zip.FullName);
                 try
                 {
-                    ZipFile.ExtractToDirectory(zip.FullName, Form1.modsPath + "/" + zip.Name.Replace(".zip", ""));
+                    if (zip.Extension == ".zip")
+                        ZipFile.ExtractToDirectory(zip.FullName, Form1.modsPath + "/" + zip.Name.Replace(".zip", ""));
                 }
                 catch (Exception ex)
                 {
