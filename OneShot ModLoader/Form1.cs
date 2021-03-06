@@ -46,15 +46,6 @@ namespace OneShot_ModLoader
             BackColor = Color.Black;
 
             InitStartMenu();
-
-            /*
-            Controls.Add(new ActiveMods());
-            Controls.Add(new InactiveMods());
-            Controls.Add(new AddToList());
-            Controls.Add(new RemoveFromList());
-            Controls.Add(new RefreshMods());
-            Controls.Add(new ApplyChanges());
-            */
         }
 
         protected override void OnClosed(EventArgs e)
@@ -84,6 +75,7 @@ namespace OneShot_ModLoader
             new ModsButton();
             //new BrowseMods();
             new Setup();
+            Controls.Add(new DevToolsButton());
 
             // secret
             Controls.Add(new CloverSecret());
@@ -172,7 +164,7 @@ namespace OneShot_ModLoader
             Form1.baseOneShotPath = File.ReadAllText(Constants.appDataPath + "path.molly");
             Console.WriteLine("oneshot path is " + Form1.baseOneShotPath);
 
-            LoadingBar loadingBar = new LoadingBar();
+            LoadingBar loadingBar = new LoadingBar(Form1.instance);
 
             // now we extract any existing zip files
             foreach (FileInfo zip in new DirectoryInfo(Form1.modsPath).GetFiles()) 

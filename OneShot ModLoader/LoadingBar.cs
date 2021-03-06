@@ -15,7 +15,7 @@ namespace OneShot_ModLoader
     {
         public Label text = new Label();
 
-        public LoadingBar()
+        public LoadingBar(Form form)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace OneShot_ModLoader
                 text.Font = new Font(f.Families[0], 10);
                 text.ForeColor = Color.MediumPurple;
 
-                Form1.instance.Controls.Add(text);
+                form.Controls.Add(text);
             }
             catch (ArgumentException)
             {
@@ -42,7 +42,7 @@ namespace OneShot_ModLoader
                 text.Font = new Font(f.Families[0], 10, FontStyle.Bold);
                 text.ForeColor = Color.MediumPurple;
 
-                Form1.instance.Controls.Add(text);
+                form.Controls.Add(text);
             }
         }
 
