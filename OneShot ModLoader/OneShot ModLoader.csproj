@@ -104,6 +104,9 @@
     <Compile Include="Buttons.cs" />
     <Compile Include="ChangesManage.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DevToolsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

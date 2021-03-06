@@ -29,7 +29,7 @@ namespace OneShot_ModLoader
     {
         public static async Task DoStuff(string path)
         {
-            LoadingBar loadingBar = new LoadingBar();
+            LoadingBar loadingBar = new LoadingBar(Form1.instance);
             Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
 
             if (!new Yo().Verify(path)) // verify the installation

@@ -110,6 +110,36 @@ namespace OneShot_ModLoader
         }
     }
 
+    public class DevToolsButton : PictureBox
+    {
+        public DevToolsButton()
+        {
+            Image = Image.FromFile(Constants.spritesPath + "button_tools.png");
+            Size = Image.Size;
+            Location = new Point(410, 10);
+        }
+
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            ButtonsGlobalStuff.Glow(this, "button_tools");
+            Audio.PlaySound("sfx_select.mp3", false);
+        }
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            ButtonsGlobalStuff.GlowOut(this, "button_tools");
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            if (DevToolsForm.instance == null)
+            {
+                Audio.PlaySound("sfx_decision.mp3", false);
+                new DevToolsForm();
+            }
+            else Audio.PlaySound("sfx_denied.mp3", false);
+        }
+    }
+
     public class SetupPrompt : TextBox
     {
         public static SetupPrompt instance;
@@ -328,7 +358,7 @@ namespace OneShot_ModLoader
             Form1.instance.Controls.Add(pb);
 
             await Task.Delay(1);
-            try { await ChangesManage.Apply(new LoadingBar()); }
+            try { await ChangesManage.Apply(new LoadingBar(Form1.instance)); }
             catch { }
             Form1.instance.Controls.Clear();
             Form1.instance.InitStartMenu();
