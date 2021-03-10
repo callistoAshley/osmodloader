@@ -38,7 +38,7 @@ namespace OneShot_ModLoader
 
                     string mod = t.Text;
                     Console.WriteLine("mod name is " + mod);
-                    string fullModPath = Form1.modsPath + "/" + mod;
+                    string fullModPath = Constants.modsPath + "/" + mod;
                     Console.WriteLine("mod path {0}", fullModPath);
 
                     string[] modDirs = Directory.GetDirectories(fullModPath, "*", SearchOption.AllDirectories);
@@ -139,6 +139,84 @@ namespace OneShot_ModLoader
                 Console.WriteLine(message);
                 MessageBox.Show(message);
                 Form1.instance.Close();
+            }
+        }
+
+        public static async Task DirectApply(LoadingBar loadingBar, DirectoryInfo mod, bool uninstallExisting)
+        {
+            try
+            {
+                DirectoryInfo baseOs = new DirectoryInfo(Form1.baseOneShotPath);
+                if (uninstallExisting && baseOs.Exists)
+                    baseOs.Delete(true);
+                if (!Directory.Exists(Form1.baseOneShotPath)) Directory.CreateDirectory(Form1.baseOneShotPath);
+
+                string shorten = mod.FullName;
+
+                // first, create the directories
+                foreach (DirectoryInfo d in mod.GetDirectories("*", SearchOption.AllDirectories))
+                {
+                    string newDir = d.FullName.Replace(shorten, string.Empty);
+                    //MessageBox.Show(string.Format("base os path: {0}\nnew dir to combine w: {1}", Form1.baseOneShotPath, newDir));
+                    if (!Directory.Exists(Form1.baseOneShotPath + newDir))
+                    {
+                        Directory.CreateDirectory(Form1.baseOneShotPath + newDir);
+                        Console.WriteLine("creating directory {0}", Form1.baseOneShotPath + newDir);
+                        await loadingBar.SetLoadingStatus(string.Format("creating directory {0}", newDir));
+                    }
+                }
+
+                // then copy the files
+                foreach (FileInfo f in mod.GetFiles("*", SearchOption.AllDirectories))
+                {
+                    string newLocation = Form1.baseOneShotPath + f.FullName.Replace(shorten, string.Empty);
+                    if (!File.Exists(newLocation))
+                    {
+                        File.Copy(f.FullName, newLocation);
+                        Console.WriteLine("copied {0} to {1}", f.FullName, newLocation);
+                        await loadingBar.SetLoadingStatus(newLocation);
+                    }
+                }
+
+                // if the user chose to uninstall any existing mods, we copy over the stuff from the base oneshot path too
+                DirectoryInfo cool = new DirectoryInfo(Constants.modsPath + "base oneshot/");
+                shorten = cool.FullName;
+                if (uninstallExisting)
+                {
+                    // the directories
+                    foreach (DirectoryInfo d in cool.GetDirectories("*", SearchOption.AllDirectories))
+                    {
+                        string newDir = d.FullName.Replace(shorten, string.Empty);
+                        if (!Directory.Exists(Form1.baseOneShotPath + "/" + newDir))
+                        {
+                            Console.WriteLine("creating directory " + Directory.CreateDirectory(Form1.baseOneShotPath + "/" + newDir).ToString());
+                            await loadingBar.SetLoadingStatus(string.Format("final: creating directory {0}", newDir));
+                        }
+                    }
+
+                    // the files
+                    foreach (FileInfo f in cool.GetFiles("*", SearchOption.AllDirectories))
+                    {
+                        string newLocation = Form1.baseOneShotPath + "/" + f.FullName.Replace(shorten, string.Empty);
+                        if (!File.Exists(newLocation))
+                        {
+                            File.Copy(f.FullName, newLocation);
+                            Console.WriteLine("coping {0} to {1}", f.FullName, newLocation);
+                            await loadingBar.SetLoadingStatus("final: " + newLocation);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = "An exception was encountered:\n---------------\n"
+                    + ex.Message + "\n---------------\n" + ex.ToString() +
+                    "\nOneShot ModLoader will now close.";
+
+                Console.WriteLine(message);
+                MessageBox.Show(message);
+
+                OCIForm.instance.Close();
             }
         }
     }

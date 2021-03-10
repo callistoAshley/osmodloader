@@ -7,6 +7,7 @@ using System.Media;
 using NAudio;
 using NAudio.Wave;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace OneShot_ModLoader
 {
@@ -14,7 +15,7 @@ namespace OneShot_ModLoader
     {
         public static List<WaveOutEvent> activeWaveOuts = new List<WaveOutEvent>();
         public static void PlaySound(string sound, bool loop) // this used to use the System.Media.SoundPlayer class, which could loop tracks
-        {
+        {// naudio probably can too but i haven't figured out how to yet
             Console.WriteLine("attempting to play sound: " + sound);
 
             try
