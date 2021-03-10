@@ -23,6 +23,7 @@ namespace OneShot_ModLoader
             BackgroundImage = Image.FromFile(Constants.spritesPath + "terminal.png");
             BackgroundImageLayout = ImageLayout.Center;
             BackColor = Color.Black;
+            Icon = new Icon(Constants.spritesPath + "devtools.ico");
 
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Show();
@@ -38,6 +39,7 @@ namespace OneShot_ModLoader
         protected override void OnClosed(EventArgs e)
         {
             instance = null;
+            Audio.PlaySound("sfx_back.mp3", false);
         }
     }
 
@@ -61,28 +63,31 @@ namespace OneShot_ModLoader
             browse.Description = "Please navigate to your mod's path.";
             browse.ShowDialog();
 
-            try
+            if (browse.SelectedPath != string.Empty)
             {
-                LoadingBar loadingBar = new LoadingBar(DevToolsForm.instance);
-                Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
-                await loadingBar.SetLoadingStatus("Please wait a moment...");
-
-                await Task.Run(() =>
+                try
                 {
-                    ZipFile.CreateFromDirectory(browse.SelectedPath, browse.SelectedPath + ".osml");
-                });
+                    LoadingBar loadingBar = new LoadingBar(DevToolsForm.instance);
+                    Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
+                    await loadingBar.SetLoadingStatus("Please wait a moment...");
 
-                Console.Beep();
-                MessageBox.Show("All done!");
+                    await Task.Run(() =>
+                    {
+                        ZipFile.CreateFromDirectory(browse.SelectedPath, browse.SelectedPath + ".osml");
+                    });
 
-                loadingBar.text.Dispose();
-                Audio.Stop();
-            }
-            catch (Exception ex)
-            {
-                string message = "An exception was encountered:\n" + ex.Message +
-                    "\n------------------\n" + ex.ToString();
-                MessageBox.Show(message);
+                    Console.Beep();
+                    MessageBox.Show("All done!");
+
+                    loadingBar.text.Dispose();
+                    Audio.Stop();
+                }
+                catch (Exception ex)
+                {
+                    string message = "An exception was encountered:\n" + ex.Message +
+                        "\n------------------\n" + ex.ToString();
+                    MessageBox.Show(message);
+                }
             }
 
             DevToolsForm.instance.Init();

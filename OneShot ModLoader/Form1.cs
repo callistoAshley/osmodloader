@@ -19,7 +19,6 @@ namespace OneShot_ModLoader
     public partial class Form1 : Form
     {
         public static Form1 instance;
-        public static readonly string modsPath = Directory.GetCurrentDirectory() + "/Mods";
         public static string baseOneShotPath;
         public static TextWriter consoleOut = Console.Out;
         public static StreamWriter consoleOutStream;
@@ -34,12 +33,6 @@ namespace OneShot_ModLoader
         {
             if (!Directory.Exists(Constants.appDataPath))
                 Directory.CreateDirectory(Constants.appDataPath);
-            baseOneShotPath = "UNSET";
-
-            // console out stuff
-            consoleOutStream = new StreamWriter(Directory.GetCurrentDirectory() + "/output.txt");
-            Console.SetOut(consoleOutStream);
-            Console.SetError(consoleOutStream);
 
             // init stuff
             instance = this;
@@ -50,11 +43,7 @@ namespace OneShot_ModLoader
 
         protected override void OnClosed(EventArgs e)
         {
-            Console.SetOut(consoleOut);
-            Console.SetError(consoleOut);
-
-            consoleOutStream.Close();
-            consoleOut.Close();
+            Program.ConsoleToFile();
         }
 
         public void InitStartMenu()
@@ -150,10 +139,9 @@ namespace OneShot_ModLoader
             Nodes.Clear();
 
             // create the mods directory if it doesn't exist
-            if (!Directory.Exists(Form1.modsPath))
-                Directory.CreateDirectory(Form1.modsPath);
-            else if (!Directory.Exists(Form1.modsPath + "/base oneshot") || !File.Exists(
-                Constants.appDataPath + "path.molly"))
+            if (!Directory.Exists(Constants.modsPath))
+                Directory.CreateDirectory(Constants.modsPath);
+            else if (!Program.doneSetup)
             {
                 MessageBox.Show("A base oneshot could not be found. Please open the setup page and follow the instructions.");
                 Form1.instance.Controls.Clear();
@@ -167,14 +155,14 @@ namespace OneShot_ModLoader
             LoadingBar loadingBar = new LoadingBar(Form1.instance);
 
             // now we extract any existing zip files
-            foreach (FileInfo zip in new DirectoryInfo(Form1.modsPath).GetFiles()) 
+            foreach (FileInfo zip in new DirectoryInfo(Constants.modsPath).GetFiles()) 
             {
                 await loadingBar.SetLoadingStatus(string.Format("attempting to extract {0},\nplease wait a moment", zip.Name));
                 Console.WriteLine("attempting to extract {0}", zip.FullName);
                 try
                 {
                     if (zip.Extension == ".zip")
-                        ZipFile.ExtractToDirectory(zip.FullName, Form1.modsPath + "/" + zip.Name.Replace(".zip", ""));
+                        ZipFile.ExtractToDirectory(zip.FullName, Constants.modsPath + "/" + zip.Name.Replace(".zip", ""));
                 }
                 catch (Exception ex)
                 {
@@ -190,7 +178,7 @@ namespace OneShot_ModLoader
             }
 
             // add the mods to the treeview
-            string[] mods = Directory.GetDirectories(Form1.modsPath);
+            string[] mods = Directory.GetDirectories(Constants.modsPath);
             foreach (string s in mods)
             {
                 string s2 = s.Substring(s.LastIndexOf("Mods") + 5);

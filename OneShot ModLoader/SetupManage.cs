@@ -90,6 +90,8 @@ namespace OneShot_ModLoader
 
                 Audio.Stop();
 
+                Program.doneSetup = true;
+
                 Form1.instance.Controls.Clear();
                 Form1.instance.InitStartMenu();
             }
