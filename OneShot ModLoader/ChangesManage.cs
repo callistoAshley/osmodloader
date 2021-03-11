@@ -205,6 +205,25 @@ namespace OneShot_ModLoader
                             await loadingBar.SetLoadingStatus("final: " + newLocation);
                         }
                     }
+
+                    // finally, write to the active mods file
+                    List<string> currentlyActive = File.ReadAllLines(Constants.appDataPath + "activemods.molly").ToList<string>();
+                    if (File.Exists(Constants.appDataPath + "activemods.molly")) // first, delete the file if it exists
+                        File.Delete(Constants.appDataPath + "activemods.molly");
+                    
+                    // then insert the name of the mod at the beginning of a new collection
+                    if (!uninstallExisting)
+                        currentlyActive.Insert(0, mod.Name);
+                    else
+                    {
+                        currentlyActive = new List<string>
+                        {
+                            mod.Name,
+                            "base oneshot"
+                        };
+                    }
+                    // write the file
+                    File.WriteAllLines(Constants.appDataPath + "activemods.molly", currentlyActive);
                 }
             }
             catch (Exception ex)

@@ -117,6 +117,9 @@
     <Compile Include="OCIForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="OCILoadingBuddy.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetupManage.cs" />
