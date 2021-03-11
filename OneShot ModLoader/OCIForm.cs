@@ -37,8 +37,7 @@ namespace OneShot_ModLoader
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Text = "One-Click Install";
             Size = new Size(500, 400);
-            BackgroundImage = Image.FromFile(Constants.spritesPath + "oci_bg.png");
-            BackgroundImageLayout = ImageLayout.Stretch;
+            SetTheme();
             Icon = new Icon(Constants.spritesPath + "oci_icon.ico");
 
             MaximizeBox = false;
@@ -66,6 +65,36 @@ namespace OneShot_ModLoader
         protected override void OnClosed(EventArgs e)
         {
             Program.ConsoleToFile();
+        }
+
+        private void SetTheme ()
+        {
+            int theme = new Random().Next(1, 5);
+            string themeString = "blue";
+
+            switch (theme)
+            {
+                case 1:
+                    themeString = "blue";
+                    break;
+                case 2:
+                    themeString = "green";
+                    break;
+                case 3:
+                    themeString = "red";
+                    break;
+                    /*
+                default:
+                    themeString = "twm";
+                    break;
+                    */
+            }
+
+
+            new OCILoadingBuddy(themeString);
+
+            BackgroundImage = Image.FromFile(string.Format(Constants.spritesPath + "oci_bg_{0}.png", themeString));
+            BackgroundImageLayout = ImageLayout.Stretch;
         }
     }
 

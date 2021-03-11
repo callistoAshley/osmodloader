@@ -1,11 +1,3 @@
-drawing start menu
-attempting to play sound: sfx_select.mp3
-attempting to play sound: sfx_select.mp3
-attempting to play sound: sfx_decision.mp3
-drawing mods menu
-oneshot path is C:\Program Files (x86)\Steam\steamapps\common\OneShot
-active mods file exists
-found base oneshot in the active mods file
-attempting to play sound: sfx_back.mp3
-drawing start menu
-attempting to play sound: sfx_select.mp3
+OCIForm intialized with args: 
+*C:\Users\maste\Desktop\OneShot Projects\Chapter 1 EASTER EDITION.osml
+attempting to play sound: bgm_oci.mp3
