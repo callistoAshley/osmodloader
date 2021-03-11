@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace OneShot_ModLoader
 {
     public class OCILoadingBuddy : PictureBox
-    {
+    { 
         public OCILoadingBuddy(string theme)
         {
             Size = new Size(1000, 1000);
