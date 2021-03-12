@@ -57,12 +57,11 @@ namespace OneShot_ModLoader
                     string[] modFiles = Directory.GetFiles(fullModPath, "*", SearchOption.AllDirectories);
                     foreach (string s in modFiles)
                     {
+                        await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, s));
+
                         string mod2 = s.Replace(modDirCut, "");
                         if (!File.Exists(tempPath + mod2))
-                        {
-                            await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, s));
                             File.Copy(fullModPath + mod2, tempPath + mod2);
-                        }
                     }
                 }
                 // i use the DirectoryInfo class here and not in the above section because i didn't learn about it until i started writing this section
