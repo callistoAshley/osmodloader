@@ -38,7 +38,7 @@ namespace OneShot_ModLoader
 
                     string mod = t.Text;
                     Console.WriteLine("mod name is " + mod);
-                    string fullModPath = Constants.modsPath + "/" + mod;
+                    string fullModPath = Constants.modsPath + mod;
                     Console.WriteLine("mod path {0}", fullModPath);
 
                     string[] modDirs = Directory.GetDirectories(fullModPath, "*", SearchOption.AllDirectories);
@@ -50,7 +50,7 @@ namespace OneShot_ModLoader
 
                         string mod2 = s.Replace(modDirCut, "");
                         if (!Directory.Exists(tempPath + mod2))
-                            Console.WriteLine("--creating directory: " + Directory.CreateDirectory(tempPath + mod2));
+                            Console.WriteLine("--creating directory: " + Directory.CreateDirectory(Path.Combine(tempPath, mod2)));
                     }
 
                     // now the files
@@ -61,7 +61,7 @@ namespace OneShot_ModLoader
 
                         string mod2 = s.Replace(modDirCut, "");
                         if (!File.Exists(tempPath + mod2))
-                            File.Copy(fullModPath + mod2, tempPath + mod2);
+                            File.Copy(fullModPath + mod2, tempPath + "/" + mod2);
                     }
                 }
                 // i use the DirectoryInfo class here and not in the above section because i didn't learn about it until i started writing this section
@@ -206,7 +206,7 @@ namespace OneShot_ModLoader
                     }
 
                     // finally, write to the active mods file
-                    List<string> currentlyActive = File.ReadAllLines(Constants.appDataPath + "activemods.molly").ToList();
+                    List<string> currentlyActive = File.ReadAllLines(Constants.appDataPath + "activemods.molly").ToList<string>();
                     if (File.Exists(Constants.appDataPath + "activemods.molly")) // first, delete the file if it exists
                         File.Delete(Constants.appDataPath + "activemods.molly");
                     
