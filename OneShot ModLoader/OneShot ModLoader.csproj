@@ -107,6 +107,9 @@
     <Compile Include="DevToolsForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="DTModMetadataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
