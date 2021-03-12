@@ -207,7 +207,7 @@ namespace OneShot_ModLoader
                     }
 
                     // finally, write to the active mods file
-                    List<string> currentlyActive = File.ReadAllLines(Constants.appDataPath + "activemods.molly").ToList<string>();
+                    List<string> currentlyActive = File.ReadAllLines(Constants.appDataPath + "activemods.molly").ToList();
                     if (File.Exists(Constants.appDataPath + "activemods.molly")) // first, delete the file if it exists
                         File.Delete(Constants.appDataPath + "activemods.molly");
                     
