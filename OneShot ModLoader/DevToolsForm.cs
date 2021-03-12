@@ -34,6 +34,7 @@ namespace OneShot_ModLoader
         public void Init()
         {
             Controls.Add(new OSMLCompressionButton());
+            Controls.Add(new OSMLMetadataButton());
         }
 
         protected override void OnClosed(EventArgs e)
@@ -86,11 +87,48 @@ namespace OneShot_ModLoader
                 {
                     string message = "An exception was encountered:\n" + ex.Message +
                         "\n------------------\n" + ex.ToString();
+                    Console.WriteLine(message);
                     MessageBox.Show(message);
                 }
             }
 
             DevToolsForm.instance.Init();
+        }
+    }
+    public class OSMLMetadataButton : Button
+    {
+        public OSMLMetadataButton()
+        {
+            Location = new Point(10, 35);
+            Size = new Size(150, 20);
+            BackColor = Color.White;
+            Text = "Generate mod metadata";
+
+            Focus();
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            DevToolsForm.instance.Controls.Clear();
+
+            FolderBrowserDialog browse = new FolderBrowserDialog();
+            browse.Description = "Please navigate to your mod's path.";
+            browse.ShowDialog();
+
+            if (browse.SelectedPath != string.Empty)
+            {
+                try
+                {
+                    new DTModMetadataForm(browse.SelectedPath);
+                }
+                catch (Exception ex)
+                {
+                    string message = "An exception was encountered:\n" + ex.Message +
+                        "\n------------------\n" + ex.ToString();
+                    Console.WriteLine(message);
+                    MessageBox.Show(message);
+                }
+            }
         }
     }
 }

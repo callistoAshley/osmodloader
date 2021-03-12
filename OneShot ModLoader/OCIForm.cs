@@ -21,7 +21,7 @@ namespace OneShot_ModLoader
         public OCIForm(string[] things)
         {
             Console.WriteLine("OCIForm intialized with args: ");
-            foreach (string s in things) Console.WriteLine("*" + s);
+            foreach (string s in things) Console.WriteLine(" " + s);
             if (!Program.doneSetup)
             {
                 Console.WriteLine("base os not found, attempting to close oci form");

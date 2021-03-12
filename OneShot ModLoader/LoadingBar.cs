@@ -17,33 +17,15 @@ namespace OneShot_ModLoader
 
         public LoadingBar(Form form)
         {
-            try
-            {
-                text.ForeColor = Color.MediumPurple;
-                text.Location = new Point(0, 190);
-                text.AutoSize = true;
+            text.ForeColor = Color.MediumPurple;
+            text.Location = new Point(0, 190);
+            text.AutoSize = true;
 
-                PrivateFontCollection f = new PrivateFontCollection();
-                f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
-                text.Font = new Font(f.Families[0], 10);
-                text.ForeColor = Color.MediumPurple;
+            text.Font = Constants.GetTerminusFont(10);
+            text.ForeColor = Color.MediumPurple;
+            text.BackColor = Color.Transparent;
 
-                form.Controls.Add(text);
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("argument exception caught in loading bar ctor, attempting to render terminus in bold");
-                text.ForeColor = Color.MediumPurple;
-                text.Location = new Point(0, 190);
-                text.AutoSize = true;
-
-                PrivateFontCollection f = new PrivateFontCollection();
-                f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
-                text.Font = new Font(f.Families[0], 10, FontStyle.Bold);
-                text.ForeColor = Color.MediumPurple;
-
-                form.Controls.Add(text);
-            }
+            form.Controls.Add(text);
         }
 
         public string GetLoadingBGM()

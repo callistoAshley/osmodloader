@@ -1,3 +1,4 @@
-OCIForm intialized with args: 
-*C:\Users\maste\Desktop\OneShot Projects\Chapter 1 EASTER EDITION.osml
-attempting to play sound: bgm_oci.mp3
+drawing start menu
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_decision.mp3
+attempting to play sound: sfx_back.mp3
