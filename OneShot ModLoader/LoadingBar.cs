@@ -50,6 +50,7 @@ namespace OneShot_ModLoader
             }
             catch (Exception ex)
             {
+                text.Font = new Font(new FontFamily(GenericFontFamilies.Monospace), 10);
                 string message = "exception encountered in loading bar: " + ex.Message;
 
                 Console.WriteLine(message + "\n---\n" + ex.ToString());
