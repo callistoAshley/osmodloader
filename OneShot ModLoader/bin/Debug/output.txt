@@ -3,82 +3,11 @@ attempting to play sound: sfx_select.mp3
 attempting to play sound: sfx_decision.mp3
 drawing mods menu
 oneshot path is C:\Program Files (x86)\Steam\steamapps\common\OneShot
+attempting to extract C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Mods\Chapter 1 EASTER EDITION.zip
 active mods file exists
-found Chapter 1 EASTER EDITION.osml in the active mods file
-removing Chapter 1 EASTER EDITION.osml from InactiveMods and adding it to ActiveMods
 found base oneshot in the active mods file
 attempting to play sound: sfx_select.mp3
-attempting to play sound: sfx_back.mp3
 attempting to play sound: sfx_select.mp3
-attempting to play sound: bgm_04.mp3
-applying changes
-mod name is base oneshot
-mod path C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Mods/base oneshot
-modDirs.Length56
---creating directory: Audio
---creating directory: Data
---creating directory: Fonts
---creating directory: Graphics
---creating directory: Languages
---creating directory: Wallpaper
---creating directory: BGM
---creating directory: BGS
---creating directory: ME
---creating directory: SE
---creating directory: Animations
---creating directory: Autotiles
---creating directory: Characters
---creating directory: Faces
---creating directory: Fogs
---creating directory: Icons
---creating directory: Lightmaps
---creating directory: Lights
---creating directory: Menus
---creating directory: Misc
---creating directory: Panoramas
---creating directory: Pictures
---creating directory: Tilesets
---creating directory: Titles
---creating directory: Transitions
---creating directory: Windowskins
---creating directory: _
---creating directory: scenario1
---creating directory: scenario2
---creating directory: en
---creating directory: es
---creating directory: fr
---creating directory: ja
---creating directory: ko
---creating directory: pt_br
---creating directory: zh_cn
---creating directory: en
---creating directory: es
---creating directory: fr
---creating directory: ja
---creating directory: ko
---creating directory: pt_br
---creating directory: zh_cn
---creating directory: es
---creating directory: fr
---creating directory: ja
---creating directory: ko
---creating directory: pt_BR
---creating directory: zh_CN
---creating directory: internal
---creating directory: es
---creating directory: fr
---creating directory: ja
---creating directory: ko
---creating directory: pt_BR
---creating directory: zh_CN
-An exception was encountered:
----------------
-The given path's format is not supported.
----------------
-System.NotSupportedException: The given path's format is not supported.
-   at System.Security.Permissions.FileIOPermission.EmulateFileIOPermissionChecks(String fullPath)
-   at System.Security.Permissions.FileIOPermission.QuickDemand(FileIOPermissionAccess access, String fullPath, Boolean checkForDuplicates, Boolean needFullPath)
-   at System.IO.File.InternalCopy(String sourceFileName, String destFileName, Boolean overwrite, Boolean checkHost)
-   at System.IO.File.Copy(String sourceFileName, String destFileName)
-   at OneShot_ModLoader.ChangesManage.<Apply>d__0.MoveNext()
-OneShot ModLoader will now close.
+attempting to play sound: sfx_back.mp3
+drawing start menu
+attempting to play sound: sfx_select.mp3

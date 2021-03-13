@@ -10,6 +10,7 @@ namespace OneShot_ModLoader
     static class Program
     {
         public static bool doneSetup;
+        public static bool initForm;
 
         /// <summary>
         /// The main entry point for the application.
@@ -17,6 +18,9 @@ namespace OneShot_ModLoader
         [STAThread]
         static void Main(string[] args)
         {
+            if (initForm) return;
+            initForm = true;
+
             // console out stuff
             Form1.consoleOutStream = new StreamWriter(Constants.directory + "/output.txt");
             Console.SetOut(Form1.consoleOutStream);

@@ -21,97 +21,98 @@ namespace OneShot_ModLoader
 
             try
             {
+                // TreeNode t in ActiveMods.instance.Nodes
                 await loadingBar.SetLoadingStatus("creating temp directory");
-                string tempPath = Directory.GetCurrentDirectory() + "/Temp/MODCOPY";
 
-                // first, make the temp folder
-                if (!Directory.Exists(tempPath))
-                    Directory.CreateDirectory(tempPath);
-                if (Directory.Exists(Form1.baseOneShotPath)) // delete the oneshot path if it exists
-                    new DirectoryInfo(Form1.baseOneShotPath).Delete(true);
+                DirectoryInfo tempDir = new DirectoryInfo(Constants.directory + "temp DO NOT OPEN\\MODCOPY\\");
+                DirectoryInfo baseOs = new DirectoryInfo(Form1.baseOneShotPath);
 
+                // create the temp directory
+                if (tempDir.Exists) tempDir.Delete(true); // just in case it crashed previously
+                if (!Directory.Exists(tempDir.FullName)) Directory.CreateDirectory(tempDir.FullName);
+
+                // delete the base os path
+                if (baseOs.Exists) baseOs.Delete(true);
+
+                // now we do the cool stuff
                 foreach (TreeNode t in ActiveMods.instance.Nodes)
                 {
                     activeMods.Add(t.Text);
 
-                    await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}", t.Index + 1, ActiveMods.instance.Nodes.Count));
+                    DirectoryInfo mod = new DirectoryInfo(Constants.directory + "Mods\\" + t.Text);
+                    Console.WriteLine("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, mod.FullName);
 
-                    string mod = t.Text;
-                    Console.WriteLine("mod name is " + mod);
-                    string fullModPath = Constants.modsPath + mod;
-                    Console.WriteLine("mod path {0}", fullModPath);
-
-                    string[] modDirs = Directory.GetDirectories(fullModPath, "*", SearchOption.AllDirectories);
-                    Console.WriteLine("modDirs.Length{0}", modDirs.Length);
-                    string modDirCut = Directory.GetCurrentDirectory() + "/Mods/" + mod;
-                    foreach (string s in modDirs)
+                    foreach (DirectoryInfo d in mod.GetDirectories("*", SearchOption.AllDirectories))
                     {
-                        await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, s));
+                        string shorten = Constants.directory + "Mods\\" + t.Text + "\\";
+                        string create = tempDir.FullName + d.FullName.Replace(shorten, string.Empty); // the full name of the directory to create
 
-                        string mod2 = s.Replace(modDirCut, "");
-                        if (!Directory.Exists(tempPath + mod2))
-                            Console.WriteLine("--creating directory: " + Directory.CreateDirectory(Path.Combine(tempPath, mod2)));
+                        if (!Directory.Exists(create))
+                        {
+                            Console.WriteLine("creating directory: " + create);
+                            Directory.CreateDirectory(create);
+                            await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, create));
+                        }
                     }
-
-                    // now the files
-                    string[] modFiles = Directory.GetFiles(fullModPath, "*", SearchOption.AllDirectories);
-                    foreach (string s in modFiles)
+                    
+                    foreach (FileInfo f in mod.GetFiles("*", SearchOption.AllDirectories))
                     {
-                        await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, s));
+                        string shorten = Constants.directory + "Mods\\" + t.Text + "\\";
+                        string destination = tempDir.FullName + f.FullName.Replace(shorten, string.Empty);
 
-                        string mod2 = s.Replace(modDirCut, "");
-                        if (!File.Exists(tempPath + mod2))
-                            File.Copy(fullModPath + mod2, tempPath + "/" + mod2);
+                        if (!File.Exists(destination))
+                        {
+                            Console.WriteLine("copying {0} to {1}", f.FullName, destination);
+                            File.Copy(f.FullName, destination);
+                            await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, f.FullName));
+                        }
                     }
                 }
-                // i use the DirectoryInfo class here and not in the above section because i didn't learn about it until i started writing this section
-                // and i didn't feel like changing it
-                // i still don't
-
-                await loadingBar.SetLoadingStatus("finished up in temp");
-
                 Console.WriteLine("finished up in temp");
 
-                // get the directories in temp
-                string dir = Directory.GetCurrentDirectory() + "\\Temp\\MODCOPY";
-                DirectoryInfo tempDirs = new DirectoryInfo(dir);
-                foreach (DirectoryInfo d in tempDirs.GetDirectories("*", SearchOption.AllDirectories))
+                // now we copy everything in temp to the oneshot path
+
+                // start with the directories
+                foreach (DirectoryInfo d in tempDir.GetDirectories("*", SearchOption.AllDirectories))
                 {
-                    // first, cut off the start of the directory
-                    string dShortName = d.FullName;
-                    dShortName = dShortName.Replace(dir, "");
+                    string shorten = Constants.directory + "temp DO NOT OPEN\\MODCOPY\\";
+                    string create = baseOs.FullName + "\\" + d.FullName.Replace(shorten, string.Empty);
 
-                    // make the path using the shortened directory name
-                    string fullCopyPath = Form1.baseOneShotPath + dShortName;
-                    Console.WriteLine("fullCopyPath is " + fullCopyPath);
-
-                    await loadingBar.SetLoadingStatus(string.Format("final {0}", fullCopyPath));
-
-                    // finally, if the directory doesn't exist, create it
-                    if (!Directory.Exists(fullCopyPath))
-                        Console.WriteLine("-creating directory: " + Directory.CreateDirectory(fullCopyPath));
+                    if (!Directory.Exists(create))
+                    {
+                        Console.WriteLine("creating directory: " + create);
+                        Directory.CreateDirectory(create);
+                        await loadingBar.SetLoadingStatus("final: creating directory: " + create);
+                    }
                 }
 
-                Console.WriteLine("finished creating directories");
-
-                // now we move the files
-                foreach (FileInfo f in tempDirs.GetFiles("*", SearchOption.AllDirectories))
+                // and then finally, the files
+                foreach (FileInfo f in tempDir.GetFiles("*", SearchOption.AllDirectories))
                 {
-                    string fullCopyPath = Form1.baseOneShotPath + f.FullName.Replace(dir, "");
+                    string shorten = Constants.directory + "temp DO NOT OPEN\\MODCOPY";
+                    string destination = baseOs.FullName + f.FullName.Replace(shorten, string.Empty);
 
-                    await loadingBar.SetLoadingStatus(string.Format("final {0}", fullCopyPath));
-
-                    // again, cut off the start of the directory
-                    File.Copy(f.FullName, fullCopyPath, true);
-                    Console.WriteLine("-copied {0} to {1}", f.FullName, fullCopyPath);
+                    if (!File.Exists(destination))
+                    {
+                        Console.WriteLine("copying {0} to {1}", f.FullName, destination);
+                        File.Copy(f.FullName, destination);
+                        await loadingBar.SetLoadingStatus("final: " + destination);
+                    }
                 }
 
-                await loadingBar.SetLoadingStatus(loadingBar.text.Text = "almost done!");
+                // done!
+                await loadingBar.SetLoadingStatus("almost done!");
 
                 Console.WriteLine("finished copying files");
 
-                new DirectoryInfo(Directory.GetCurrentDirectory() + "/Temp").Delete(true);
+                new DirectoryInfo(Constants.directory + "\\temp DO NOT OPEN").Delete(true);
                 Console.WriteLine("successfully deleted temp");
+
+                Console.WriteLine("activeMods.Count " + activeMods.Count);
+                // write the active mods to a file
+                if (File.Exists(Constants.appDataPath + "activemods.molly"))
+                    File.Delete(Constants.appDataPath + "activemods.molly");
+                File.WriteAllLines(Constants.appDataPath + "activemods.molly", activeMods);
 
                 Console.Beep();
                 MessageBox.Show("All done!");
@@ -119,13 +120,6 @@ namespace OneShot_ModLoader
                 loadingBar.text.Dispose();
 
                 Console.WriteLine("finished applying changes");
-
-                Console.WriteLine("activeMods.Count " + activeMods.Count);
-
-                // write the active mods to a file
-                if (File.Exists(Constants.appDataPath + "activemods.molly"))
-                    File.Delete(Constants.appDataPath + "activemods.molly");
-                File.WriteAllLines(Constants.appDataPath + "activemods.molly", activeMods);
 
                 Audio.Stop();
             }
