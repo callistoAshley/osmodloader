@@ -116,7 +116,7 @@ namespace OneShot_ModLoader
         {
             Image = Image.FromFile(Constants.spritesPath + "button_tools.png");
             Size = Image.Size;
-            Location = new Point(410, 10);
+            Location = new Point(390, 10);
         }
 
         protected override void OnMouseEnter(EventArgs e)
