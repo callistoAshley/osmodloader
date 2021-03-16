@@ -136,12 +136,13 @@ namespace OneShot_ModLoader
 
         public async Task RefreshMods ()
         {
+            StringBuilder sb = new StringBuilder("samuel");
             Nodes.Clear();
 
             // create the mods directory if it doesn't exist
             if (!Directory.Exists(Constants.modsPath))
                 Directory.CreateDirectory(Constants.modsPath);
-            else if (!Program.doneSetup)
+            if (!Program.doneSetup)
             {
                 MessageBox.Show("A base oneshot could not be found. Please open the setup page and follow the instructions.");
                 Form1.instance.Controls.Clear();
