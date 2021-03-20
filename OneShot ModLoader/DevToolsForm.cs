@@ -129,6 +129,8 @@ namespace OneShot_ModLoader
                     MessageBox.Show(message);
                 }
             }
+
+            DevToolsForm.instance.Init();
         }
     }
 }

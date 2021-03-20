@@ -16,6 +16,7 @@ namespace OneShot_ModLoader
         public static TextBox authorInstance;
         public static TextBox versionInstance;
         public static TextBox descriptionInstance;
+        public static PictureBox icon = new PictureBox();
 
         public DTModMetadataForm(string modPath)
         {
@@ -59,10 +60,17 @@ namespace OneShot_ModLoader
             description.MaxLength = 50;
             description.Size = new Size(200, 200);
 
+            icon.Location = new Point(250, 10);
+            icon.Image = Image.FromFile(Constants.spritesPath + "mmd_icon_default.png");
+            icon.Size = new Size(80, 80);
+            icon.SizeMode = PictureBoxSizeMode.StretchImage;
+            icon.BackColor = Color.Transparent;
+
             Controls.Add(displayName);
             Controls.Add(author);
             Controls.Add(description);
             Controls.Add(version);
+            Controls.Add(icon);
 
             displayNameInstance = displayName;
             authorInstance = author;

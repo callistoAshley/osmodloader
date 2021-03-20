@@ -22,7 +22,9 @@ namespace OneShot_ModLoader
             initForm = true;
 
             // console out stuff
-            Form1.consoleOutStream = new StreamWriter(Constants.directory + "/output.txt");
+            if (!Directory.Exists(Constants.appDataPath + "logs")) Directory.CreateDirectory(Constants.appDataPath + "logs");
+
+            Form1.consoleOutStream = new StreamWriter(Constants.appDataPath + "logs\\output " + DateTime.Now.ToString().Replace("/", ".").Replace(":", ".") + ".txt");
             Console.SetOut(Form1.consoleOutStream);
             Console.SetError(Form1.consoleOutStream);
 
@@ -46,6 +48,15 @@ namespace OneShot_ModLoader
 
         public static void ConsoleToFile()
         {
+            List<string> delete = new List<string>();
+            foreach (FileInfo f in new DirectoryInfo(Constants.appDataPath + "/logs").GetFiles())
+            {
+                DateTime lifespan = DateTime.Now - new TimeSpan(2, 0, 0);
+
+                if (f.CreationTime <= lifespan) delete.Add(f.FullName); // if the file has been alive for more than 2 days, add it to a collection
+            }
+            foreach (string s in delete) new FileInfo(s).Delete(); // then delete every file in that collection
+
             Console.SetOut(Form1.consoleOut);
             Console.SetError(Form1.consoleOut);
 
