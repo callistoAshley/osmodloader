@@ -1,7 +1,26 @@
 drawing start menu
 attempting to play sound: sfx_select.mp3
 attempting to play sound: sfx_decision.mp3
+drawing mods menu
+drawing start menu
 attempting to play sound: sfx_select.mp3
-initalized mod metadata form with path: C:\Users\maste\Desktop\MIDI
-attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_decision.mp3
+drawing setup menu
 attempting to play sound: sfx_back.mp3
+drawing start menu
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_decision.mp3
+drawing setup menu
+attempting to play sound: sfx_back.mp3
+drawing start menu
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_decision.mp3
+drawing setup menu
+attempting to play sound: sfx_back.mp3
+drawing start menu
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_select.mp3
+attempting to play sound: sfx_decision.mp3
+drawing setup menu

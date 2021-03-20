@@ -20,7 +20,7 @@ namespace OneShot_ModLoader
         public static readonly string audioPath = directory + "/Audio/";
         public static readonly string fontsPath = directory + "/Fonts/";
         public static readonly string modsPath = directory + "Mods/";
-        public static readonly string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/OneShotModLoader/";
+        public static readonly string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OneShotModLoader\\";
 
         public static Font GetTerminusFont(float size)
         {
