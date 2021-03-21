@@ -51,9 +51,10 @@ namespace OneShot_ModLoader
             List<string> delete = new List<string>();
             foreach (FileInfo f in new DirectoryInfo(Constants.appDataPath + "/logs").GetFiles())
             {
-                DateTime lifespan = DateTime.Now - new TimeSpan(2, 0, 0);
+                // for every file in the /logs folder, check if it has been alive for more than 6 hours
+                DateTime lifespan = DateTime.Now - new TimeSpan(6, 0, 0);
 
-                if (f.CreationTime <= lifespan) delete.Add(f.FullName); // if the file has been alive for more than 2 days, add it to a collection
+                if (f.CreationTime <= lifespan) delete.Add(f.FullName); // and if it has, add it to a collection
             }
             foreach (string s in delete) new FileInfo(s).Delete(); // then delete every file in that collection
 

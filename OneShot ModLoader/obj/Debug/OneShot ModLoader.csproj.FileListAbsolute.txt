@@ -24,3 +24,5 @@ C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Security.Principal.Windows.xml
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.csproj.CopyComplete
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\WindowsBase.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\INIFileParser.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\INIFileParser.xml

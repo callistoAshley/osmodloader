@@ -119,7 +119,7 @@ namespace OneShot_ModLoader
             {
                 try
                 {
-                    new DTModMetadataForm(browse.SelectedPath);
+                    new MMDForm(browse.SelectedPath);
                 }
                 catch (Exception ex)
                 {
