@@ -5,22 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.IO;
 
 namespace OneShot_ModLoader
 {
-    public class DTModMetadataForm : Form
+    public class MMDForm : Form 
     {
-        public static DTModMetadataForm instance;
+        public static MMDForm instance;
 
         public static TextBox displayNameInstance;
         public static TextBox authorInstance;
         public static TextBox versionInstance;
         public static TextBox descriptionInstance;
-        public static PictureBox icon = new PictureBox();
+        public static ModIcon icon;
 
-        public DTModMetadataForm(string modPath)
+        public static string modPath;
+
+        public MMDForm(string path)
         {
-            Console.WriteLine("initalized mod metadata form with path: " + modPath);
+            Console.WriteLine("initalized mod metadata form with path: " + path);
+            modPath = path;
 
             instance = this;
 
@@ -60,17 +64,14 @@ namespace OneShot_ModLoader
             description.MaxLength = 50;
             description.Size = new Size(200, 200);
 
-            icon.Location = new Point(250, 10);
-            icon.Image = Image.FromFile(Constants.spritesPath + "mmd_icon_default.png");
-            icon.Size = new Size(80, 80);
-            icon.SizeMode = PictureBoxSizeMode.StretchImage;
-            icon.BackColor = Color.Transparent;
+            icon = new ModIcon();
 
             Controls.Add(displayName);
             Controls.Add(author);
             Controls.Add(description);
             Controls.Add(version);
             Controls.Add(icon);
+            Controls.Add(new MMDDone());
 
             displayNameInstance = displayName;
             authorInstance = author;
@@ -81,6 +82,121 @@ namespace OneShot_ModLoader
         protected override void OnClosed(EventArgs e)
         {
             Audio.PlaySound("sfx_back.mp3", false);
+        }
+    }
+
+    public class ModIcon : PictureBox
+    {
+        public ModIcon()
+        {
+            Location = new Point(250, 10);
+            Image = Image.FromFile(Constants.spritesPath + "mmd_icon_default.png");
+            Size = new Size(80, 80);
+            SizeMode = PictureBoxSizeMode.StretchImage;
+            BackColor = Color.Transparent;
+
+            Label l = new Label();
+            l.Text = "Click to change icon";
+            l.Location = new Point(200, 95);
+            l.AutoSize = true;
+            l.ForeColor = Color.White;
+            l.BackColor = Color.Transparent;
+            l.Font = Constants.GetTerminusFont(10);
+            MMDForm.instance.Controls.Add(l);
+        }
+
+
+        protected override void OnClick(EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog browse = new OpenFileDialog();
+
+                browse.Title = "Please browse to the image you want to set as your icon.";
+                browse.ShowDialog();
+
+                Image = Image.FromFile(browse.FileName);
+                Audio.PlaySound("sfx_decision.mp3", false);
+            }
+            catch (Exception ex)
+            {
+                string message = "An exception was encountered:\n" + ex.Message +
+                        "\n------------------\n" + ex.ToString();
+                Console.WriteLine(message);
+                MessageBox.Show(message);
+            }
+        }
+    }
+
+    public class MMDDone : Button
+    {
+        public MMDDone()
+        {
+            Location = new Point(150, 190);
+            AutoSize = true;
+            BackColor = Color.White;
+            Font = Constants.GetTerminusFont(12);
+
+            Text = "Generate";
+        }
+
+        protected override async void OnClick(EventArgs e)
+        {
+            try
+            {
+                MMDForm.instance.Controls.Clear();
+
+                if (!Directory.Exists(MMDForm.modPath + "\\.osml")) Directory.CreateDirectory(MMDForm.modPath + "\\.osml");
+
+                LoadingBar loadingBar = new LoadingBar(MMDForm.instance);
+                await loadingBar.SetLoadingStatus("working, please wait...");
+                Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
+
+                // values
+                string displayName = MMDForm.displayNameInstance.Text;
+                string author = MMDForm.authorInstance.Text;
+                string version = MMDForm.versionInstance.Text;
+                string description = MMDForm.descriptionInstance.Text;
+
+                // parse the ini file
+                await loadingBar.SetLoadingStatus("writing ini data to metadata.ini");
+
+                await INIManage.Parse(MMDForm.modPath + "\\metadata.ini",
+                    new string[4]
+                    {
+                    "displayName",
+                    "author",
+                    "version",
+                    "description"
+                    },
+                    new string[4]
+                    {
+                    displayName,
+                    author,
+                    version,
+                    description
+                    }
+                );
+
+                await loadingBar.SetLoadingStatus("saving icon");
+
+                MMDForm.icon.Image.Save(MMDForm.modPath + "\\icon.png");
+
+                await loadingBar.SetLoadingStatus("almost done!");
+
+                Console.Beep();
+                MessageBox.Show("All done!");
+                MMDForm.instance.Close();
+                Audio.PlaySound("sfx_back.mp3", false);
+            }
+
+            catch (Exception ex)
+            {
+                string message = "An exception was encountered:\n" + ex.Message +
+                        "\n------------------\n" + ex.ToString();
+                Console.WriteLine(message);
+                MessageBox.Show(message);
+            }
         }
     }
 }
