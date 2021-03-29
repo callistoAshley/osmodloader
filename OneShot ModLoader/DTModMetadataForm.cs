@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using IniParser.Model;
 
 namespace OneShot_ModLoader
 {
@@ -65,6 +66,21 @@ namespace OneShot_ModLoader
             description.Size = new Size(200, 200);
 
             icon = new ModIcon();
+
+            // if the metadata file already exists, try to read from it
+            if (File.Exists(modPath + "\\.osml\\metadata.ini"))
+            {
+                IniData data = INIManage.Read(modPath + "\\metadata.ini");
+
+                displayName.Text = data["config"]["displayName"];
+                author.Text = data["config"]["author"];
+                version.Text = data["config"]["version"];
+                description.Text = data["config"]["description"];
+            }
+
+            // and the icon
+            if (File.Exists(modPath + "\\.osml\\icon.png"))
+                icon.Image = Image.FromFile(modPath + "\\icon.png");
 
             Controls.Add(displayName);
             Controls.Add(author);
@@ -161,32 +177,33 @@ namespace OneShot_ModLoader
                 // parse the ini file
                 await loadingBar.SetLoadingStatus("writing ini data to metadata.ini");
 
-                await INIManage.Parse(MMDForm.modPath + "\\metadata.ini",
+                await INIManage.Parse(MMDForm.modPath + "\\.osml\\metadata.ini",
                     new string[4]
                     {
-                    "displayName",
-                    "author",
-                    "version",
-                    "description"
+                        "displayName",
+                        "author",
+                        "version",
+                        "description"
                     },
                     new string[4]
                     {
-                    displayName,
-                    author,
-                    version,
-                    description
+                        displayName,
+                        author,
+                        version,
+                        description
                     }
                 );
 
                 await loadingBar.SetLoadingStatus("saving icon");
 
-                MMDForm.icon.Image.Save(MMDForm.modPath + "\\icon.png");
+                MMDForm.icon.Image.Save(MMDForm.modPath + "\\.osml\\icon.png");
 
                 await loadingBar.SetLoadingStatus("almost done!");
 
                 Console.Beep();
                 MessageBox.Show("All done!");
                 MMDForm.instance.Close();
+                Audio.Stop();
                 Audio.PlaySound("sfx_back.mp3", false);
             }
 
