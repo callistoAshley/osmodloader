@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,16 @@ namespace OneShot_ModLoader
             IniData data = new IniData();
 
             for (int i = 0; i < valueNames.Length; i++)
-                data["metadata"][valueNames[i]] = values[i];
+                data["config"][valueNames[i]] = values[i];
 
             parser.WriteFile(path, data);
 
             await Task.Delay(0);
+        }
+
+        public static IniData Read(string path)
+        {
+            return new FileIniDataParser().ReadFile(path);
         }
     }
 }
