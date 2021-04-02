@@ -26,3 +26,4 @@ C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneSho
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\WindowsBase.dll
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\INIFileParser.dll
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\INIFileParser.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot_ModLoader.TestFormLol.resources

@@ -31,6 +31,7 @@ namespace OneShot_ModLoader
 
         public void Init()
         {
+            new TestFormLol();
             if (!Directory.Exists(Constants.appDataPath))
                 Directory.CreateDirectory(Constants.appDataPath);
 
