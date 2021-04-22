@@ -249,6 +249,55 @@ namespace OneShot_ModLoader
 
                 List<string> filesToCache = new List<string>();
 
+                // deal with any files that are no longer being used
+                foreach (string s in Directory.GetDirectories(Constants.modInfoPath)) // get the mods in the modinfo folder
+                {
+                    DirectoryInfo d = new DirectoryInfo(s);
+
+                    // and determine whether they're still active
+                    if (!ActiveMods.instance.Nodes.ContainsKey(s))
+                    {
+                        // directories
+                        foreach (string ss in File.ReadAllLines(d.FullName + "\\directories.molly"))
+                        {
+                            if (Directory.Exists(baseOs.FullName + "\\" + ss))
+                            {
+                                await loadingBar.SetLoadingStatus("deleting directory: " + baseOs.FullName + "\\" + ss);
+                                Console.WriteLine("deleting directory: " + baseOs.FullName + "\\" + ss);
+
+                                // then delete it if it exists in base os
+                                Directory.Delete(baseOs.FullName + "\\" + ss);
+                            }   
+                        }
+
+                        // files
+                        foreach (string ss in File.ReadAllLines(d.FullName + "\\files.molly"))
+                        {
+                            if (File.Exists(baseOs.FullName + "\\" + ss))
+                            {
+                                await loadingBar.SetLoadingStatus("deleting file: " + ss);
+                                Console.WriteLine("deleting file: " + baseOs.FullName + "\\" + ss);
+
+                                // then delete it if it exists in base os
+                                File.Delete(baseOs.FullName + "\\" + ss);
+
+                                // check whether the file exists in the cache
+                                if (File.Exists(Constants.appDataPath + "cache\\" + ss))
+                                {
+                                    Console.WriteLine("restoring {0} from cache", ss);
+                                    await loadingBar.SetLoadingStatus(string.Format("restoring {0} from cache", ss));
+
+                                    // and if it does, return it to base os
+                                    File.Copy(Constants.appDataPath + "cache\\" + ss, baseOs.FullName + "\\" + ss);
+                                }
+                            }
+                        }
+
+                        // finally, delete the modinfo folder
+                        d.Delete(true);
+                    }
+                }
+
                 foreach (TreeNode t in ActiveMods.instance.Nodes)
                 {
                     bool isBase = t.Text == "base oneshot"; // just so it doesn't cache itself lol
@@ -348,6 +397,11 @@ namespace OneShot_ModLoader
                 new ExceptionMessage(ex, true, "\nOneShot ModLoader will now close.");
                 Form1.instance.Close();
             }
+        }
+
+        private void RestoreFromCache(FileInfo f)
+        {
+            
         }
     }
 }
