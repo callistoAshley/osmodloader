@@ -231,5 +231,123 @@ namespace OneShot_ModLoader
                 OCIForm.instance.Close();
             }
         }
+
+        public static async Task Apply2(LoadingBar loadingBar)
+        {
+            Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
+
+            Console.WriteLine("applying changes");
+            await Task.Delay(1);
+
+            List<string> activeMods = new List<string>();
+
+            try
+            {
+                DirectoryInfo baseOs = new DirectoryInfo(Form1.baseOneShotPath);
+                if (!baseOs.Exists)
+                    baseOs.Create();
+
+                List<string> filesToCache = new List<string>();
+
+                foreach (TreeNode t in ActiveMods.instance.Nodes)
+                {
+                    bool isBase = t.Text == "base oneshot"; // just so it doesn't cache itself lol
+                    Console.WriteLine("mod {0} out of {1}, isBase {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, isBase);
+
+                    activeMods.Add(t.Text);
+
+                    DirectoryInfo mod = new DirectoryInfo(Constants.directory + "Mods\\" + t.Text);
+                    Console.WriteLine("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, mod.FullName);
+
+                    // create the modinfo directory
+                    DirectoryInfo modInfoDir = new DirectoryInfo(Constants.modInfoPath + t.Text);
+
+                    if (!modInfoDir.Exists && !isBase)
+                        modInfoDir.Create();
+
+                    List<string> directories = new List<string>();
+                    List<string> files = new List<string>();
+
+                    foreach (DirectoryInfo d in mod.GetDirectories("*", SearchOption.AllDirectories))
+                    {
+                        // cut the mod directory out of the string to make the name of the directory to create
+                        string shorten = Constants.directory + "Mods\\" + t.Text;
+                        string create = d.FullName.Replace(shorten, string.Empty);
+
+                        // add the name of the directory to a list
+                        directories.Add(create);
+
+                        Console.WriteLine("creating directory: " + create);
+                        await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, create));
+                    }
+
+                    // write the directories list to a file
+                    if (!isBase)
+                        File.WriteAllLines(modInfoDir.FullName + "\\directories.molly", directories);
+
+                    // then do the files
+                    foreach (FileInfo f in mod.GetFiles("*", SearchOption.AllDirectories))
+                    {
+                        // cut the mod directory out of the string to make the name of the directory to copy
+                        string shorten = Constants.directory + "Mods\\" + t.Text;
+                        string copy = f.FullName.Replace(shorten, string.Empty);
+
+                        // add the name of the file to a list
+                        files.Add(copy);
+
+                        if (File.Exists(baseOs.FullName + copy) && !isBase)
+                            filesToCache.Add(copy);
+                        File.Copy(f.FullName, baseOs.FullName + copy);
+                    }
+
+                    // write the files list to a file
+                    if (!isBase)
+                        File.WriteAllLines(modInfoDir.FullName + "\\files.molly", files);
+                }
+
+                Console.WriteLine("finished up with mod stuff");
+
+                // copy the files in the list from base os to the cache folder
+                if (!Directory.Exists(Constants.appDataPath + "cache")) // if the cache directory doesn't exist, create it
+                    Directory.CreateDirectory(Constants.appDataPath + "cache");
+
+                foreach (string s in filesToCache)
+                {
+                    // double check if the string contains the name of a directory
+                    string s2 = s.Substring(0, s.LastIndexOf("\\"));
+                    if (s2 != string.Empty)
+                        Console.WriteLine("creating directory: " + Directory.CreateDirectory(Constants.appDataPath + "cache\\" + s2)); // and if it does, create it
+
+                    Console.WriteLine("caching " + s);
+                    await loadingBar.SetLoadingStatus("caching " + s);
+
+                    // copy the file to the cache directory
+                    File.Copy(Constants.modsPath + "base oneshot\\" + s, Constants.appDataPath + "cache\\" + s);
+                }
+
+                // done!
+                await loadingBar.SetLoadingStatus("almost done!");
+
+                Console.WriteLine("activeMods.Count " + activeMods.Count);
+                // write the active mods to a file
+                if (File.Exists(Constants.appDataPath + "activemods.molly"))
+                    File.Delete(Constants.appDataPath + "activemods.molly");
+                File.WriteAllLines(Constants.appDataPath + "activemods.molly", activeMods);
+
+                Console.Beep();
+                MessageBox.Show("All done!");
+
+                loadingBar.text.Dispose();
+
+                Console.WriteLine("finished applying changes (Apply2)");
+
+                Audio.Stop();
+            }
+            catch (Exception ex)
+            {
+                new ExceptionMessage(ex, true, "\nOneShot ModLoader will now close.");
+                Form1.instance.Close();
+            }
+        }
     }
 }
