@@ -346,7 +346,7 @@ namespace OneShot_ModLoader
 
                         if (File.Exists(baseOs.FullName + copy) && !isBase)
                             filesToCache.Add(copy);
-                        File.Copy(f.FullName, baseOs.FullName + copy);
+                        File.Copy(f.FullName, baseOs.FullName + copy, true);
                     }
 
                     // write the files list to a file
