@@ -19,7 +19,6 @@ namespace OneShot_ModLoader
         static void Main(string[] args)
         {
             if (initForm) return;
-            initForm = true;
 
             // console out stuff
             if (!Directory.Exists(Constants.appDataPath + "logs")) Directory.CreateDirectory(Constants.appDataPath + "logs");
@@ -36,12 +35,17 @@ namespace OneShot_ModLoader
             else
                 Form1.baseOneShotPath = "woah";
 
+            if (!Directory.Exists(Constants.modInfoPath))
+                Directory.CreateDirectory(Constants.modInfoPath);
+
             try
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                if (args.Length == 0) Application.Run(new Form1());
-                else Application.Run(new OCIForm(args));
+                if (args.Length == 0 && !initForm) Application.Run(new Form1());
+                else if (args.Length > 0 && !initForm) Application.Run(new OCIForm(args));
+
+                initForm = true;
             }
             catch (ObjectDisposedException) { }
         }

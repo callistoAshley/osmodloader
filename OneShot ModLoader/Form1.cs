@@ -13,6 +13,7 @@ using System.Drawing.Text;
 using System.IO.Compression;
 using System.Security.AccessControl;
 using System.Windows.Input;
+using Microsoft.Win32;
 
 namespace OneShot_ModLoader
 {
@@ -137,7 +138,7 @@ namespace OneShot_ModLoader
 
         public async Task RefreshMods ()
         {
-            StringBuilder sb = new StringBuilder("***REMOVED***");
+            StringBuilder sb = new StringBuilder("***REMOVED***"); // i can't remember why i made this but i'm scared to remove it in case it'll break everything beyond repair
             Nodes.Clear();
 
             // create the mods directory if it doesn't exist

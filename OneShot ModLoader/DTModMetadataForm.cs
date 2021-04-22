@@ -89,7 +89,7 @@ namespace OneShot_ModLoader
             Controls.Add(icon);
             Controls.Add(new MMDDone());
 
-            displayNameInstance = displayName;
+            displayNameInstance = displayName; 
             authorInstance = author;
             versionInstance = version;
             descriptionInstance = description;
