@@ -398,10 +398,5 @@ namespace OneShot_ModLoader
                 Form1.instance.Close();
             }
         }
-
-        private void RestoreFromCache(FileInfo f)
-        {
-            
-        }
     }
 }
