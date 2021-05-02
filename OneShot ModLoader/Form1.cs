@@ -51,16 +51,17 @@ namespace OneShot_ModLoader
 
         public void InitStartMenu()
         {
-            Console.WriteLine("drawing start menu"); 
+            Console.WriteLine("drawing start menu");
 
             // logo
-            PictureBox logo = new PictureBox();
             Image image = Image.FromFile(Constants.spritesPath + "logo2.png");
-            logo.Image = image;
-            logo.Size = image.Size;
-            logo.Enabled = true;
-            logo.BackColor = Color.Transparent;
-
+            PictureBox logo = new PictureBox
+            {
+                Image = image,
+                Size = image.Size,
+                Enabled = true,
+                BackColor = Color.Transparent,
+            };
             Controls.Add(logo);
 
             // buttons
