@@ -27,6 +27,8 @@ namespace OneShot_ModLoader
             Console.SetOut(Form1.consoleOutStream);
             Console.SetError(Form1.consoleOutStream);
 
+            Console.WriteLine("les goooooooooooooo");
+
             // base os stuff
             doneSetup = Directory.Exists(Constants.modsPath + "/base oneshot") && File.Exists(Constants.appDataPath + "path.molly");
 
