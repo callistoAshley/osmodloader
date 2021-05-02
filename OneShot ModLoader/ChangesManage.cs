@@ -250,8 +250,10 @@ namespace OneShot_ModLoader
                 List<string> filesToCache = new List<string>();
 
                 // deal with any files that are no longer being used
+                List<string> deletedFiles = new List<string>(); // add deleted files to a list so mod stacking doesn't screw everything over
                 foreach (string s in Directory.GetDirectories(Constants.modInfoPath)) // get the mods in the modinfo folder
                 {
+                    // note to future self: make the above foreach loop work backwards with a for loop instead so it doesn't the uhhhhhhhhhhhhh
                     DirectoryInfo d = new DirectoryInfo(s);
 
                     // and determine whether they're still active
@@ -266,7 +268,7 @@ namespace OneShot_ModLoader
                                 Console.WriteLine("deleting directory: " + baseOs.FullName + "\\" + ss);
 
                                 // then delete it if it exists in base os
-                                Directory.Delete(baseOs.FullName + "\\" + ss);
+                                //Directory.Delete(baseOs.FullName + "\\" + ss);
                             }   
                         }
 
@@ -279,7 +281,11 @@ namespace OneShot_ModLoader
                                 Console.WriteLine("deleting file: " + baseOs.FullName + "\\" + ss);
 
                                 // then delete it if it exists in base os
-                                File.Delete(baseOs.FullName + "\\" + ss);
+                                if (!deletedFiles.Contains(ss))
+                                {
+                                    File.Delete(baseOs.FullName + "\\" + ss);
+                                    deletedFiles.Add(ss);
+                                }       
 
                                 // check whether the file exists in the cache
                                 if (File.Exists(Constants.appDataPath + "cache\\" + ss))
@@ -346,6 +352,10 @@ namespace OneShot_ModLoader
 
                         if (File.Exists(baseOs.FullName + copy) && !isBase)
                             filesToCache.Add(copy);
+
+                        Console.WriteLine("copying {0} to {1}", f.FullName, baseOs.FullName + copy);
+                        await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, copy));
+
                         File.Copy(f.FullName, baseOs.FullName + copy, true);
                     }
 
