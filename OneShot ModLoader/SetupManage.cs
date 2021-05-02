@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace OneShot_ModLoader
 {
-    internal class Yo
+    public class SetupManage
     {
-        public bool Verify(string path)
+        public static bool Verify(string path)
         {
             string[] check =
             {
@@ -24,15 +24,13 @@ namespace OneShot_ModLoader
 
             return amountFound == check.Length;
         }
-    }
-    public class SetupManage
-    {
+
         public static async Task DoStuff(string path)
         {
             LoadingBar loadingBar = new LoadingBar(Form1.instance);
             Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
 
-            if (!new Yo().Verify(path)) // verify the installation
+            if (!Verify(path)) // verify the installation
             {
                 MessageBox.Show("Could not find a valid OneShot installation at that location. Please double-check for typos in your path.");
                 Audio.Stop();
