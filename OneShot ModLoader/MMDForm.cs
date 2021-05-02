@@ -44,26 +44,31 @@ namespace OneShot_ModLoader
 
         public void Init()
         {
-            TextBox displayName = new TextBox();
-            displayName.Text = "Display Name";
-            displayName.Location = new Point(10, 10);
-            displayName.MaxLength = 20;
-
-            TextBox author = new TextBox();
-            author.Text = "Author";
-            author.Location = new Point(10, 30);
-            author.MaxLength = 15;
-
-            TextBox version = new TextBox();
-            version.Text = "Version";
-            version.Location = new Point(10, 50);
-            version.MaxLength = 10;
-
-            TextBox description = new TextBox();
-            description.Text = "Short Description - Max: 50 char";
-            description.Location = new Point(10, 70);
-            description.MaxLength = 50;
-            description.Size = new Size(200, 200);
+            TextBox displayName = new TextBox
+            {
+                Text = "Display Name",
+                Location = new Point(10, 10),
+                MaxLength = 20,
+            };
+            TextBox author = new TextBox
+            {
+                Text = "Author",
+                Location = new Point(10, 30),
+                MaxLength = 15,
+            };
+            TextBox version = new TextBox
+            {
+                Text = "Version",
+                Location = new Point(10, 50),
+                MaxLength = 10,
+            };
+            TextBox description = new TextBox
+            {
+                Text = "Short Description - Max: 50 char",
+                Location = new Point(10, 70),
+                MaxLength = 50,
+                Size = new Size(200, 200),
+            };
 
             icon = new ModIcon();
 
