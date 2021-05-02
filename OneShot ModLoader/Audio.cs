@@ -15,12 +15,19 @@ namespace OneShot_ModLoader
     {
         public static List<WaveOutEvent> activeWaveOuts = new List<WaveOutEvent>();
         public static void PlaySound(string sound, bool loop) // this used to use the System.Media.SoundPlayer class, which could loop tracks
-        {// naudio probably can too but i haven't figured out how to yet
+        {
             Console.WriteLine("attempting to play sound: " + sound);
 
             try
             {
                 AudioFileReader a = new AudioFileReader(Constants.audioPath + sound);
+
+                if (loop)
+                {
+                    LoopPlay(a);
+                    return;
+                }
+
                 WaveOutEvent waveOut = new WaveOutEvent();
 
                 waveOut.Init(a);
@@ -35,6 +42,13 @@ namespace OneShot_ModLoader
 
                 MessageBox.Show(message);
             }
+        }
+
+        private static void LoopPlay(AudioFileReader sound)
+        {
+            WaveOutEvent waveOut = new WaveOutEvent();
+
+            waveOut.Init(sound);
         }
 
         public static void Stop()
