@@ -358,7 +358,7 @@ namespace OneShot_ModLoader
             Form1.instance.Controls.Add(pb);
 
             await Task.Delay(1);
-            try { await ChangesManage.Apply2(new LoadingBar(Form1.instance)); }
+            try { await ChangesManage.Apply(new LoadingBar(Form1.instance)); }
             catch { }
             Form1.instance.Controls.Clear();
             Form1.instance.InitStartMenu();
