@@ -21,16 +21,14 @@ namespace OneShot_ModLoader
             try
             {
                 AudioFileReader a = new AudioFileReader(Constants.audioPath + sound);
-
-                if (loop)
-                {
-                    LoopPlay(a);
-                    return;
-                }
+                LoopStream l = new LoopStream(a);
 
                 WaveOutEvent waveOut = new WaveOutEvent();
 
-                waveOut.Init(a);
+                if (loop)
+                    waveOut.Init(l);
+                else
+                    waveOut.Init(a);
                 waveOut.Play();
 
                 activeWaveOuts.Add(waveOut);
@@ -42,13 +40,6 @@ namespace OneShot_ModLoader
 
                 MessageBox.Show(message);
             }
-        }
-
-        private static void LoopPlay(AudioFileReader sound)
-        {
-            WaveOutEvent waveOut = new WaveOutEvent();
-
-            waveOut.Init(sound);
         }
 
         public static void Stop()
