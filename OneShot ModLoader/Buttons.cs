@@ -22,7 +22,6 @@ namespace OneShot_ModLoader
             picture.Image = Image.FromFile(Constants.spritesPath + name + ".png");
         }
     }
-
     public class ModsButton : PictureBox
     {
         public ModsButton()
@@ -31,7 +30,6 @@ namespace OneShot_ModLoader
             Image = button;
             Size = button.Size;
             Location = new Point(30, 130);
-            Form1.instance.Controls.Add(this);
         }
 
         protected override void OnMouseEnter(EventArgs e) 
@@ -51,7 +49,6 @@ namespace OneShot_ModLoader
             Form1.instance.InitModsMenu();
         }
     }
-
     public class BrowseMods : PictureBox
     {
         public BrowseMods()
@@ -80,7 +77,6 @@ namespace OneShot_ModLoader
             MessageBox.Show("browse mods button also this isn't done yet");
         }
     }
-
     public class Setup : PictureBox
     {
         public Setup()
@@ -89,7 +85,6 @@ namespace OneShot_ModLoader
             Image = button;
             Size = button.Size;
             Location = new Point(200, 130);//new Point(370, 130); use this when browse mods is added
-            Form1.instance.Controls.Add(this);
         }
 
         protected override void OnMouseEnter(EventArgs e)
@@ -109,7 +104,6 @@ namespace OneShot_ModLoader
             Form1.instance.InitSetupMenu();
         }
     }
-
     public class DevToolsButton : PictureBox
     {
         public DevToolsButton()
@@ -139,7 +133,6 @@ namespace OneShot_ModLoader
             else Audio.PlaySound("sfx_denied.mp3", false);
         }
     }
-
     public class SetupPrompt : TextBox
     {
         public static SetupPrompt instance;
@@ -152,7 +145,6 @@ namespace OneShot_ModLoader
             Size = new Size(600, 200);
         }
     }
-
     public class SetupDone : Button
     {
         public SetupDone()
@@ -187,7 +179,6 @@ namespace OneShot_ModLoader
             await SetupManage.DoStuff(path);
         }
     }
-
     public class BackButton : Button
     {
         private bool stopAudio;
@@ -236,7 +227,6 @@ namespace OneShot_ModLoader
             if (stopAudio) Audio.Stop();
         }
     }
-
     public class AddToList : Button
     {
         public static AddToList instance;
@@ -277,7 +267,6 @@ namespace OneShot_ModLoader
             }
         }
     }
-
     public class RemoveFromList : Button
     {
         public static RemoveFromList instance;
@@ -318,7 +307,6 @@ namespace OneShot_ModLoader
             }
         }
     }
-
     public class ApplyChanges : Button
     {
         public static ApplyChanges instance;
@@ -364,7 +352,6 @@ namespace OneShot_ModLoader
             Form1.instance.InitStartMenu();
         }
     }
-
     public class RefreshMods : Button
     {
         public static RefreshMods instance;
@@ -383,7 +370,6 @@ namespace OneShot_ModLoader
             await InactiveMods.instance.RefreshMods();
         }
     }
-
     public class CloverSecret : PictureBox
     {
         public CloverSecret()
@@ -416,6 +402,46 @@ namespace OneShot_ModLoader
             Form1.instance.Controls.Add(new BackButton(true));
 
             Audio.PlaySound("bgm_countdown.mp3", false);
+        }
+    }
+    public class MoveScreen : PictureBox
+    {
+        public Direction direction;
+        public MoveScreen(Point pos, Direction direction)
+        {
+            Location = pos;
+            this.direction = direction;
+
+            if (direction == Direction.Right)
+                Image = Image.FromFile(Constants.spritesPath + "oci_friend_blue.gif");
+            else
+                Image = Image.FromFile(Constants.spritesPath + "oci_friend_green.gif");
+        }
+
+        protected override async void OnClick(EventArgs e)
+        {
+            for (int i = 0; i < Form1.instance.Width; i++)
+            {
+                foreach (Control c in Form1.instance.Controls)
+                {
+                    Point newLocation = new Point(
+                        direction == Direction.Right ? c.Location.X - 10 // if the direction is right, subtract 10 from the location
+                            : c.Location.X + 10, // otherwise, add 1
+                            0
+                        );
+
+                    // set the new location of the control
+                    c.Location = newLocation;
+                }
+
+                await Task.Delay(1);
+            }
+        }
+
+        public enum Direction // which direction should the picture box move the screen to?
+        {
+            Left,
+            Right
         }
     }
 }
