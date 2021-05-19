@@ -43,9 +43,8 @@ namespace OneShot_ModLoader
 
             // wf loading bar
             progress.Location = new Point(0, 230);
-            progress.BackColor = Color.MediumPurple;
-            progress.ForeColor = Color.MediumPurple;
             progress.Size = new Size(500, 20);
+            progress.Style = ProgressBarStyle.Continuous;
             form.Controls.Add(progress);
         }
 
