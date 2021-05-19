@@ -37,12 +37,23 @@ namespace OneShot_ModLoader
                 // now we do the cool stuff
                 foreach (TreeNode t in ActiveMods.instance.Nodes)
                 {
+                    await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}", t.Index + 1, ActiveMods.instance.Nodes.Count));
+                    loadingBar.ResetProgress();
+
                     activeMods.Add(t.Text);
 
                     DirectoryInfo mod = new DirectoryInfo(Constants.directory + "Mods\\" + t.Text);
+
+                    // get the files and directories from the mod
+                    DirectoryInfo[] directories = mod.GetDirectories("*", SearchOption.AllDirectories);
+                    FileInfo[] files = mod.GetFiles("*", SearchOption.AllDirectories);
+
+                    // set the maximum value of the progress bar to the sum of the directories/files
+                    loadingBar.progress.Maximum = directories.Length + files.Length;
+
                     Console.WriteLine("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, mod.FullName);
 
-                    foreach (DirectoryInfo d in mod.GetDirectories("*", SearchOption.AllDirectories))
+                    foreach (DirectoryInfo d in directories)
                     {
                         string shorten = Constants.directory + "Mods\\" + t.Text + "\\";
                         string create = tempDir.FullName + d.FullName.Replace(shorten, string.Empty); // the full name of the directory to create
@@ -51,11 +62,15 @@ namespace OneShot_ModLoader
                         {
                             Console.WriteLine("creating directory: " + create);
                             Directory.CreateDirectory(create);
-                            await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, create));
+
+                            // update progress
+                            await loadingBar.UpdateProgress();
+                            if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                                await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, create));
                         }
                     }
                     
-                    foreach (FileInfo f in mod.GetFiles("*", SearchOption.AllDirectories))
+                    foreach (FileInfo f in files)
                     {
                         string shorten = Constants.directory + "Mods\\" + t.Text + "\\";
                         string destination = tempDir.FullName + f.FullName.Replace(shorten, string.Empty);
@@ -64,16 +79,29 @@ namespace OneShot_ModLoader
                         {
                             Console.WriteLine("copying {0} to {1}", f.FullName, destination);
                             File.Copy(f.FullName, destination);
-                            await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, f.FullName));
+
+                            // update progress
+                            await loadingBar.UpdateProgress();
+                            if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                                await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, f.FullName));
                         }
                     }
                 }
                 Console.WriteLine("finished up in temp");
 
+                await loadingBar.SetLoadingStatus("final");
+                loadingBar.ResetProgress();
+
                 // now we copy everything in temp to the oneshot path
 
-                // start with the directories
-                foreach (DirectoryInfo d in tempDir.GetDirectories("*", SearchOption.AllDirectories))
+                // get the directories and files
+                DirectoryInfo[] directories2 = tempDir.GetDirectories("*", SearchOption.AllDirectories);
+                FileInfo[] files2 = tempDir.GetFiles("*", SearchOption.AllDirectories);
+
+                // set the maximum value of the progress bar to the sum of the directories and files
+                loadingBar.progress.Maximum = directories2.Length + files2.Length;
+
+                foreach (DirectoryInfo d in directories2)
                 {
                     string shorten = Constants.directory + "temp DO NOT OPEN\\MODCOPY\\";
                     string create = baseOs.FullName + "\\" + d.FullName.Replace(shorten, string.Empty);
@@ -82,12 +110,16 @@ namespace OneShot_ModLoader
                     {
                         Console.WriteLine("creating directory: " + create);
                         Directory.CreateDirectory(create);
-                        await loadingBar.SetLoadingStatus("final: creating directory: " + create);
+
+                        // update progress
+                        await loadingBar.UpdateProgress();
+                        if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                            await loadingBar.SetLoadingStatus("final: creating directory: " + create);
                     }
                 }
 
                 // and then finally, the files
-                foreach (FileInfo f in tempDir.GetFiles("*", SearchOption.AllDirectories))
+                foreach (FileInfo f in files2)
                 {
                     string shorten = Constants.directory + "temp DO NOT OPEN\\MODCOPY";
                     string destination = baseOs.FullName + f.FullName.Replace(shorten, string.Empty);
@@ -96,7 +128,11 @@ namespace OneShot_ModLoader
                     {
                         Console.WriteLine("copying {0} to {1}", f.FullName, destination);
                         File.Copy(f.FullName, destination);
-                        await loadingBar.SetLoadingStatus("final: " + destination);
+
+                        // update progress
+                        await loadingBar.UpdateProgress();
+                        if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                            await loadingBar.SetLoadingStatus("final: " + destination);
                     }
                 }
 

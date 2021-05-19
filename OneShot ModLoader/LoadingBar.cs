@@ -15,7 +15,19 @@ namespace OneShot_ModLoader
     {
         public Label text = new Label();
 
-        public LoadingBar(Form form)
+        #region loading bar type enum
+        public enum LoadingBarType
+        {
+            Detailed, // significantly slower, primarily for debug purposes
+            Efficient, // around 40 seconds faster than detailed, doesn't show individual files
+            Disabled // completely disabled
+        }
+        public LoadingBarType displayType;
+        #endregion
+
+        public ProgressBar progress = new ProgressBar();
+
+        public LoadingBar(Form form, LoadingBarType type = LoadingBarType.Efficient)
         {
             text.ForeColor = Color.MediumPurple;
             text.Location = new Point(0, 190);
@@ -25,12 +37,32 @@ namespace OneShot_ModLoader
             text.ForeColor = Color.MediumPurple;
             text.BackColor = Color.Transparent;
 
+            displayType = type;
+
             form.Controls.Add(text);
+
+            // wf loading bar
+            progress.Location = new Point(0, 230);
+            progress.BackColor = Color.MediumPurple;
+            progress.ForeColor = Color.MediumPurple;
+            progress.Size = new Size(500, 20);
+            form.Controls.Add(progress);
         }
 
         public string GetLoadingBGM()
         {
             return "bgm_0" + new Random().Next(1, 6) + ".mp3";
+        }
+
+        public void ResetProgress()
+        {
+            progress.Value = 0;
+        }
+
+        public async Task UpdateProgress()
+        {
+            if (progress.Value < progress.Maximum) progress.Value++;
+            await Task.Delay(0);
         }
 
         public async Task SetLoadingStatus(string status)
@@ -56,7 +88,9 @@ namespace OneShot_ModLoader
                 Console.WriteLine(message + "\n---\n" + ex.ToString());
             }
             
-            await Task.Delay(1);
+            await Task.Delay(
+                displayType == LoadingBarType.Disabled ? 0 : 1 // if the loading bar is completely disabled, don't await
+                );
         }
     }
 }

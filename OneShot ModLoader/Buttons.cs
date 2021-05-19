@@ -417,7 +417,6 @@ namespace OneShot_ModLoader
             else
                 Image = Image.FromFile(Constants.spritesPath + "oci_friend_green.gif");
         }
-
         protected override async void OnClick(EventArgs e)
         {
             for (int i = 0; i < Form1.instance.Width; i++)
@@ -426,7 +425,7 @@ namespace OneShot_ModLoader
                 {
                     Point newLocation = new Point(
                         direction == Direction.Right ? c.Location.X - 10 // if the direction is right, subtract 10 from the location
-                            : c.Location.X + 10, // otherwise, add 1
+                            : c.Location.X + 10, // otherwise, add 10
                             0
                         );
 
