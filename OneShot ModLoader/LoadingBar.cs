@@ -25,7 +25,7 @@ namespace OneShot_ModLoader
         public LoadingBarType displayType;
         #endregion
 
-        public ProgressBar progress = new ProgressBar();
+        public LoadingProgress progress = new LoadingProgress();
 
         public LoadingBar(Form form, LoadingBarType type = LoadingBarType.Efficient)
         {
@@ -90,6 +90,27 @@ namespace OneShot_ModLoader
             await Task.Delay(
                 displayType == LoadingBarType.Disabled ? 0 : 1 // if the loading bar is completely disabled, don't await
                 );
+        }
+
+        // progress bar
+        public class LoadingProgress : ProgressBar
+        {
+            // stole this code lol https://stackoverflow.com/questions/778678/how-to-change-the-color-of-progressbar-in-c-sharp-net-3-5
+            public LoadingProgress()
+            {
+                SetStyle(ControlStyles.UserPaint, true);
+            }
+
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                Rectangle rec = e.ClipRectangle;
+
+                rec.Width = (int)(rec.Width * ((double)Value / Maximum)) - 4;
+                if (ProgressBarRenderer.IsSupported)
+                    ProgressBarRenderer.DrawHorizontalBar(e.Graphics, e.ClipRectangle);
+                rec.Height = rec.Height - 4;
+                e.Graphics.FillRectangle(Brushes.MediumPurple, 2, 2, rec.Width, rec.Height);
+            }
         }
     }
 }
