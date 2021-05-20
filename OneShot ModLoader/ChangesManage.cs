@@ -182,8 +182,15 @@ namespace OneShot_ModLoader
 
                 string shorten = mod.FullName;
 
+                // get the files and directories from the mod
+                DirectoryInfo[] directories = mod.GetDirectories("*", SearchOption.AllDirectories);
+                FileInfo[] files = mod.GetFiles("*", SearchOption.AllDirectories);
+
+                // set the maximum value of the progress bar to the sum of the directories/files
+                loadingBar.progress.Maximum = directories.Length + files.Length;
+
                 // first, create the directories
-                foreach (DirectoryInfo d in mod.GetDirectories("*", SearchOption.AllDirectories))
+                foreach (DirectoryInfo d in directories)
                 {
                     string newDir = d.FullName.Replace(shorten, string.Empty);
                     //MessageBox.Show(string.Format("base os path: {0}\nnew dir to combine w: {1}", Form1.baseOneShotPath, newDir));
@@ -191,47 +198,69 @@ namespace OneShot_ModLoader
                     {
                         Directory.CreateDirectory(Form1.baseOneShotPath + newDir);
                         Console.WriteLine("creating directory {0}", Form1.baseOneShotPath + newDir);
-                        await loadingBar.SetLoadingStatus(string.Format("creating directory {0}", newDir));
+
+                        await loadingBar.UpdateProgress();
+                        if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                            await loadingBar.SetLoadingStatus(string.Format("creating directory {0}", newDir));
                     }
                 }
 
                 // then copy the files
-                foreach (FileInfo f in mod.GetFiles("*", SearchOption.AllDirectories))
+                foreach (FileInfo f in files)
                 {
                     string newLocation = Form1.baseOneShotPath + f.FullName.Replace(shorten, string.Empty);
                     if (!File.Exists(newLocation))
                     {
                         File.Copy(f.FullName, newLocation);
                         Console.WriteLine("copied {0} to {1}", f.FullName, newLocation);
-                        await loadingBar.SetLoadingStatus(newLocation);
+
+                        await loadingBar.UpdateProgress();
+                        if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                            await loadingBar.SetLoadingStatus(newLocation);
                     }
                 }
+
+                loadingBar.ResetProgress();
 
                 // if the user chose to uninstall any existing mods, we copy over the stuff from the base oneshot path too
                 DirectoryInfo cool = new DirectoryInfo(Constants.modsPath + "base oneshot/");
                 shorten = cool.FullName;
+
+                // get the files and directories from the mod
+                DirectoryInfo[] directories2 = cool.GetDirectories("*", SearchOption.AllDirectories);
+                FileInfo[] files2 = cool.GetFiles("*", SearchOption.AllDirectories);
+
+                // set the maximum value of the progress bar to the sum of the directories/files
+                loadingBar.progress.Maximum = directories.Length + files.Length;
+
                 if (uninstallExisting)
                 {
                     // the directories
-                    foreach (DirectoryInfo d in cool.GetDirectories("*", SearchOption.AllDirectories))
+                    foreach (DirectoryInfo d in directories2)
                     {
                         string newDir = d.FullName.Replace(shorten, string.Empty);
                         if (!Directory.Exists(Form1.baseOneShotPath + "/" + newDir))
                         {
                             Console.WriteLine("creating directory " + Directory.CreateDirectory(Form1.baseOneShotPath + "/" + newDir).ToString());
-                            await loadingBar.SetLoadingStatus(string.Format("final: creating directory {0}", newDir));
+
+                            await loadingBar.UpdateProgress();
+                            if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                                await loadingBar.SetLoadingStatus(string.Format("final: creating directory {0}", newDir));
                         }
                     }
 
                     // the files
-                    foreach (FileInfo f in cool.GetFiles("*", SearchOption.AllDirectories))
+                    foreach (FileInfo f in files2)
                     {
                         string newLocation = Form1.baseOneShotPath + "/" + f.FullName.Replace(shorten, string.Empty);
                         if (!File.Exists(newLocation))
                         {
                             File.Copy(f.FullName, newLocation);
                             Console.WriteLine("coping {0} to {1}", f.FullName, newLocation);
-                            await loadingBar.SetLoadingStatus("final: " + newLocation);
+
+                            await loadingBar.UpdateProgress();
+                            if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                                await loadingBar.SetLoadingStatus("final: " + newLocation);
                         }
                     }
 
