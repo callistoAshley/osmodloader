@@ -189,6 +189,8 @@ namespace OneShot_ModLoader
                 // set the maximum value of the progress bar to the sum of the directories/files
                 loadingBar.progress.Maximum = directories.Length + files.Length;
 
+                await loadingBar.SetLoadingStatus("working, please wait");
+
                 // first, create the directories
                 foreach (DirectoryInfo d in directories)
                 {
