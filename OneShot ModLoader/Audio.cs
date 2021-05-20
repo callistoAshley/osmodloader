@@ -14,7 +14,7 @@ namespace OneShot_ModLoader
     public class Audio
     {
         public static List<WaveOutEvent> activeWaveOuts = new List<WaveOutEvent>();
-        public static void PlaySound(string sound, bool loop) // this used to use the System.Media.SoundPlayer class, which could loop tracks
+        public static void PlaySound(string sound, bool loop)
         {
             Console.WriteLine("attempting to play sound: " + sound);
 
