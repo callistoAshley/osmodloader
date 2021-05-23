@@ -89,7 +89,7 @@ namespace OneShot_ModLoader
                 }
                 Console.WriteLine("finished up in temp");
 
-                await loadingBar.SetLoadingStatus("final");
+                await loadingBar.SetLoadingStatus("finalizing, please wait");
                 loadingBar.ResetProgress();
 
                 // now we copy everything in temp to the oneshot path
