@@ -53,10 +53,7 @@ namespace OneShot_ModLoader
             return "bgm_0" + new Random().Next(1, 6) + ".mp3";
         }
 
-        public void ResetProgress()
-        {
-            progress.Value = 0;
-        }
+        public void ResetProgress() => progress.Value = 0;
 
         public async Task UpdateProgress()
         {
@@ -109,7 +106,7 @@ namespace OneShot_ModLoader
                 if (ProgressBarRenderer.IsSupported)
                     ProgressBarRenderer.DrawHorizontalBar(e.Graphics, e.ClipRectangle);
                 rec.Height = rec.Height - 4;
-                e.Graphics.FillRectangle(Brushes.MediumPurple, 2, 2, rec.Width, rec.Height);
+                e.Graphics.FillRectangle(Brushes.MediumPurple, 0, 0, rec.Width, rec.Height);
             }
         }
     }

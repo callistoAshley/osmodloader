@@ -135,10 +135,7 @@ namespace OneShot_ModLoader
             Cool();
         }
 
-        private async void Cool()
-        {
-            await RefreshMods();
-        }
+        private async void Cool() => await RefreshMods(); // can't await in ctor lol
 
         public async Task RefreshMods ()
         {
