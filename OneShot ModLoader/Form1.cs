@@ -119,12 +119,14 @@ namespace OneShot_ModLoader
             instance = this;
 
             // first, initalize the title
-            Label title = new Label();
-            title.Text = "Inactive Mods";
-            title.ForeColor = Color.MediumPurple;
-            title.Font = new Font(title.Font, FontStyle.Bold);
-            title.Location = new Point(120, 35);
-            title.Size = new Size(100, 15);
+            Label title = new Label
+            {
+                Text = "Inactive Mods",
+                ForeColor = Color.MediumPurple,
+                Font = new Font(Font, FontStyle.Bold),
+                Location = new Point(120, 35),
+                Size = new Size(100, 15)
+            };
             Form1.instance.Controls.Add(title);
 
             // then the treeview
@@ -185,9 +187,20 @@ namespace OneShot_ModLoader
             string[] mods = Directory.GetDirectories(Constants.modsPath);
             foreach (string s in mods)
             {
-                string s2 = s.Substring(s.LastIndexOf("Mods") + 5);
-                if (!ActiveMods.instance.Nodes.ContainsKey(s2) && s2 != "base oneshot")
-                    Nodes.Add(s2, s2);
+                string modName = s.Substring(s.LastIndexOf("Mods") + 5); // create the name of the mod to add to the treeview
+
+                // check if the mod is valid. if not, warn the player
+                if (!ChangesManage.ConfirmValid(s))
+                {
+                    Audio.PlaySound("sfx_denied.mp3", false);
+                    MessageBox.Show($"Could not confirm that {modName} is a valid OneShot mod or add-on." +
+                        "\nThis could be because the contents of the mod are not in the root of the directory." +
+                        "\nPlease double check that this is the case, and if so, move them." +
+                        "\n\nOneShot ModLoader will ignore this just in case and continue as if it were valid, but there are no guarantees it will install correctly.");
+                }
+
+                if (!ActiveMods.instance.Nodes.ContainsKey(modName) && modName != "base oneshot")
+                    Nodes.Add(modName, modName);
             }
 
             ActiveMods.instance.RefreshMods();

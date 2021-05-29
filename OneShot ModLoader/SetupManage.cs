@@ -45,6 +45,48 @@ namespace OneShot_ModLoader
 
                 await loadingBar.SetLoadingStatus("working, please wait a moment");
 
+                // get directories and files from base os
+                DirectoryInfo baseOs = new DirectoryInfo(path);
+                DirectoryInfo[] directories = baseOs.GetDirectories("*", SearchOption.AllDirectories);
+                FileInfo[] files = baseOs.GetFiles("*", SearchOption.AllDirectories);
+
+                // create directories
+                await loadingBar.SetLoadingStatus("setting up directories");
+                foreach (DirectoryInfo d in directories)
+                {
+                    string create = d.FullName.Replace(path, string.Empty); // create the name of the directory to create
+
+                    // and create it
+                    if (!Directory.Exists(Constants.modsPath + "/base oneshot/" + create))
+                        Directory.CreateDirectory(Constants.modsPath + "/base oneshot/" + create);
+
+                    // update loading bar
+                    if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                        await loadingBar.SetLoadingStatus("setup: " + d.FullName);
+
+                    await loadingBar.UpdateProgress();
+                }
+
+                loadingBar.ResetProgress();
+
+                // copy files
+                await loadingBar.SetLoadingStatus("setting up files");
+                foreach (FileInfo f in files)
+                {
+                    string copyPath = f.FullName.Replace(path, string.Empty); // create the name of the file to create
+
+                    // and copy it
+                    if (!File.Exists(Constants.modsPath + "/base oneshot/" + copyPath))
+                        f.CopyTo(copyPath, true); // overwrite
+
+                    if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                        await loadingBar.SetLoadingStatus("setup: " + f.FullName);
+
+                    await loadingBar.UpdateProgress();
+                }
+
+                #region ---------------OLD---------------
+                /*
                 // first we need to copy all of the directories
                 string[] dirs = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
 
@@ -76,6 +118,8 @@ namespace OneShot_ModLoader
 
                     await loadingBar.SetLoadingStatus("setup: " + fileName);
                 }
+                */
+                #endregion
 
                 if (File.Exists(Constants.appDataPath + "path.molly"))
                     File.Delete(Constants.appDataPath + "path.molly");
