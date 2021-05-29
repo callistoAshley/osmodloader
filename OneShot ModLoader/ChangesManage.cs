@@ -299,6 +299,7 @@ namespace OneShot_ModLoader
             }
         }
 
+        #region uh this other weird thing i was going to do that i'm keeping just in case
         public static async Task Apply2(LoadingBar loadingBar)
         {
             Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
@@ -336,7 +337,7 @@ namespace OneShot_ModLoader
 
                                 // then delete it if it exists in base os
                                 //Directory.Delete(baseOs.FullName + "\\" + ss);
-                            }   
+                            }
                         }
 
                         // files
@@ -352,7 +353,7 @@ namespace OneShot_ModLoader
                                 {
                                     File.Delete(baseOs.FullName + "\\" + ss);
                                     deletedFiles.Add(ss);
-                                }       
+                                }
 
                                 // check whether the file exists in the cache
                                 if (File.Exists(Constants.appDataPath + "cache\\" + ss))
@@ -474,6 +475,34 @@ namespace OneShot_ModLoader
                 new ExceptionMessage(ex, true, "\nOneShot ModLoader will now close.");
                 Form1.instance.Close();
             }
+        }
+        #endregion
+
+        public static bool ConfirmValid(string modPath)
+        {
+            string[] directoriesToSearch = new string[]
+            {
+                "/Audio",
+                "/Data",
+                "/Fonts",
+                "/Graphics",
+                "/Languages",
+                "/Wallpaper"
+            };
+
+            foreach (string s in directoriesToSearch)
+                if (Directory.Exists(modPath + s)) return true;
+
+            // that didn't work? let's search for some files instead. maybe it's modshot or something
+            DirectoryInfo mod = new DirectoryInfo(modPath);
+            List<FileInfo> files = new List<FileInfo>();
+
+            // search for .exe and .dll files
+            files.AddRange(mod.EnumerateFiles("*.exe"));
+            files.AddRange(mod.EnumerateFiles("*.dll"));
+
+            if (files.Count > 0) return true; // awesome! we found something!
+            return false; // uh oh, looks like this isn't a mod - or maybe the contents aren't in the root of the directory. we should warn the player
         }
     }
 }
