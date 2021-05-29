@@ -25,6 +25,11 @@ namespace OneShot_ModLoader
             BackColor = Color.Black;
             Icon = new Icon(Constants.spritesPath + "devtools.ico");
 
+            // add ? icon
+            MinimizeBox = false;
+            MaximizeBox = false;
+            HelpButton = true;
+
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Show();
 
@@ -94,6 +99,12 @@ namespace OneShot_ModLoader
 
             DevToolsForm.instance.Init();
         }
+
+        protected override void OnHelpRequested(HelpEventArgs hevent)
+        {
+            MessageBox.Show("====Compress mod to .osml====\nCompresses a directory to a .osml file using zip compression, " +
+                "which OneShot ModLoader can run and use for One-Click Install.");
+        }
     }
     public class OSMLMetadataButton : Button
     {
@@ -131,6 +142,11 @@ namespace OneShot_ModLoader
             }
 
             DevToolsForm.instance.Init();
+        }
+
+        protected override void OnHelpRequested(HelpEventArgs hevent)
+        {
+            MessageBox.Show("====Generate mod metadata====\nCurrently obsolete. Will be used in a future update.");
         }
     }
 }

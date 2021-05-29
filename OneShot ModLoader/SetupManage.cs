@@ -50,6 +50,8 @@ namespace OneShot_ModLoader
                 DirectoryInfo[] directories = baseOs.GetDirectories("*", SearchOption.AllDirectories);
                 FileInfo[] files = baseOs.GetFiles("*", SearchOption.AllDirectories);
 
+                loadingBar.progress.Maximum = directories.Length + files.Length; // set the maximum of the loading bar to the length of the directories and files
+
                 // create directories
                 await loadingBar.SetLoadingStatus("setting up directories");
                 foreach (DirectoryInfo d in directories)
@@ -67,8 +69,6 @@ namespace OneShot_ModLoader
                     await loadingBar.UpdateProgress();
                 }
 
-                loadingBar.ResetProgress();
-
                 // copy files
                 await loadingBar.SetLoadingStatus("setting up files");
                 foreach (FileInfo f in files)
@@ -77,7 +77,7 @@ namespace OneShot_ModLoader
 
                     // and copy it
                     if (!File.Exists(Constants.modsPath + "/base oneshot/" + copyPath))
-                        f.CopyTo(copyPath, true); // overwrite
+                        f.CopyTo(Constants.modsPath + "/base oneshot/" + copyPath, true); // overwrite
 
                     if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
                         await loadingBar.SetLoadingStatus("setup: " + f.FullName);
@@ -121,11 +121,13 @@ namespace OneShot_ModLoader
                 */
                 #endregion
 
+                await loadingBar.SetLoadingStatus("almost done!");
+
                 if (File.Exists(Constants.appDataPath + "path.molly"))
                     File.Delete(Constants.appDataPath + "path.molly");
                 File.WriteAllText(Constants.appDataPath + "path.molly", path);
 
-                await loadingBar.SetLoadingStatus("almost done!");
+                
 
                 Console.Beep();
                 MessageBox.Show("All done!");

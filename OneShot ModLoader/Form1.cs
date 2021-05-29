@@ -69,8 +69,8 @@ namespace OneShot_ModLoader
             //new BrowseMods();
             Controls.Add(new Setup());
             Controls.Add(new DevToolsButton());
-            Controls.Add(new MoveScreen(new Point(390, 225), MoveScreen.Direction.Right));
-            Controls.Add(new MoveScreen(new Point(430, 225), MoveScreen.Direction.Left));
+            //Controls.Add(new MoveScreen(new Point(390, 225), MoveScreen.Direction.Right));
+            //Controls.Add(new MoveScreen(new Point(430, 225), MoveScreen.Direction.Left));
 
             // secret
             Controls.Add(new CloverSecret());
