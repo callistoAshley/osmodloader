@@ -158,7 +158,7 @@ namespace OneShot_ModLoader
             Form1.baseOneShotPath = File.ReadAllText(Constants.appDataPath + "path.molly");
             Console.WriteLine("oneshot path is " + Form1.baseOneShotPath);
 
-            LoadingBar loadingBar = new LoadingBar(Form1.instance);
+            LoadingBar loadingBar = new LoadingBar(Form1.instance, showProgressBar: false);
 
             // now we extract any existing zip files
             foreach (FileInfo zip in new DirectoryInfo(Constants.modsPath).GetFiles()) 

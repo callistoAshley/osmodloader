@@ -11,7 +11,7 @@ using System.IO;
 
 namespace OneShot_ModLoader
 {
-    public class LoadingBar
+    public class LoadingBar 
     {
         public Label text = new Label();
 
@@ -27,7 +27,7 @@ namespace OneShot_ModLoader
 
         public LoadingProgress progress = new LoadingProgress();
 
-        public LoadingBar(Form form, LoadingBarType type = LoadingBarType.Efficient)
+        public LoadingBar(Form form, LoadingBarType type = LoadingBarType.Efficient, bool showProgressBar = true)
         {
             text.ForeColor = Color.MediumPurple;
             text.Location = new Point(0, 190);
@@ -41,11 +41,14 @@ namespace OneShot_ModLoader
 
             form.Controls.Add(text);
 
-            // wf loading bar
-            progress.Location = new Point(0, 230);
-            progress.Size = new Size(500, 20);
-            progress.Style = ProgressBarStyle.Continuous;
-            form.Controls.Add(progress);
+            if (showProgressBar)
+            {
+                // wf loading bar
+                progress.Location = new Point(0, 230);
+                progress.Size = new Size(500, 20);
+                progress.Style = ProgressBarStyle.Continuous;
+                form.Controls.Add(progress);
+            }
         }
 
         public string GetLoadingBGM()
@@ -106,7 +109,7 @@ namespace OneShot_ModLoader
                 if (ProgressBarRenderer.IsSupported)
                     ProgressBarRenderer.DrawHorizontalBar(e.Graphics, e.ClipRectangle);
                 rec.Height = rec.Height - 4;
-                e.Graphics.FillRectangle(Brushes.MediumPurple, 0, 0, rec.Width, rec.Height);
+                e.Graphics.FillRectangle(Brushes.MediumPurple, 2, 2, rec.Width, rec.Height);
             }
         }
     }
