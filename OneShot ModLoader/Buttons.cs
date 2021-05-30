@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
+using System.Threading;
 
 namespace OneShot_ModLoader
 {
@@ -199,6 +200,7 @@ namespace OneShot_ModLoader
             FlatAppearance.BorderSize = 3;
             ForeColor = Color.MediumPurple;
         }
+
         public BackButton(bool audioStop)
         {
             Enabled = true;
@@ -345,9 +347,12 @@ namespace OneShot_ModLoader
             pb.Location = new Point(20, 20);
             Form1.instance.Controls.Add(pb);
 
-            await Task.Delay(1);
-            try { await ChangesManage.Apply(new LoadingBar(Form1.instance)); }
+            try 
+            {
+                await ChangesManage.Apply(new LoadingBar(Form1.instance)); 
+            }
             catch { }
+
             Form1.instance.Controls.Clear();
             Form1.instance.InitStartMenu();
         }
