@@ -33,7 +33,7 @@ namespace OneShot_ModLoader
             text.Location = new Point(0, 190);
             text.AutoSize = true;
 
-            text.Font = Constants.GetTerminusFont(10);
+            text.Font = Static.GetTerminusFont(10);
             text.ForeColor = Color.MediumPurple;
             text.BackColor = Color.Transparent;
 
@@ -86,10 +86,8 @@ namespace OneShot_ModLoader
 
                 Console.WriteLine(message + "\n---\n" + ex.ToString());
             }
-            
-            await Task.Delay(
-                displayType == LoadingBarType.Disabled ? 0 : 1 // if the loading bar is completely disabled, don't await
-                );
+
+            await Task.Delay(1);
         }
 
         // progress bar

@@ -106,7 +106,7 @@
     <Compile Include="Audio.cs" />
     <Compile Include="Buttons.cs" />
     <Compile Include="ChangesManage.cs" />
-    <Compile Include="Constants.cs" />
+    <Compile Include="Static.cs" />
     <Compile Include="DevToolsForm.cs">
       <SubType>Form</SubType>
     </Compile>

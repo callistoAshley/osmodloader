@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace OneShot_ModLoader
 {
-    public static class Constants
+    public static class Static
     {
         // yes i know these are readonly not constant but shut up i feel cool ok
         public static readonly string directory = Application.ExecutablePath.Replace(Application.ProductName + ".exe", string.Empty);

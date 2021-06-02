@@ -20,7 +20,7 @@ namespace OneShot_ModLoader
             Location = new Point(400, 250);
             BackColor = Color.Transparent;
             
-            Image = Image.FromFile(Constants.spritesPath + "oci_friend_" + theme + ".gif");
+            Image = Image.FromFile(Static.spritesPath + "oci_friend_" + theme + ".gif");
             OCIForm.instance.Controls.Add(this);
         }
 

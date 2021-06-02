@@ -34,8 +34,8 @@ namespace OneShot_ModLoader
         {
             //Audio.PlaySound("bgm_menu.mp3", true);
             //new TestFormLol();
-            if (!Directory.Exists(Constants.appDataPath))
-                Directory.CreateDirectory(Constants.appDataPath);
+            if (!Directory.Exists(Static.appDataPath))
+                Directory.CreateDirectory(Static.appDataPath);
 
             // init stuff
             instance = this;
@@ -54,7 +54,7 @@ namespace OneShot_ModLoader
             Console.WriteLine("drawing start menu");
 
             // logo
-            Image image = Image.FromFile(Constants.spritesPath + "logo2.png");
+            Image image = Image.FromFile(Static.spritesPath + "logo2.png");
             PictureBox logo = new PictureBox
             {
                 Image = image,
@@ -99,7 +99,7 @@ namespace OneShot_ModLoader
             instructions.Location = new Point(0, 20);
 
             PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
             instructions.Font = new Font(f.Families[0], 12, FontStyle.Bold);
 
             Controls.Add(instructions);
@@ -145,8 +145,8 @@ namespace OneShot_ModLoader
             Nodes.Clear();
 
             // create the mods directory if it doesn't exist
-            if (!Directory.Exists(Constants.modsPath))
-                Directory.CreateDirectory(Constants.modsPath);
+            if (!Directory.Exists(Static.modsPath))
+                Directory.CreateDirectory(Static.modsPath);
             if (!Program.doneSetup)
             {
                 MessageBox.Show("A base oneshot could not be found. Please open the setup page and follow the instructions.");
@@ -155,20 +155,20 @@ namespace OneShot_ModLoader
                 return;
             }
 
-            Form1.baseOneShotPath = File.ReadAllText(Constants.appDataPath + "path.molly");
+            Form1.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
             Console.WriteLine("oneshot path is " + Form1.baseOneShotPath);
 
             LoadingBar loadingBar = new LoadingBar(Form1.instance, showProgressBar: false);
 
             // now we extract any existing zip files
-            foreach (FileInfo zip in new DirectoryInfo(Constants.modsPath).GetFiles()) 
+            foreach (FileInfo zip in new DirectoryInfo(Static.modsPath).GetFiles()) 
             {
                 await loadingBar.SetLoadingStatus(string.Format("attempting to extract {0},\nplease wait a moment", zip.Name));
                 Console.WriteLine("attempting to extract {0}", zip.FullName);
                 try
                 {
                     if (zip.Extension == ".zip")
-                        ZipFile.ExtractToDirectory(zip.FullName, Constants.modsPath + "/" + zip.Name.Replace(".zip", ""));
+                        ZipFile.ExtractToDirectory(zip.FullName, Static.modsPath + "/" + zip.Name.Replace(".zip", ""));
                 }
                 catch (Exception ex)
                 {
@@ -184,7 +184,7 @@ namespace OneShot_ModLoader
             }
 
             // add the mods to the treeview
-            string[] mods = Directory.GetDirectories(Constants.modsPath);
+            string[] mods = Directory.GetDirectories(Static.modsPath);
             foreach (string s in mods)
             {
                 string modName = s.Substring(s.LastIndexOf("Mods") + 5); // create the name of the mod to add to the treeview
@@ -232,7 +232,7 @@ namespace OneShot_ModLoader
             Enabled = true;
             Location = new Point(280, 50);
             Size = new Size(176, 175);
-            BackgroundImage = Image.FromFile(Constants.spritesPath + "button_box.png");
+            BackgroundImage = Image.FromFile(Static.spritesPath + "button_box.png");
 
             // add base
             Nodes.Add("base oneshot");
@@ -274,11 +274,11 @@ namespace OneShot_ModLoader
         public void RefreshMods()
         {
             // try to read from the active mods file and add any of the mods found within to the active mods treeview
-            FileInfo activeModsFile = new FileInfo(Constants.appDataPath + "activemods.molly");
+            FileInfo activeModsFile = new FileInfo(Static.appDataPath + "activemods.molly");
             if (activeModsFile.Exists)
             {
                 Console.WriteLine("active mods file exists");
-                string[] active = File.ReadAllLines(Constants.appDataPath + "activemods.molly");
+                string[] active = File.ReadAllLines(Static.appDataPath + "activemods.molly");
                 foreach (string s in active)
                 {
                     Console.WriteLine("found {0} in the active mods file", s);

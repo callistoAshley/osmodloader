@@ -38,7 +38,7 @@ namespace OneShot_ModLoader
             Text = "One-Click Install";
             Size = new Size(500, 400);
             SetTheme();
-            Icon = new Icon(Constants.spritesPath + "oci_icon.ico");
+            Icon = new Icon(Static.spritesPath + "oci_icon.ico");
 
             MaximizeBox = false;
             MinimizeBox = false;
@@ -51,7 +51,7 @@ namespace OneShot_ModLoader
             Label text = new Label();
             text.Text = "OneShot ModLoader\nOne-Click Install\n" + modPath.Name;
             text.Location = new Point(10, 10);
-            text.Font = Constants.GetTerminusFont(16);
+            text.Font = Static.GetTerminusFont(16);
             text.AutoSize = true;
             text.ForeColor = Color.White;
             text.BackColor = Color.Transparent;
@@ -93,7 +93,7 @@ namespace OneShot_ModLoader
 
             new OCILoadingBuddy(themeString);
 
-            BackgroundImage = Image.FromFile(string.Format(Constants.spritesPath + "oci_bg_{0}.png", themeString));
+            BackgroundImage = Image.FromFile(string.Format(Static.spritesPath + "oci_bg_{0}.png", themeString));
             BackgroundImageLayout = ImageLayout.Stretch;
         }
     }
@@ -104,7 +104,7 @@ namespace OneShot_ModLoader
         {
             Location = new Point(200, 300);
 
-            Font = Constants.GetTerminusFont(8);
+            Font = Static.GetTerminusFont(8);
             Text = "Ready";
         }
 
@@ -118,7 +118,7 @@ namespace OneShot_ModLoader
             await loadingBar.SetLoadingStatus(string.Format("Extracting {0}, please wait...", OCIForm.instance.modPath.Name));
             Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
 
-            string zipDestination = Constants.modsPath + mod;
+            string zipDestination = Static.modsPath + mod;
             try
             {
                 if (!Directory.Exists(zipDestination))
@@ -157,7 +157,7 @@ namespace OneShot_ModLoader
             instance = this;
 
             Text = "Directly apply to OneShot";
-            Font = Constants.GetTerminusFont(12);
+            Font = Static.GetTerminusFont(12);
 
             Location = new Point(175, 150);
             Size = new Size(200, 50);
@@ -189,7 +189,7 @@ namespace OneShot_ModLoader
             instance = this;
 
             Text = "Uninstall already activated mod(s)";
-            Font = Constants.GetTerminusFont(12);
+            Font = Static.GetTerminusFont(12);
 
             Location = new Point(175, 200);
             Size = new Size(200, 75);

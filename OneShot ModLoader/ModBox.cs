@@ -30,7 +30,7 @@ namespace OneShot_ModLoader
 
                 modName = modPath.Substring(modPath.LastIndexOf("Mods") + 5);
                 desc.Text = "Metadata is nonexistent or unreadable";
-                icon.Image = Image.FromFile(Constants.spritesPath + "mmd_icon_default.png");
+                icon.Image = Image.FromFile(Static.spritesPath + "mmd_icon_default.png");
 
                 // read from metadata
                 if (File.Exists(modPath + "\\.osml\\metadata.ini"))
@@ -58,9 +58,9 @@ namespace OneShot_ModLoader
                 icon.SizeMode = PictureBoxSizeMode.StretchImage;
 
                 // font
-                displayName.Font = Constants.GetTerminusFont(9);
-                author.Font = Constants.GetTerminusFont(9);
-                desc.Font = Constants.GetTerminusFont(9);
+                displayName.Font = Static.GetTerminusFont(9);
+                author.Font = Static.GetTerminusFont(9);
+                desc.Font = Static.GetTerminusFont(9);
 
                 // colour
                 displayName.ForeColor = Color.MediumPurple;

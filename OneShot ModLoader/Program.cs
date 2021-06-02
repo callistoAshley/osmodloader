@@ -21,24 +21,24 @@ namespace OneShot_ModLoader
             if (initForm) return;
 
             // console out stuff
-            if (!Directory.Exists(Constants.appDataPath + "logs")) Directory.CreateDirectory(Constants.appDataPath + "logs");
+            if (!Directory.Exists(Static.appDataPath + "logs")) Directory.CreateDirectory(Static.appDataPath + "logs");
 
-            Form1.consoleOutStream = new StreamWriter(Constants.appDataPath + "logs\\output " + DateTime.Now.ToString().Replace("/", ".").Replace(":", ".") + ".txt");
+            Form1.consoleOutStream = new StreamWriter(Static.appDataPath + "logs\\output " + DateTime.Now.ToString().Replace("/", ".").Replace(":", ".") + ".txt");
             Console.SetOut(Form1.consoleOutStream);
             Console.SetError(Form1.consoleOutStream);
 
             Console.WriteLine("les goooooooooooooo");
 
             // base os stuff
-            doneSetup = Directory.Exists(Constants.modsPath + "/base oneshot") && File.Exists(Constants.appDataPath + "path.molly");
+            doneSetup = Directory.Exists(Static.modsPath + "/base oneshot") && File.Exists(Static.appDataPath + "path.molly");
 
-            if (File.Exists(Constants.appDataPath + "path.molly"))
-                Form1.baseOneShotPath = File.ReadAllText(Constants.appDataPath + "path.molly");
+            if (File.Exists(Static.appDataPath + "path.molly"))
+                Form1.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
             else
                 Form1.baseOneShotPath = "woah";
 
-            if (!Directory.Exists(Constants.modInfoPath))
-                Directory.CreateDirectory(Constants.modInfoPath);
+            if (!Directory.Exists(Static.modInfoPath))
+                Directory.CreateDirectory(Static.modInfoPath);
 
             try
             {
@@ -55,7 +55,7 @@ namespace OneShot_ModLoader
         public static void ConsoleToFile()
         {
             List<string> delete = new List<string>();
-            foreach (FileInfo f in new DirectoryInfo(Constants.appDataPath + "/logs").GetFiles())
+            foreach (FileInfo f in new DirectoryInfo(Static.appDataPath + "/logs").GetFiles())
             {
                 // for every file in the /logs folder, check if it has been alive for more than 6 hours
                 DateTime lifespan = DateTime.Now - new TimeSpan(6, 0, 0);
