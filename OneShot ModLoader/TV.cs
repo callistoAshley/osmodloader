@@ -16,7 +16,7 @@ namespace OneShot_ModLoader
         public TV(Control parent)
         {
             Random r = new Random();
-            pictureBox.Image = Image.FromFile(Constants.spritesPath + "tv" + r.Next(1, 13) + ".png");
+            pictureBox.Image = Image.FromFile(Static.spritesPath + "tv" + r.Next(1, 13) + ".png");
             pictureBox.Location = new Point(r.Next(1, 3) == 1 ? 0 : 500);
             pictureBox.Size = pictureBox.Image.Size;
 

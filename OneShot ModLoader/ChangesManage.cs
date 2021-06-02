@@ -10,8 +10,9 @@ namespace OneShot_ModLoader
 {
     public class ChangesManage
     {
-        public static async Task Apply(LoadingBar loadingBar)
+        public static async Task Apply()
         {
+            LoadingBar loadingBar = new LoadingBar(Form1.instance);
             Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
 
             Console.WriteLine("applying changes");
@@ -24,7 +25,7 @@ namespace OneShot_ModLoader
                 // TreeNode t in ActiveMods.instance.Nodes
                 await loadingBar.SetLoadingStatus("creating temp directory");
 
-                DirectoryInfo tempDir = new DirectoryInfo(Constants.directory + "temp DO NOT OPEN\\MODCOPY\\");
+                DirectoryInfo tempDir = new DirectoryInfo(Static.directory + "temp DO NOT OPEN\\MODCOPY\\");
                 DirectoryInfo baseOs = new DirectoryInfo(Form1.baseOneShotPath);
 
                 // create the temp directory
@@ -42,7 +43,7 @@ namespace OneShot_ModLoader
 
                     activeMods.Add(t.Text);
 
-                    DirectoryInfo mod = new DirectoryInfo(Constants.directory + "Mods\\" + t.Text);
+                    DirectoryInfo mod = new DirectoryInfo(Static.directory + "Mods\\" + t.Text);
 
                     // get the files and directories from the mod
                     DirectoryInfo[] directories = mod.GetDirectories("*", SearchOption.AllDirectories);
@@ -55,7 +56,7 @@ namespace OneShot_ModLoader
 
                     foreach (DirectoryInfo d in directories)
                     {
-                        string shorten = Constants.directory + "Mods\\" + t.Text + "\\";
+                        string shorten = Static.directory + "Mods\\" + t.Text + "\\";
                         string create = tempDir.FullName + d.FullName.Replace(shorten, string.Empty); // the full name of the directory to create
 
                         if (!Directory.Exists(create))
@@ -72,7 +73,7 @@ namespace OneShot_ModLoader
                     
                     foreach (FileInfo f in files)
                     {
-                        string shorten = Constants.directory + "Mods\\" + t.Text + "\\";
+                        string shorten = Static.directory + "Mods\\" + t.Text + "\\";
                         string destination = tempDir.FullName + f.FullName.Replace(shorten, string.Empty);
 
                         if (!File.Exists(destination))
@@ -103,7 +104,7 @@ namespace OneShot_ModLoader
 
                 foreach (DirectoryInfo d in directories2)
                 {
-                    string shorten = Constants.directory + "temp DO NOT OPEN\\MODCOPY\\";
+                    string shorten = Static.directory + "temp DO NOT OPEN\\MODCOPY\\";
                     string create = baseOs.FullName + "\\" + d.FullName.Replace(shorten, string.Empty);
 
                     if (!Directory.Exists(create))
@@ -121,7 +122,7 @@ namespace OneShot_ModLoader
                 // and then finally, the files
                 foreach (FileInfo f in files2)
                 {
-                    string shorten = Constants.directory + "temp DO NOT OPEN\\MODCOPY";
+                    string shorten = Static.directory + "temp DO NOT OPEN\\MODCOPY";
                     string destination = baseOs.FullName + f.FullName.Replace(shorten, string.Empty);
 
                     if (!File.Exists(destination))
@@ -141,14 +142,14 @@ namespace OneShot_ModLoader
 
                 Console.WriteLine("finished copying files");
 
-                new DirectoryInfo(Constants.directory + "\\temp DO NOT OPEN").Delete(true);
+                new DirectoryInfo(Static.directory + "\\temp DO NOT OPEN").Delete(true);
                 Console.WriteLine("successfully deleted temp");
 
                 Console.WriteLine("activeMods.Count " + activeMods.Count);
                 // write the active mods to a file
-                if (File.Exists(Constants.appDataPath + "activemods.molly"))
-                    File.Delete(Constants.appDataPath + "activemods.molly");
-                File.WriteAllLines(Constants.appDataPath + "activemods.molly", activeMods);
+                if (File.Exists(Static.appDataPath + "activemods.molly"))
+                    File.Delete(Static.appDataPath + "activemods.molly");
+                File.WriteAllLines(Static.appDataPath + "activemods.molly", activeMods);
 
                 Console.Beep();
                 MessageBox.Show("All done!");
@@ -225,7 +226,7 @@ namespace OneShot_ModLoader
                 loadingBar.ResetProgress();
 
                 // if the user chose to uninstall any existing mods, we copy over the stuff from the base oneshot path too
-                DirectoryInfo cool = new DirectoryInfo(Constants.modsPath + "base oneshot/");
+                DirectoryInfo cool = new DirectoryInfo(Static.modsPath + "base oneshot/");
                 shorten = cool.FullName;
 
                 // get the files and directories from the mod
@@ -267,9 +268,9 @@ namespace OneShot_ModLoader
                     }
 
                     // finally, write to the active mods file
-                    List<string> currentlyActive = File.ReadAllLines(Constants.appDataPath + "activemods.molly").ToList<string>();
-                    if (File.Exists(Constants.appDataPath + "activemods.molly")) // first, delete the file if it exists
-                        File.Delete(Constants.appDataPath + "activemods.molly");
+                    List<string> currentlyActive = File.ReadAllLines(Static.appDataPath + "activemods.molly").ToList<string>();
+                    if (File.Exists(Static.appDataPath + "activemods.molly")) // first, delete the file if it exists
+                        File.Delete(Static.appDataPath + "activemods.molly");
                     
                     // then insert the name of the mod at the beginning of a new collection
                     if (!uninstallExisting)
@@ -283,7 +284,7 @@ namespace OneShot_ModLoader
                         };
                     }
                     // write the file
-                    File.WriteAllLines(Constants.appDataPath + "activemods.molly", currentlyActive);
+                    File.WriteAllLines(Static.appDataPath + "activemods.molly", currentlyActive);
                 }
             }
             catch (Exception ex)
@@ -319,7 +320,7 @@ namespace OneShot_ModLoader
 
                 // deal with any files that are no longer being used
                 List<string> deletedFiles = new List<string>(); // add deleted files to a list so mod stacking doesn't screw everything over
-                foreach (string s in Directory.GetDirectories(Constants.modInfoPath)) // get the mods in the modinfo folder
+                foreach (string s in Directory.GetDirectories(Static.modInfoPath)) // get the mods in the modinfo folder
                 {
                     // note to future self: make the above foreach loop work backwards with a for loop instead so it doesn't the uhhhhhhhhhhhhh
                     DirectoryInfo d = new DirectoryInfo(s);
@@ -356,13 +357,13 @@ namespace OneShot_ModLoader
                                 }
 
                                 // check whether the file exists in the cache
-                                if (File.Exists(Constants.appDataPath + "cache\\" + ss))
+                                if (File.Exists(Static.appDataPath + "cache\\" + ss))
                                 {
                                     Console.WriteLine("restoring {0} from cache", ss);
                                     await loadingBar.SetLoadingStatus(string.Format("restoring {0} from cache", ss));
 
                                     // and if it does, return it to base os
-                                    File.Copy(Constants.appDataPath + "cache\\" + ss, baseOs.FullName + "\\" + ss);
+                                    File.Copy(Static.appDataPath + "cache\\" + ss, baseOs.FullName + "\\" + ss);
                                 }
                             }
                         }
@@ -379,11 +380,11 @@ namespace OneShot_ModLoader
 
                     activeMods.Add(t.Text);
 
-                    DirectoryInfo mod = new DirectoryInfo(Constants.directory + "Mods\\" + t.Text);
+                    DirectoryInfo mod = new DirectoryInfo(Static.directory + "Mods\\" + t.Text);
                     Console.WriteLine("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, mod.FullName);
 
                     // create the modinfo directory
-                    DirectoryInfo modInfoDir = new DirectoryInfo(Constants.modInfoPath + t.Text);
+                    DirectoryInfo modInfoDir = new DirectoryInfo(Static.modInfoPath + t.Text);
 
                     if (!modInfoDir.Exists && !isBase)
                         modInfoDir.Create();
@@ -394,7 +395,7 @@ namespace OneShot_ModLoader
                     foreach (DirectoryInfo d in mod.GetDirectories("*", SearchOption.AllDirectories))
                     {
                         // cut the mod directory out of the string to make the name of the directory to create
-                        string shorten = Constants.directory + "Mods\\" + t.Text;
+                        string shorten = Static.directory + "Mods\\" + t.Text;
                         string create = d.FullName.Replace(shorten, string.Empty);
 
                         // add the name of the directory to a list
@@ -412,7 +413,7 @@ namespace OneShot_ModLoader
                     foreach (FileInfo f in mod.GetFiles("*", SearchOption.AllDirectories))
                     {
                         // cut the mod directory out of the string to make the name of the directory to copy
-                        string shorten = Constants.directory + "Mods\\" + t.Text;
+                        string shorten = Static.directory + "Mods\\" + t.Text;
                         string copy = f.FullName.Replace(shorten, string.Empty);
 
                         // add the name of the file to a list
@@ -435,21 +436,21 @@ namespace OneShot_ModLoader
                 Console.WriteLine("finished up with mod stuff");
 
                 // copy the files in the list from base os to the cache folder
-                if (!Directory.Exists(Constants.appDataPath + "cache")) // if the cache directory doesn't exist, create it
-                    Directory.CreateDirectory(Constants.appDataPath + "cache");
+                if (!Directory.Exists(Static.appDataPath + "cache")) // if the cache directory doesn't exist, create it
+                    Directory.CreateDirectory(Static.appDataPath + "cache");
 
                 foreach (string s in filesToCache)
                 {
                     // double check if the string contains the name of a directory
                     string s2 = s.Substring(0, s.LastIndexOf("\\"));
                     if (s2 != string.Empty)
-                        Console.WriteLine("creating directory: " + Directory.CreateDirectory(Constants.appDataPath + "cache\\" + s2)); // and if it does, create it
+                        Console.WriteLine("creating directory: " + Directory.CreateDirectory(Static.appDataPath + "cache\\" + s2)); // and if it does, create it
 
                     Console.WriteLine("caching " + s);
                     await loadingBar.SetLoadingStatus("caching " + s);
 
                     // copy the file to the cache directory
-                    File.Copy(Constants.modsPath + "base oneshot\\" + s, Constants.appDataPath + "cache\\" + s);
+                    File.Copy(Static.modsPath + "base oneshot\\" + s, Static.appDataPath + "cache\\" + s);
                 }
 
                 // done!
@@ -457,9 +458,9 @@ namespace OneShot_ModLoader
 
                 Console.WriteLine("activeMods.Count " + activeMods.Count);
                 // write the active mods to a file
-                if (File.Exists(Constants.appDataPath + "activemods.molly"))
-                    File.Delete(Constants.appDataPath + "activemods.molly");
-                File.WriteAllLines(Constants.appDataPath + "activemods.molly", activeMods);
+                if (File.Exists(Static.appDataPath + "activemods.molly"))
+                    File.Delete(Static.appDataPath + "activemods.molly");
+                File.WriteAllLines(Static.appDataPath + "activemods.molly", activeMods);
 
                 Console.Beep();
                 MessageBox.Show("All done!");

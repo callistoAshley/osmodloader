@@ -59,8 +59,8 @@ namespace OneShot_ModLoader
                     string create = d.FullName.Replace(path, string.Empty); // create the name of the directory to create
 
                     // and create it
-                    if (!Directory.Exists(Constants.modsPath + "/base oneshot/" + create))
-                        Directory.CreateDirectory(Constants.modsPath + "/base oneshot/" + create);
+                    if (!Directory.Exists(Static.modsPath + "/base oneshot/" + create))
+                        Directory.CreateDirectory(Static.modsPath + "/base oneshot/" + create);
 
                     // update loading bar
                     if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
@@ -76,8 +76,8 @@ namespace OneShot_ModLoader
                     string copyPath = f.FullName.Replace(path, string.Empty); // create the name of the file to create
 
                     // and copy it
-                    if (!File.Exists(Constants.modsPath + "/base oneshot/" + copyPath))
-                        f.CopyTo(Constants.modsPath + "/base oneshot/" + copyPath, true); // overwrite
+                    if (!File.Exists(Static.modsPath + "/base oneshot/" + copyPath))
+                        f.CopyTo(Static.modsPath + "/base oneshot/" + copyPath, true); // overwrite
 
                     if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
                         await loadingBar.SetLoadingStatus("setup: " + f.FullName);
@@ -123,9 +123,9 @@ namespace OneShot_ModLoader
 
                 await loadingBar.SetLoadingStatus("almost done!");
 
-                if (File.Exists(Constants.appDataPath + "path.molly"))
-                    File.Delete(Constants.appDataPath + "path.molly");
-                File.WriteAllText(Constants.appDataPath + "path.molly", path);
+                if (File.Exists(Static.appDataPath + "path.molly"))
+                    File.Delete(Static.appDataPath + "path.molly");
+                File.WriteAllText(Static.appDataPath + "path.molly", path);
 
                 
 

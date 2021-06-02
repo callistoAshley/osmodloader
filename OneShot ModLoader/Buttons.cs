@@ -15,19 +15,19 @@ namespace OneShot_ModLoader
     {
         public static void Glow (PictureBox picture, string name)
         {
-            Image glow = Image.FromFile(Constants.spritesPath + name + "_glow.png");
+            Image glow = Image.FromFile(Static.spritesPath + name + "_glow.png");
             picture.Image = glow;
         }
         public static void GlowOut (PictureBox picture, string name)
         {
-            picture.Image = Image.FromFile(Constants.spritesPath + name + ".png");
+            picture.Image = Image.FromFile(Static.spritesPath + name + ".png");
         }
     }
     public class ModsButton : PictureBox
     {
         public ModsButton()
         {
-            Image button = Image.FromFile(Constants.spritesPath + "button_mods.png");
+            Image button = Image.FromFile(Static.spritesPath + "button_mods.png");
             Image = button;
             Size = button.Size;
             Location = new Point(30, 130);
@@ -54,7 +54,7 @@ namespace OneShot_ModLoader
     {
         public BrowseMods()
         {
-            Image button = Image.FromFile(Constants.spritesPath + "button_browse.png");
+            Image button = Image.FromFile(Static.spritesPath + "button_browse.png");
             Image = button;
             Size = button.Size;
             Location = new Point(200, 130);
@@ -82,7 +82,7 @@ namespace OneShot_ModLoader
     {
         public Setup()
         {
-            Image button = Image.FromFile(Constants.spritesPath + "button_setup.png");
+            Image button = Image.FromFile(Static.spritesPath + "button_setup.png");
             Image = button;
             Size = button.Size;
             Location = new Point(200, 130);//new Point(370, 130); use this when browse mods is added
@@ -109,7 +109,7 @@ namespace OneShot_ModLoader
     {
         public DevToolsButton()
         {
-            Image = Image.FromFile(Constants.spritesPath + "button_tools.png");
+            Image = Image.FromFile(Static.spritesPath + "button_tools.png");
             Size = Image.Size;
             Location = new Point(390, 10);
         }
@@ -156,7 +156,7 @@ namespace OneShot_ModLoader
             Text = "Done";
 
             PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
@@ -172,7 +172,7 @@ namespace OneShot_ModLoader
 
             // initialize loading box
             PictureBox pb = new PictureBox();
-            pb.Image = Image.FromFile(Constants.spritesPath + "loading.png");
+            pb.Image = Image.FromFile(Static.spritesPath + "loading.png");
             pb.Size = pb.Image.Size;
             pb.Location = new Point(20, 20);
             Form1.instance.Controls.Add(pb);
@@ -192,7 +192,7 @@ namespace OneShot_ModLoader
             Text = "Back";
 
             PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
@@ -209,7 +209,7 @@ namespace OneShot_ModLoader
             Text = "Back";
 
             PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
@@ -243,7 +243,7 @@ namespace OneShot_ModLoader
             Text = "Add to List";
 
             PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
@@ -282,7 +282,7 @@ namespace OneShot_ModLoader
             Text = "Remove from List";
 
             PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
@@ -322,7 +322,7 @@ namespace OneShot_ModLoader
             Text = "Apply\nChanges";
 
             PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
             Font = new Font(f.Families[0], 8, FontStyle.Bold);
 
             FlatStyle = FlatStyle.Flat;
@@ -342,14 +342,14 @@ namespace OneShot_ModLoader
 
             // initialize loading box
             PictureBox pb = new PictureBox();
-            pb.Image = Image.FromFile(Constants.spritesPath + "loading.png");
+            pb.Image = Image.FromFile(Static.spritesPath + "loading.png");
             pb.Size = pb.Image.Size;
             pb.Location = new Point(20, 20);
             Form1.instance.Controls.Add(pb);
 
             try 
             {
-                await ChangesManage.Apply(new LoadingBar(Form1.instance)); 
+                await ChangesManage.Apply();
             }
             catch { }
 
@@ -379,7 +379,7 @@ namespace OneShot_ModLoader
     {
         public CloverSecret()
         {
-            Image = Image.FromFile(Constants.spritesPath + "clover.png");
+            Image = Image.FromFile(Static.spritesPath + "clover.png");
             Size = Image.Size;
             Location = new Point(500, 290);
             Enabled = true;
@@ -398,7 +398,7 @@ namespace OneShot_ModLoader
             text.ForeColor = Color.MediumPurple;
 
             PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Constants.fontsPath + "TerminusTTF-Bold.ttf");
+            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
             text.Font = new Font(f.Families[0], 12, FontStyle.Bold);
             text.AutoSize = true;
             text.Enabled = true;
@@ -418,9 +418,9 @@ namespace OneShot_ModLoader
             this.direction = direction;
 
             if (direction == Direction.Right)
-                Image = Image.FromFile(Constants.spritesPath + "oci_friend_blue.gif");
+                Image = Image.FromFile(Static.spritesPath + "oci_friend_blue.gif");
             else
-                Image = Image.FromFile(Constants.spritesPath + "oci_friend_green.gif");
+                Image = Image.FromFile(Static.spritesPath + "oci_friend_green.gif");
         }
         protected override async void OnClick(EventArgs e)
         {

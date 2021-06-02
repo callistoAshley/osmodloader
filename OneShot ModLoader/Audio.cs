@@ -20,7 +20,7 @@ namespace OneShot_ModLoader
 
             try
             {
-                AudioFileReader a = new AudioFileReader(Constants.audioPath + sound);
+                AudioFileReader a = new AudioFileReader(Static.audioPath + sound);
                 LoopStream l = new LoopStream(a);
 
                 WaveOutEvent waveOut = new WaveOutEvent();

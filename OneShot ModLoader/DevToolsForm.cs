@@ -20,10 +20,10 @@ namespace OneShot_ModLoader
 
             Size = new Size(300, 500);
             Text = "Dev Tools";
-            BackgroundImage = Image.FromFile(Constants.spritesPath + "terminal.png");
+            BackgroundImage = Image.FromFile(Static.spritesPath + "terminal.png");
             BackgroundImageLayout = ImageLayout.Center;
             BackColor = Color.Black;
-            Icon = new Icon(Constants.spritesPath + "devtools.ico");
+            Icon = new Icon(Static.spritesPath + "devtools.ico");
 
             // add ? icon
             MinimizeBox = false;

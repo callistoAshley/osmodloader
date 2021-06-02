@@ -31,10 +31,10 @@ namespace OneShot_ModLoader
 
             Size = new Size(400, 300);
             Text = "Mod Metadata: " + modPath.Replace(modPath.Substring(0, modPath.LastIndexOf("\\") + 1), string.Empty);
-            BackgroundImage = Image.FromFile(Constants.spritesPath + "bg.png");
+            BackgroundImage = Image.FromFile(Static.spritesPath + "bg.png");
             BackgroundImageLayout = ImageLayout.Tile;
             BackColor = Color.Black;
-            Icon = new Icon(Constants.spritesPath + "devtools.ico");
+            Icon = new Icon(Static.spritesPath + "devtools.ico");
 
             FormBorderStyle = FormBorderStyle.FixedSingle; 
             Show();
@@ -111,7 +111,7 @@ namespace OneShot_ModLoader
         public ModIcon()
         {
             Location = new Point(250, 10);
-            Image = Image.FromFile(Constants.spritesPath + "mmd_icon_default.png");
+            Image = Image.FromFile(Static.spritesPath + "mmd_icon_default.png");
             Size = new Size(80, 80);
             SizeMode = PictureBoxSizeMode.StretchImage;
             BackColor = Color.Transparent;
@@ -122,7 +122,7 @@ namespace OneShot_ModLoader
             l.AutoSize = true;
             l.ForeColor = Color.White;
             l.BackColor = Color.Transparent;
-            l.Font = Constants.GetTerminusFont(10);
+            l.Font = Static.GetTerminusFont(10);
             MMDForm.instance.Controls.Add(l);
         }
 
@@ -156,7 +156,7 @@ namespace OneShot_ModLoader
             Location = new Point(150, 190);
             AutoSize = true;
             BackColor = Color.White;
-            Font = Constants.GetTerminusFont(12);
+            Font = Static.GetTerminusFont(12);
 
             Text = "Generate";
         }
