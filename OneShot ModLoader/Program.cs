@@ -45,11 +45,16 @@ namespace OneShot_ModLoader
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 if (args.Length == 0 && !initForm) Application.Run(new Form1());
-                else if (args.Length > 0 && !initForm) Application.Run(new OCIForm(args));
+                else if (args.Length > 0 && !initForm) ProcessArgs(args);
 
                 initForm = true;
             }
             catch (ObjectDisposedException) { }
+        }
+
+        private static void ProcessArgs(string[] args) // this'll be expanded on in future
+        {
+            Application.Run(new OCIForm(args));
         }
 
         public static void ConsoleToFile()
