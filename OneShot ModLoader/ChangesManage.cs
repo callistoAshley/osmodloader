@@ -33,6 +33,7 @@ namespace OneShot_ModLoader
                 if (!Directory.Exists(tempDir.FullName)) Directory.CreateDirectory(tempDir.FullName);
 
                 // delete the base os path
+                File.SetAttributes(Form1.baseOneShotPath, FileAttributes.Normal); // set file attributes
                 if (baseOs.Exists) baseOs.Delete(true);
 
                 // now we do the cool stuff
