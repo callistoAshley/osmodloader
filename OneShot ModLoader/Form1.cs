@@ -14,6 +14,7 @@ using System.IO.Compression;
 using System.Security.AccessControl;
 using System.Windows.Input;
 using Microsoft.Win32;
+using System.Reflection;
 
 namespace OneShot_ModLoader
 {
@@ -42,11 +43,6 @@ namespace OneShot_ModLoader
             BackColor = Color.Black;
 
             InitStartMenu();
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            Program.ConsoleToFile();
         }
 
         public void InitStartMenu()
@@ -92,15 +88,14 @@ namespace OneShot_ModLoader
             Console.WriteLine("drawing setup menu");
 
             // first, initialize the instructions
-            Label instructions = new Label();
-            instructions.Text = "Please click on the textbox below and enter the path to your\nOneShot installation.\nEnsure that you have a clean installation with no mods.";
-            instructions.ForeColor = Color.MediumPurple;
-            instructions.AutoSize = true;
-            instructions.Location = new Point(0, 20);
-
-            PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
-            instructions.Font = new Font(f.Families[0], 12, FontStyle.Bold);
+            Label instructions = new Label
+            {
+                Text = "Please click on the textbox below and enter the path to your\nOneShot installation.\nEnsure that you have a clean installation with no mods.",
+                ForeColor = Color.MediumPurple,
+                AutoSize = true,
+                Location = new Point(0, 20),
+                Font = Static.GetTerminusFont(12)
+            };
 
             Controls.Add(instructions);
             Controls.Add(new SetupPrompt());
