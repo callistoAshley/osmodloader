@@ -69,10 +69,10 @@ namespace OneShot_ModLoader
 
         private void SetTheme ()
         {
-            int theme = new Random().Next(1, 5);
+            int bonk = new Random().Next(1, 4);
             string themeString = "blue";
 
-            switch (theme)
+            switch (bonk)
             {
                 case 1:
                     themeString = "blue";
@@ -90,8 +90,10 @@ namespace OneShot_ModLoader
                     */
             }
 
+            // i hate c#
+            OCILoadingBuddy.Theme theme = (OCILoadingBuddy.Theme)Enum.Parse(typeof(OCILoadingBuddy.Theme), themeString, true);
 
-            new OCILoadingBuddy(themeString);
+            new OCILoadingBuddy(theme);
 
             BackgroundImage = Image.FromFile(string.Format(Static.spritesPath + "oci_bg_{0}.png", themeString));
             BackgroundImageLayout = ImageLayout.Stretch;

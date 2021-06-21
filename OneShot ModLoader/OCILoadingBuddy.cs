@@ -10,11 +10,11 @@ namespace OneShot_ModLoader
 {
     public class OCILoadingBuddy : PictureBox
     {
-        private string themeMain;
+        private Theme theme;
 
-        public OCILoadingBuddy(string theme)
+        public OCILoadingBuddy(Theme theme)
         {
-            themeMain = theme;
+            this.theme = theme;
 
             Size = new Size(1000, 1000);
             Location = new Point(400, 250);
@@ -26,18 +26,25 @@ namespace OneShot_ModLoader
 
         protected override void OnClick(EventArgs e)
         {
-            switch (themeMain)
+            switch (theme)
             {
-                case "blue":
+                case Theme.Blue:
                     Audio.PlaySound("sfx_robot.mp3", false);
                     break;
-                case "green":
+                case Theme.Green:
                     Audio.PlaySound("sfx_ram.mp3", false);
                     break;
-                case "red":
+                case Theme.Red:
                     Audio.PlaySound("sfx_scientist.mp3", false);
                     break;
             }   
+        }
+
+        public enum Theme
+        {
+            Blue,
+            Green,
+            Red
         }
     }
 }

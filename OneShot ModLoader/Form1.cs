@@ -33,8 +33,6 @@ namespace OneShot_ModLoader
 
         public void Init()
         {
-            //Audio.PlaySound("bgm_menu.mp3", true);
-            //new TestFormLol();
             if (!Directory.Exists(Static.appDataPath))
                 Directory.CreateDirectory(Static.appDataPath);
 
