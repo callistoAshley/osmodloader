@@ -24,8 +24,8 @@ namespace OneShot_ModLoader
             {
                 // TreeNode t in ActiveMods.instance.Nodes
                 await loadingBar.SetLoadingStatus("creating temp directory");
-
-                DirectoryInfo tempDir = new DirectoryInfo(Static.directory + "temp DO NOT OPEN\\MODCOPY\\");
+                
+                DirectoryInfo tempDir = new DirectoryInfo(Static.GetOrCreateTempDirectory().FullName + "\\MODCOPY\\");
                 DirectoryInfo baseOs = new DirectoryInfo(Form1.baseOneShotPath);
 
                 // create the temp directory

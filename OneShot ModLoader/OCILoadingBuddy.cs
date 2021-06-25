@@ -40,6 +40,24 @@ namespace OneShot_ModLoader
             }   
         }
 
+        protected override void OnHelpRequested(HelpEventArgs hevent)
+        {
+            string msg = "Your friend!";
+            switch (theme)
+            {
+                case Theme.Blue:
+                    msg += "\nThey are most humbled by your presence. Yes!";
+                    break;
+                case Theme.Green:
+                    msg += "\nBAA";
+                    break;
+                case Theme.Red:
+                    msg += "Hello, Freeman.";
+                    break;
+            }
+            MessageBox.Show(msg);
+        }
+
         public enum Theme
         {
             Blue,
