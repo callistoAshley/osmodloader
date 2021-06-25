@@ -90,7 +90,7 @@ namespace OneShot_ModLoader
                     */
             }
 
-            // i hate c#
+            // i have no idea if this is any better than just using a string but i'm doing it anyway
             OCILoadingBuddy.Theme theme = (OCILoadingBuddy.Theme)Enum.Parse(typeof(OCILoadingBuddy.Theme), themeString, true);
 
             new OCILoadingBuddy(theme);
