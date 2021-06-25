@@ -21,7 +21,6 @@ namespace OneShot_ModLoader
     public partial class Form1 : Form
     {
         public static Form1 instance;
-        public static string baseOneShotPath;
         public static TextWriter consoleOut = Console.Out;
         public static StreamWriter consoleOutStream;
 
@@ -148,8 +147,8 @@ namespace OneShot_ModLoader
                 return;
             }
 
-            Form1.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
-            Console.WriteLine("oneshot path is " + Form1.baseOneShotPath);
+            Static.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
+            Console.WriteLine("oneshot path is " + Static.baseOneShotPath);
 
             LoadingBar loadingBar = new LoadingBar(Form1.instance, showProgressBar: false);
 

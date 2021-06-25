@@ -73,8 +73,8 @@ namespace OneShot_ModLoader
                 // replace the working directory or oneshot path with an empty string to shorten the status
                 if (finalStatus.Contains(Directory.GetCurrentDirectory()))
                     finalStatus = finalStatus.Replace(Directory.GetCurrentDirectory(), string.Empty);
-                else if (finalStatus.Contains(Form1.baseOneShotPath))
-                    finalStatus = finalStatus.Replace(Form1.baseOneShotPath, string.Empty);
+                else if (finalStatus.Contains(Static.baseOneShotPath))
+                    finalStatus = finalStatus.Replace(Static.baseOneShotPath, string.Empty);
 
                 // set the status
                 text.Text = finalStatus;

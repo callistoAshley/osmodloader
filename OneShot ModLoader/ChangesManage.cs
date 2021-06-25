@@ -26,14 +26,14 @@ namespace OneShot_ModLoader
                 await loadingBar.SetLoadingStatus("creating temp directory");
                 
                 DirectoryInfo tempDir = new DirectoryInfo(Static.GetOrCreateTempDirectory().FullName + "\\MODCOPY\\");
-                DirectoryInfo baseOs = new DirectoryInfo(Form1.baseOneShotPath);
+                DirectoryInfo baseOs = new DirectoryInfo(Static.baseOneShotPath);
 
                 // create the temp directory
                 if (tempDir.Exists) tempDir.Delete(true); // just in case it crashed previously
                 if (!Directory.Exists(tempDir.FullName)) Directory.CreateDirectory(tempDir.FullName);
 
                 // delete the base os path
-                File.SetAttributes(Form1.baseOneShotPath, FileAttributes.Normal); // set file attributes
+                File.SetAttributes(Static.baseOneShotPath, FileAttributes.Normal); // set file attributes
                 if (baseOs.Exists) baseOs.Delete(true);
 
                 // now we do the cool stuff
@@ -177,10 +177,10 @@ namespace OneShot_ModLoader
         {
             try
             {
-                DirectoryInfo baseOs = new DirectoryInfo(Form1.baseOneShotPath);
+                DirectoryInfo baseOs = new DirectoryInfo(Static.baseOneShotPath);
                 if (uninstallExisting && baseOs.Exists)
                     baseOs.Delete(true);
-                if (!Directory.Exists(Form1.baseOneShotPath)) Directory.CreateDirectory(Form1.baseOneShotPath);
+                if (!Directory.Exists(Static.baseOneShotPath)) Directory.CreateDirectory(Static.baseOneShotPath);
 
                 string shorten = mod.FullName;
 
@@ -198,10 +198,10 @@ namespace OneShot_ModLoader
                 {
                     string newDir = d.FullName.Replace(shorten, string.Empty);
                     //MessageBox.Show(string.Format("base os path: {0}\nnew dir to combine w: {1}", Form1.baseOneShotPath, newDir));
-                    if (!Directory.Exists(Form1.baseOneShotPath + newDir))
+                    if (!Directory.Exists(Static.baseOneShotPath + newDir))
                     {
-                        Directory.CreateDirectory(Form1.baseOneShotPath + newDir);
-                        Console.WriteLine("creating directory {0}", Form1.baseOneShotPath + newDir);
+                        Directory.CreateDirectory(Static.baseOneShotPath + newDir);
+                        Console.WriteLine("creating directory {0}", Static.baseOneShotPath + newDir);
 
                         await loadingBar.UpdateProgress();
                         if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
@@ -212,7 +212,7 @@ namespace OneShot_ModLoader
                 // then copy the files
                 foreach (FileInfo f in files)
                 {
-                    string newLocation = Form1.baseOneShotPath + f.FullName.Replace(shorten, string.Empty);
+                    string newLocation = Static.baseOneShotPath + f.FullName.Replace(shorten, string.Empty);
                     if (!File.Exists(newLocation))
                     {
                         File.Copy(f.FullName, newLocation);
@@ -243,9 +243,9 @@ namespace OneShot_ModLoader
                     foreach (DirectoryInfo d in directories2)
                     {
                         string newDir = d.FullName.Replace(shorten, string.Empty);
-                        if (!Directory.Exists(Form1.baseOneShotPath + "/" + newDir))
+                        if (!Directory.Exists(Static.baseOneShotPath + "/" + newDir))
                         {
-                            Console.WriteLine("creating directory " + Directory.CreateDirectory(Form1.baseOneShotPath + "/" + newDir).ToString());
+                            Console.WriteLine("creating directory " + Directory.CreateDirectory(Static.baseOneShotPath + "/" + newDir).ToString());
 
                             await loadingBar.UpdateProgress();
                             if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
@@ -256,7 +256,7 @@ namespace OneShot_ModLoader
                     // the files
                     foreach (FileInfo f in files2)
                     {
-                        string newLocation = Form1.baseOneShotPath + "/" + f.FullName.Replace(shorten, string.Empty);
+                        string newLocation = Static.baseOneShotPath + "/" + f.FullName.Replace(shorten, string.Empty);
                         if (!File.Exists(newLocation))
                         {
                             File.Copy(f.FullName, newLocation);
@@ -300,185 +300,6 @@ namespace OneShot_ModLoader
                 OCIForm.instance.Close();
             }
         }
-
-        #region uh this other weird thing i was going to do that i'm keeping just in case
-        public static async Task Apply2(LoadingBar loadingBar)
-        {
-            Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
-
-            Console.WriteLine("applying changes");
-            await Task.Delay(1);
-
-            List<string> activeMods = new List<string>();
-
-            try
-            {
-                DirectoryInfo baseOs = new DirectoryInfo(Form1.baseOneShotPath);
-                if (!baseOs.Exists)
-                    baseOs.Create();
-
-                List<string> filesToCache = new List<string>();
-
-                // deal with any files that are no longer being used
-                List<string> deletedFiles = new List<string>(); // add deleted files to a list so mod stacking doesn't screw everything over
-                foreach (string s in Directory.GetDirectories(Static.modInfoPath)) // get the mods in the modinfo folder
-                {
-                    // note to future self: make the above foreach loop work backwards with a for loop instead so it doesn't the uhhhhhhhhhhhhh
-                    DirectoryInfo d = new DirectoryInfo(s);
-
-                    // and determine whether they're still active
-                    if (!ActiveMods.instance.Nodes.ContainsKey(s))
-                    {
-                        // directories
-                        foreach (string ss in File.ReadAllLines(d.FullName + "\\directories.molly"))
-                        {
-                            if (Directory.Exists(baseOs.FullName + "\\" + ss))
-                            {
-                                await loadingBar.SetLoadingStatus("deleting directory: " + baseOs.FullName + "\\" + ss);
-                                Console.WriteLine("deleting directory: " + baseOs.FullName + "\\" + ss);
-
-                                // then delete it if it exists in base os
-                                //Directory.Delete(baseOs.FullName + "\\" + ss);
-                            }
-                        }
-
-                        // files
-                        foreach (string ss in File.ReadAllLines(d.FullName + "\\files.molly"))
-                        {
-                            if (File.Exists(baseOs.FullName + "\\" + ss))
-                            {
-                                await loadingBar.SetLoadingStatus("deleting file: " + ss);
-                                Console.WriteLine("deleting file: " + baseOs.FullName + "\\" + ss);
-
-                                // then delete it if it exists in base os
-                                if (!deletedFiles.Contains(ss))
-                                {
-                                    File.Delete(baseOs.FullName + "\\" + ss);
-                                    deletedFiles.Add(ss);
-                                }
-
-                                // check whether the file exists in the cache
-                                if (File.Exists(Static.appDataPath + "cache\\" + ss))
-                                {
-                                    Console.WriteLine("restoring {0} from cache", ss);
-                                    await loadingBar.SetLoadingStatus(string.Format("restoring {0} from cache", ss));
-
-                                    // and if it does, return it to base os
-                                    File.Copy(Static.appDataPath + "cache\\" + ss, baseOs.FullName + "\\" + ss);
-                                }
-                            }
-                        }
-
-                        // finally, delete the modinfo folder
-                        d.Delete(true);
-                    }
-                }
-
-                foreach (TreeNode t in ActiveMods.instance.Nodes)
-                {
-                    bool isBase = t.Text == "base oneshot"; // just so it doesn't cache itself lol
-                    Console.WriteLine("mod {0} out of {1}, isBase {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, isBase);
-
-                    activeMods.Add(t.Text);
-
-                    DirectoryInfo mod = new DirectoryInfo(Static.directory + "Mods\\" + t.Text);
-                    Console.WriteLine("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, mod.FullName);
-
-                    // create the modinfo directory
-                    DirectoryInfo modInfoDir = new DirectoryInfo(Static.modInfoPath + t.Text);
-
-                    if (!modInfoDir.Exists && !isBase)
-                        modInfoDir.Create();
-
-                    List<string> directories = new List<string>();
-                    List<string> files = new List<string>();
-
-                    foreach (DirectoryInfo d in mod.GetDirectories("*", SearchOption.AllDirectories))
-                    {
-                        // cut the mod directory out of the string to make the name of the directory to create
-                        string shorten = Static.directory + "Mods\\" + t.Text;
-                        string create = d.FullName.Replace(shorten, string.Empty);
-
-                        // add the name of the directory to a list
-                        directories.Add(create);
-
-                        Console.WriteLine("creating directory: " + create);
-                        await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, create));
-                    }
-
-                    // write the directories list to a file
-                    if (!isBase)
-                        File.WriteAllLines(modInfoDir.FullName + "\\directories.molly", directories);
-
-                    // then do the files
-                    foreach (FileInfo f in mod.GetFiles("*", SearchOption.AllDirectories))
-                    {
-                        // cut the mod directory out of the string to make the name of the directory to copy
-                        string shorten = Static.directory + "Mods\\" + t.Text;
-                        string copy = f.FullName.Replace(shorten, string.Empty);
-
-                        // add the name of the file to a list
-                        files.Add(copy);
-
-                        if (File.Exists(baseOs.FullName + copy) && !isBase)
-                            filesToCache.Add(copy);
-
-                        Console.WriteLine("copying {0} to {1}", f.FullName, baseOs.FullName + copy);
-                        await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, copy));
-
-                        File.Copy(f.FullName, baseOs.FullName + copy, true);
-                    }
-
-                    // write the files list to a file
-                    if (!isBase)
-                        File.WriteAllLines(modInfoDir.FullName + "\\files.molly", files);
-                }
-
-                Console.WriteLine("finished up with mod stuff");
-
-                // copy the files in the list from base os to the cache folder
-                if (!Directory.Exists(Static.appDataPath + "cache")) // if the cache directory doesn't exist, create it
-                    Directory.CreateDirectory(Static.appDataPath + "cache");
-
-                foreach (string s in filesToCache)
-                {
-                    // double check if the string contains the name of a directory
-                    string s2 = s.Substring(0, s.LastIndexOf("\\"));
-                    if (s2 != string.Empty)
-                        Console.WriteLine("creating directory: " + Directory.CreateDirectory(Static.appDataPath + "cache\\" + s2)); // and if it does, create it
-
-                    Console.WriteLine("caching " + s);
-                    await loadingBar.SetLoadingStatus("caching " + s);
-
-                    // copy the file to the cache directory
-                    File.Copy(Static.modsPath + "base oneshot\\" + s, Static.appDataPath + "cache\\" + s);
-                }
-
-                // done!
-                await loadingBar.SetLoadingStatus("almost done!");
-
-                Console.WriteLine("activeMods.Count " + activeMods.Count);
-                // write the active mods to a file
-                if (File.Exists(Static.appDataPath + "activemods.molly"))
-                    File.Delete(Static.appDataPath + "activemods.molly");
-                File.WriteAllLines(Static.appDataPath + "activemods.molly", activeMods);
-
-                Console.Beep();
-                MessageBox.Show("All done!");
-
-                loadingBar.text.Dispose();
-
-                Console.WriteLine("finished applying changes (Apply2)");
-
-                Audio.Stop();
-            }
-            catch (Exception ex)
-            {
-                new ExceptionMessage(ex, true, "\nOneShot ModLoader will now close.");
-                Form1.instance.Close();
-            }
-        }
-        #endregion
 
         public static bool ConfirmValid(string modPath)
         {
