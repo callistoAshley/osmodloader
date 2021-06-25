@@ -33,9 +33,9 @@ namespace OneShot_ModLoader
             doneSetup = Directory.Exists(Static.modsPath + "/base oneshot") && File.Exists(Static.appDataPath + "path.molly");
 
             if (File.Exists(Static.appDataPath + "path.molly"))
-                Form1.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
+                Static.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
             else
-                Form1.baseOneShotPath = "woah";
+                Static.baseOneShotPath = "woah";
 
             if (!Directory.Exists(Static.modInfoPath))
                 Directory.CreateDirectory(Static.modInfoPath);

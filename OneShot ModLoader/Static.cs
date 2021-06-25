@@ -23,6 +23,7 @@ namespace OneShot_ModLoader
         public static readonly string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OneShotModLoader\\";
         public static readonly string modInfoPath = appDataPath + "\\modinfo\\";
         public static readonly string tempPath = directory + "\\temp DO NOT OPEN\\";
+        public static string baseOneShotPath;
 
         public static Font GetTerminusFont(float size)
         {
@@ -30,7 +31,7 @@ namespace OneShot_ModLoader
             f.AddFontFile(fontsPath + "TerminusTTF-Bold.ttf");
             return new Font(f.Families[0], size, FontStyle.Bold);
         }
-
+        
         public static DirectoryInfo GetOrCreateTempDirectory()
         {
             if (!Directory.Exists(tempPath))
