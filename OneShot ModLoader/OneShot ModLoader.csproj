@@ -106,6 +106,15 @@
     <Compile Include="Audio.cs" />
     <Compile Include="Buttons.cs" />
     <Compile Include="ChangesManage.cs" />
+    <Compile Include="DTCompressionButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DTMetadataButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DTUnpiracyButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Misc.cs" />
     <Compile Include="Static.cs" />
     <Compile Include="DevToolsForm.cs">
