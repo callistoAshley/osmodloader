@@ -15,6 +15,7 @@ using System.Security.AccessControl;
 using System.Windows.Input;
 using Microsoft.Win32;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace OneShot_ModLoader
 {
