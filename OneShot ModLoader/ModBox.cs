@@ -78,7 +78,7 @@ namespace OneShot_ModLoader
             }
             catch (Exception ex)
             {
-                new ExceptionMessage(ex, true);
+                ExceptionMessage.New(ex, true);
             }
         }
     }
