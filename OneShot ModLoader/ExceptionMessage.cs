@@ -9,16 +9,10 @@ namespace OneShot_ModLoader
 {
     public class ExceptionMessage
     {
-        public ExceptionMessage(Exception exception, bool show)
-        {
-            New(exception, show, string.Empty);
-        }
-        public ExceptionMessage(Exception exception, bool show, string append)
-        {
-            New(exception, show, append);
-        }
+        public static void New(Exception exception, bool show) => Bruh(exception, show, string.Empty);
+        public static void New(Exception exception, bool show, string append) => Bruh(exception, show, append);
 
-        private void New(Exception e, bool show, string append)
+        private static void Bruh(Exception e, bool show, string append)
         {
             StringBuilder message = new StringBuilder(
                 "An exception was encountered:\n---------------\n" +
@@ -32,7 +26,7 @@ namespace OneShot_ModLoader
             if (show) MessageBox.Show(message.ToString());
         }
 
-        private string Splash()
+        private static string Splash()
         {
             switch (new Random().Next(10))
             {
