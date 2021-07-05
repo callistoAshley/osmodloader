@@ -13,43 +13,61 @@ namespace OneShot_ModLoader
 {
     public class Audio
     {
-        public static List<WaveOutEvent> activeWaveOuts = new List<WaveOutEvent>();
+        private static List<AudioFile> activeAudio = new List<AudioFile>();
+
         public static void PlaySound(string sound, bool loop)
         {
             Console.WriteLine("attempting to play sound: " + sound);
 
             try
             {
-                AudioFileReader a = new AudioFileReader(Static.audioPath + sound);
-                LoopStream l = new LoopStream(a);
-                WaveOutEvent waveOut = new WaveOutEvent();
-
-                if (loop)
-                    waveOut.Init(l);
-                else
-                    waveOut.Init(a);
-
-                waveOut.Play();
-
-                activeWaveOuts.Add(waveOut);
+                activeAudio.Add(new AudioFile(new AudioFileReader(Static.audioPath + sound), loop));
             }
             catch (Exception ex)
             {
-                string message = "An exception was encountered in the music player:\n---------------\n"
-                    + ex.Message + "\n---------------\n" + ex.ToString();
-
-                MessageBox.Show(message);
+                ExceptionMessage.New(ex, true);
             }
         }
 
         public static void Stop()
         {
-            foreach (WaveOutEvent w in activeWaveOuts)
+            // dispose the fields of each file
+            foreach (AudioFile a in activeAudio)
+                a.DisposeStuff(new object(), new StoppedEventArgs());
+            activeAudio.Clear();
+        }
+
+        private struct AudioFile
+        {
+            private AudioFileReader a;
+            private LoopStream loopStream;
+            private WaveOutEvent waveOut;
+
+            // initialize a structure called AudioFile that contains an AudioFileReader, LoopStream and WaveOutEvent
+            // that can each be disposed when playback stops
+            public AudioFile(AudioFileReader a, bool loop)
             {
-                w.Stop();
-                w.Dispose();
+                this.a = a;
+                loopStream = new LoopStream(this.a);
+                waveOut = new WaveOutEvent();
+
+                if (loop)
+                    waveOut.Init(loopStream);
+                else
+                {
+                    waveOut.Init(a);
+                    waveOut.PlaybackStopped += DisposeStuff;
+                }
+
+                waveOut.Play();
             }
-            activeWaveOuts.Clear();
+
+            public void DisposeStuff(object sender, StoppedEventArgs e)
+            {
+                waveOut.Dispose();
+                a.Dispose();
+                if (loopStream != null) loopStream.Dispose();
+            }
         }
     }
 }
