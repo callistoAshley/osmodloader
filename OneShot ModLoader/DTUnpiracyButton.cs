@@ -33,20 +33,22 @@ namespace OneShot_ModLoader
             // bring up a folder browser to browse to the mod's path
             if (Program.doneSetup)
             {
-                FolderBrowserDialog browse = new FolderBrowserDialog();
-                browse.Description = "Please navigate to your mod's path.";
-                browse.ShowDialog();
-
-                if (browse.SelectedPath != string.Empty)
+                using (FolderBrowserDialog browse = new FolderBrowserDialog())
                 {
-                    try
+                    browse.Description = "Please navigate to your mod's path.";
+                    browse.ShowDialog();
+
+                    if (browse.SelectedPath != string.Empty)
                     {
-                        modPath = browse.SelectedPath;
-                        CompareToBaseOS(modPath);
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionMessage.New(ex, true);
+                        try
+                        {
+                            modPath = browse.SelectedPath;
+                            CompareToBaseOS(modPath);
+                        }
+                        catch (Exception ex)
+                        {
+                            ExceptionMessage.New(ex, true);
+                        }
                     }
                 }
             }

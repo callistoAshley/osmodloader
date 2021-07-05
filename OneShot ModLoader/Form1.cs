@@ -31,6 +31,13 @@ namespace OneShot_ModLoader
             Init();
         }
 
+        public Form1(bool withTestForm)
+        {
+            InitializeComponent();
+            Init();
+            if (withTestForm) new TestFormLol();
+        }
+
         public void Init()
         {
             if (!Directory.Exists(Static.appDataPath))

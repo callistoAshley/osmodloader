@@ -1,11 +1,12 @@
 ﻿using NAudio.Wave;
+using System;
 
 namespace OneShot_ModLoader
 {
     /// <summary>
     /// Stream for looping playback
     /// </summary>
-    public class LoopStream : WaveStream // i didn't write this lol http://mark-dot-net.blogspot.com/2009/10/looped-playback-in-net-with-naudio.html
+    public class LoopStream : WaveStream, IDisposable // i didn't write this lol http://mark-dot-net.blogspot.com/2009/10/looped-playback-in-net-with-naudio.html
     {
         WaveStream sourceStream;
 
@@ -69,6 +70,7 @@ namespace OneShot_ModLoader
                 }
                 totalBytesRead += bytesRead;
             }
+
             return totalBytesRead;
         }
     }

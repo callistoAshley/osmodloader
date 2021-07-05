@@ -22,35 +22,34 @@ namespace OneShot_ModLoader
         {
             DevToolsForm.instance.Controls.Clear();
 
-            FolderBrowserDialog browse = new FolderBrowserDialog();
-            browse.Description = "Please navigate to your mod's path.";
-            browse.ShowDialog();
-
-            if (browse.SelectedPath != string.Empty)
+            using (FolderBrowserDialog browse = new FolderBrowserDialog())
             {
-                try
-                {
-                    LoadingBar loadingBar = new LoadingBar(DevToolsForm.instance);
-                    Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
-                    await loadingBar.SetLoadingStatus("Please wait a moment...");
+                browse.Description = "Please navigate to your mod's path.";
+                browse.ShowDialog();
 
-                    await Task.Run(() =>
+                if (browse.SelectedPath != string.Empty)
+                {
+                    try
                     {
-                        ZipFile.CreateFromDirectory(browse.SelectedPath, browse.SelectedPath + ".osml");
-                    });
+                        LoadingBar loadingBar = new LoadingBar(DevToolsForm.instance);
+                        Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
+                        await loadingBar.SetLoadingStatus("Please wait a moment...");
 
-                    Console.Beep();
-                    MessageBox.Show("All done!");
+                        await Task.Run(() =>
+                        {
+                            ZipFile.CreateFromDirectory(browse.SelectedPath, browse.SelectedPath + ".osml");
+                        });
 
-                    loadingBar.text.Dispose();
-                    Audio.Stop();
-                }
-                catch (Exception ex)
-                {
-                    string message = "An exception was encountered:\n" + ex.Message +
-                        "\n------------------\n" + ex.ToString();
-                    Console.WriteLine(message);
-                    MessageBox.Show(message);
+                        Console.Beep();
+                        MessageBox.Show("All done!");
+
+                        loadingBar.text.Dispose();
+                        Audio.Stop();
+                    }
+                    catch (Exception ex)
+                    {
+                        ExceptionMessage.New(ex, true);
+                    }
                 }
             }
 

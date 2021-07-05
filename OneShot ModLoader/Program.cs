@@ -18,7 +18,7 @@ namespace OneShot_ModLoader
         [STAThread]
         static void Main(string[] args)
         {
-            if (initForm) return;
+            if (initForm) return; // trying to debug this :/
 
             // console out stuff
             if (!Directory.Exists(Static.appDataPath + "logs")) Directory.CreateDirectory(Static.appDataPath + "logs");
@@ -28,6 +28,7 @@ namespace OneShot_ModLoader
             Console.SetError(Form1.consoleOutStream);
 
             Console.WriteLine("les goooooooooooooo");
+            Console.WriteLine(Static.ver);
 
             // base os stuff
             doneSetup = Directory.Exists(Static.modsPath + "/base oneshot") && File.Exists(Static.appDataPath + "path.molly");
@@ -54,7 +55,10 @@ namespace OneShot_ModLoader
 
         private static void ProcessArgs(string[] args) // this'll be expanded on in future
         {
-            Application.Run(new OCIForm(args));
+            Console.WriteLine(args[0]);
+
+            if (args.Contains("testform")) new Form1(true);
+            else Application.Run(new OCIForm(args));
         }
 
         public static void ConsoleToFile()
