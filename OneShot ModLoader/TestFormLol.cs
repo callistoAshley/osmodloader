@@ -11,7 +11,6 @@ namespace OneShot_ModLoader
     // test form for testing stuff
     public class TestFormLol : Form
     {
-
         public TestFormLol()
         {
             FormBorderStyle = FormBorderStyle.Sizable;

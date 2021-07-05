@@ -22,13 +22,13 @@ namespace OneShot_ModLoader
             {
                 AudioFileReader a = new AudioFileReader(Static.audioPath + sound);
                 LoopStream l = new LoopStream(a);
-
                 WaveOutEvent waveOut = new WaveOutEvent();
 
                 if (loop)
                     waveOut.Init(l);
                 else
                     waveOut.Init(a);
+
                 waveOut.Play();
 
                 activeWaveOuts.Add(waveOut);
@@ -44,7 +44,11 @@ namespace OneShot_ModLoader
 
         public static void Stop()
         {
-            foreach (WaveOutEvent w in activeWaveOuts) w.Stop();
+            foreach (WaveOutEvent w in activeWaveOuts)
+            {
+                w.Stop();
+                w.Dispose();
+            }
             activeWaveOuts.Clear();
         }
     }

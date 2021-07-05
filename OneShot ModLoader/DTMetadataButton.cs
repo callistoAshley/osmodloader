@@ -20,22 +20,21 @@ namespace OneShot_ModLoader
         {
             DevToolsForm.instance.Controls.Clear();
 
-            FolderBrowserDialog browse = new FolderBrowserDialog();
-            browse.Description = "Please navigate to your mod's path.";
-            browse.ShowDialog();
-
-            if (browse.SelectedPath != string.Empty)
+            using (FolderBrowserDialog browse = new FolderBrowserDialog())
             {
-                try
+                browse.Description = "Please navigate to your mod's path.";
+                browse.ShowDialog();
+
+                if (browse.SelectedPath != string.Empty)
                 {
-                    new MMDForm(browse.SelectedPath);
-                }
-                catch (Exception ex)
-                {
-                    string message = "An exception was encountered:\n" + ex.Message +
-                        "\n------------------\n" + ex.ToString();
-                    Console.WriteLine(message);
-                    MessageBox.Show(message);
+                    try
+                    {
+                        new MMDForm(browse.SelectedPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        ExceptionMessage.New(ex, true);
+                    }
                 }
             }
 

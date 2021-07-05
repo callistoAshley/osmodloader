@@ -163,12 +163,7 @@ namespace OneShot_ModLoader
             }
             catch (Exception ex)
             {
-                string message = "An exception was encountered:\n---------------\n"
-                    + ex.Message + "\n---------------\n" + ex.ToString() +
-                    "\nOneShot ModLoader will now close.";
-
-                Console.WriteLine(message);
-                MessageBox.Show(message);
+                ExceptionMessage.New(ex, true, "OneShot ModLoader will now close.");
                 Form1.instance.Close();
             }
         }

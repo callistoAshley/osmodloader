@@ -16,11 +16,12 @@ namespace OneShot_ModLoader
     {
         public static void Glow (PictureBox picture, string name)
         {
-            Image glow = Image.FromFile(Static.spritesPath + name + "_glow.png");
-            picture.Image = glow;
+            picture.Image.Dispose();
+            picture.Image = Image.FromFile(Static.spritesPath + name + "_glow.png");
         }
         public static void GlowOut (PictureBox picture, string name)
         {
+            picture.Image.Dispose();
             picture.Image = Image.FromFile(Static.spritesPath + name + ".png");
         }
     }
