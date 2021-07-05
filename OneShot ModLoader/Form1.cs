@@ -16,6 +16,7 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using System.Reflection;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace OneShot_ModLoader
 {
@@ -70,6 +71,14 @@ namespace OneShot_ModLoader
             //new BrowseMods();
             Controls.Add(new Setup());
             Controls.Add(new DevToolsButton());
+            Controls.Add(new Label
+            {
+                Text = Static.ver,
+                ForeColor = Color.White,
+                Size = new Size(50, 50),
+                Font = new Font(FontFamily.GenericSansSerif, 8),
+            });
+
             //Controls.Add(new MoveScreen(new Point(390, 225), MoveScreen.Direction.Right));
             //Controls.Add(new MoveScreen(new Point(430, 225), MoveScreen.Direction.Left));
 

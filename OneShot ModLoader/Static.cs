@@ -15,6 +15,7 @@ namespace OneShot_ModLoader
     {
         public static readonly string ver = "0.12.dev";
 
+        // cry about it
         public static readonly string directory = Application.ExecutablePath.Replace(Application.ProductName + ".exe", string.Empty);
 
         public static readonly string spritesPath = directory + "\\Sprites\\";
@@ -37,10 +38,8 @@ namespace OneShot_ModLoader
         {
             if (!Directory.Exists(tempPath))
                 return Directory.CreateDirectory(tempPath);
-            
-            DirectoryInfo d = new DirectoryInfo(tempPath);
-            d.Create();
-            return d;
+
+            return new DirectoryInfo(tempPath);
         }
     }
 }
