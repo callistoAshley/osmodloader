@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace OneShot_ModLoader
 {
-    public class ButtonsGlobalStuff
+    public class ButtonsStaticStuff
     {
         public static void Glow (PictureBox picture, string name)
         {
@@ -37,12 +37,12 @@ namespace OneShot_ModLoader
 
         protected override void OnMouseEnter(EventArgs e) 
         {
-            ButtonsGlobalStuff.Glow(this, "button_mods");
+            ButtonsStaticStuff.Glow(this, "button_mods");
             Audio.PlaySound("sfx_select.mp3", false); 
         }
         protected override void OnMouseLeave(EventArgs e)
         {
-            ButtonsGlobalStuff.GlowOut(this, "button_mods");
+            ButtonsStaticStuff.GlowOut(this, "button_mods");
         }
 
         protected override void OnClick(EventArgs e)
@@ -65,12 +65,12 @@ namespace OneShot_ModLoader
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            ButtonsGlobalStuff.Glow(this, "button_browse");
+            ButtonsStaticStuff.Glow(this, "button_browse");
             Audio.PlaySound("sfx_select.mp3", false);
         }
         protected override void OnMouseLeave(EventArgs e)
         {
-            ButtonsGlobalStuff.GlowOut(this, "button_browse");
+            ButtonsStaticStuff.GlowOut(this, "button_browse");
         }
 
         protected override void OnClick(EventArgs e)
@@ -80,9 +80,9 @@ namespace OneShot_ModLoader
             MessageBox.Show("browse mods button also this isn't done yet");
         }
     }
-    public class Setup : PictureBox
+    public class SetupButton : PictureBox
     {
-        public Setup()
+        public SetupButton()
         {
             Image button = Image.FromFile(Static.spritesPath + "button_setup.png");
             Image = button;
@@ -92,12 +92,12 @@ namespace OneShot_ModLoader
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            ButtonsGlobalStuff.Glow(this, "button_setup");
+            ButtonsStaticStuff.Glow(this, "button_setup");
             Audio.PlaySound("sfx_select.mp3", false);
         }
         protected override void OnMouseLeave(EventArgs e)
         {
-            ButtonsGlobalStuff.GlowOut(this, "button_setup");
+            ButtonsStaticStuff.GlowOut(this, "button_setup");
         }
 
         protected override void OnClick(EventArgs e)
@@ -105,6 +105,33 @@ namespace OneShot_ModLoader
             Audio.PlaySound("sfx_decision.mp3", false);
             Form1.instance.Controls.Clear();
             Form1.instance.InitSetupMenu();
+        }
+    }
+    public class SettingsButton : PictureBox
+    {
+        public SettingsButton()
+        {
+            Image button = Image.FromFile(Static.spritesPath + "button_settings.png");
+            Image = button;
+            Size = button.Size;
+            Location = new Point(390, 150);
+        }
+
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            ButtonsStaticStuff.Glow(this, "button_settings");
+            Audio.PlaySound("sfx_select.mp3", false);
+        }
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            ButtonsStaticStuff.GlowOut(this, "button_settings");
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            Audio.PlaySound("sfx_decision.mp3", false);
+            Form1.instance.Controls.Clear();
+            Form1.instance.InitSettingsMenu();
         }
     }
     public class DevToolsButton : PictureBox
@@ -118,12 +145,12 @@ namespace OneShot_ModLoader
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            ButtonsGlobalStuff.Glow(this, "button_tools");
+            ButtonsStaticStuff.Glow(this, "button_tools");
             Audio.PlaySound("sfx_select.mp3", false);
         }
         protected override void OnMouseLeave(EventArgs e)
         {
-            ButtonsGlobalStuff.GlowOut(this, "button_tools");
+            ButtonsStaticStuff.GlowOut(this, "button_tools");
         }
 
         protected override void OnClick(EventArgs e)

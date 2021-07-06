@@ -69,7 +69,8 @@ namespace OneShot_ModLoader
             // buttons
             Controls.Add(new ModsButton());
             //new BrowseMods();
-            Controls.Add(new Setup());
+            Controls.Add(new SetupButton());
+            Controls.Add(new SettingsButton());
             Controls.Add(new DevToolsButton());
             Controls.Add(new Label
             {
@@ -96,7 +97,7 @@ namespace OneShot_ModLoader
             Controls.Add(new ApplyChanges());
             Controls.Add(new InactiveMods());
         }
-
+        
         public void InitSetupMenu()
         {
             Console.WriteLine("drawing setup menu");
@@ -115,6 +116,11 @@ namespace OneShot_ModLoader
             Controls.Add(new SetupPrompt());
             Controls.Add(new SetupDone());
             Controls.Add(new BackButton());
+        }
+
+        public void InitSettingsMenu()
+        {
+            Console.WriteLine("drawing settings menu");
         }
 
         private void Form1_Load(object sender, EventArgs e) {}

@@ -16,11 +16,11 @@ namespace OneShot_ModLoader
         {
             this.theme = theme;
 
-            Size = new Size(1000, 1000);
             Location = new Point(400, 250);
             BackColor = Color.Transparent;
             
             Image = Image.FromFile(Static.spritesPath + "oci_friend_" + theme + ".gif");
+            Size = Image.Size;
             OCIForm.instance.Controls.Add(this);
         }
 
@@ -52,12 +52,12 @@ namespace OneShot_ModLoader
                     msg += "\nBAA";
                     break;
                 case Theme.Red:
-                    msg += "Hello, Freeman.";
+                    msg += "\nHello, Freeman.";
                     break;
             }
             MessageBox.Show(msg);
         }
-
+        
         public enum Theme
         {
             Blue,
