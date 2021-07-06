@@ -25,6 +25,13 @@ namespace OneShot_ModLoader
             Focus();
         }
 
+        protected override void OnHelpRequested(HelpEventArgs hevent)
+        {
+            MessageBox.Show("====Compare mod to base====\nIterates through each of the files in a selected folder and " +
+                "compares its text to its counterpart in Mods/base oneshot if it exists. If there is a match, the file's" +
+                "info is added to a list whereupon the user can decide to delete the unchanged file(s) or move them elsewhere.");
+        }
+
         protected override void OnClick(EventArgs e)
         {
             Console.WriteLine("doin the unpiracyifier");
@@ -83,7 +90,7 @@ namespace OneShot_ModLoader
 
                     // if a file of the same name exists in base oneshot, add it to the matches list
                     if (File.Exists(fileName)
-                        && File.ReadAllBytes(fileName) == File.ReadAllBytes(f.FullName))
+                        && File.ReadAllText(fileName) == File.ReadAllText(f.FullName))
                     {
                         Console.WriteLine("unchanged file found! " + f.FullName);
                         matches.Add(f);
@@ -92,7 +99,7 @@ namespace OneShot_ModLoader
                 }
 
                 // make string array from file matches
-                List<string> matchNames = new List<string>{ "CLOSE THIS FILE BEFORE TAKING ANY FURTHER ACTION", string.Empty };
+                List<string> matchNames = new List<string>();
                 // convert all of the files in the matches list to their string values by creating a converter 
                 // that refers to the FileInfoToString method
                 matchNames.AddRange(matches.ConvertAll<string>(new Converter<FileInfo, string>(FileInfoToString)));
@@ -110,32 +117,42 @@ namespace OneShot_ModLoader
                 {
                     Text = "All done!",
                     FormBorderStyle = FormBorderStyle.FixedDialog,
+                    Size = new Size(400, 200)
                 };
 
                 Label text = new Label
                 {
                     AutoSize = true,
-                    Text = $"OneShot ModLoader found {matchNames.Count} unchanged files. What would you like to do?"
+                    Text = $"OneShot ModLoader found {matchNames.Count} unchanged files. What would you like to do?",
+                    Location = new Point(10, 0),
+                    Font = new Font(FontFamily.GenericSansSerif, 8),
                 };
 
                 // initialize buttons
                 Button deleteFiles = new Button
                 {
                     Text = "Delete",
+                    Location = new Point(10, 25),
+                    Size = new Size(50, 20)
                 };
                 Button moveFiles = new Button
                 {
                     Text = "Move to ModName-Unchanged\\",
+                    Location = new Point(10, 50),
+                    Size = new Size(50, 20)
                 };
                 Button listFiles = new Button
                 {
                     Text = "List",
+                    Location = new Point(10, 75),
+                    Size = new Size(50, 20),
                 };
 
                 // hook events to the associated methods
                 deleteFiles.Click += DeleteFiles;
                 moveFiles.Click += MoveFiles;
                 listFiles.Click += ListFiles;
+                dialog.FormClosing += CloseDialog;
 
                 // add controls
                 dialog.Controls.Add(text);
@@ -157,6 +174,9 @@ namespace OneShot_ModLoader
 
             try
             {
+                // kill each active file matches.txt process
+                matchesProcesses.ForEach((Process p) => { if (!p.HasExited) p.Kill(); });
+
                 string file = Static.GetOrCreateTempDirectory().FullName + "\\file matches.txt";
 
                 // reset loading bar progress
@@ -194,6 +214,9 @@ namespace OneShot_ModLoader
 
             try
             {
+                // kill each active file matches.txt process
+                matchesProcesses.ForEach((Process p) => { if (!p.HasExited) p.Kill(); });
+
                 string file = Static.GetOrCreateTempDirectory().FullName + "\\file matches.txt";
 
                 // reset loading bar progress
@@ -246,7 +269,10 @@ namespace OneShot_ModLoader
             }
         }
 
-        public void ListFiles(object sender, EventArgs e) 
-            => Process.Start(Static.GetOrCreateTempDirectory().FullName + "\\file matches.txt");
+        private List<Process> matchesProcesses = new List<Process>();
+        public void ListFiles(object sender, EventArgs e) // open the process and add it to a list
+            => matchesProcesses.Add(Process.Start(Static.GetOrCreateTempDirectory().FullName + "\\file matches.txt"));
+        private void CloseDialog(object sender, EventArgs e) // method hooked to dialog's FormClosing event
+            => Static.GetOrCreateTempDirectory().Delete(true);
     }
 }
