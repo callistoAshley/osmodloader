@@ -115,6 +115,9 @@
     <Compile Include="DTUnpiracyButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SettingsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Static.cs" />
     <Compile Include="DevToolsForm.cs">
       <SubType>Form</SubType>
