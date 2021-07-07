@@ -26,8 +26,9 @@ namespace OneShot_ModLoader
         #endregion
 
         public LoadingProgress progress = new LoadingProgress();
+        private Form form;
 
-        public LoadingBar(Form form, LoadingBarType type = LoadingBarType.Efficient, bool showProgressBar = true)
+        public LoadingBar(Form form, LoadingBarType displayType = LoadingBarType.Efficient, bool showProgressBar = true)
         {
             text.ForeColor = Color.MediumPurple;
             text.Location = new Point(0, 190);
@@ -37,9 +38,10 @@ namespace OneShot_ModLoader
             text.ForeColor = Color.MediumPurple;
             text.BackColor = Color.Transparent;
 
-            displayType = type;
+            this.displayType = displayType;
 
-            form.Controls.Add(text);
+            this.form = form;
+            this.form.Controls.Add(text);
 
             if (showProgressBar)
             {
@@ -78,6 +80,7 @@ namespace OneShot_ModLoader
 
                 // set the status
                 text.Text = finalStatus;
+                //text.Refresh();
             }
             catch (Exception ex)
             {
@@ -87,7 +90,7 @@ namespace OneShot_ModLoader
                 Console.WriteLine(message + "\n---\n" + ex.ToString());
             }
 
-            await Task.Delay(1);
+            await Task.Delay(0);
         }
 
         // progress bar

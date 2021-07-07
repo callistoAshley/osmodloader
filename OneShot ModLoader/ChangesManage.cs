@@ -12,7 +12,7 @@ namespace OneShot_ModLoader
     {
         public static async Task Apply()
         {
-            LoadingBar loadingBar = new LoadingBar(Form1.instance);
+            LoadingBar loadingBar = new LoadingBar(Form1.instance, LoadingBar.LoadingBarType.Efficient);
             Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
 
             Console.WriteLine("applying changes");
@@ -143,7 +143,7 @@ namespace OneShot_ModLoader
 
                 Console.WriteLine("finished copying files");
 
-                new DirectoryInfo(Static.directory + "\\temp DO NOT OPEN").Delete(true);
+                Static.GetOrCreateTempDirectory().Delete(true);
                 Console.WriteLine("successfully deleted temp");
 
                 Console.WriteLine("activeMods.Count " + activeMods.Count);

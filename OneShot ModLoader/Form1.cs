@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using System.Reflection;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using OneShot_ModLoaderm;
 
 namespace OneShot_ModLoader
 {
@@ -121,6 +122,8 @@ namespace OneShot_ModLoader
         public void InitSettingsMenu()
         {
             Console.WriteLine("drawing settings menu");
+
+            Controls.Add(new SettingsPage());
         }
 
         private void Form1_Load(object sender, EventArgs e) {}
