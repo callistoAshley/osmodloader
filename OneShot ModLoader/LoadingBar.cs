@@ -11,7 +11,7 @@ using System.IO;
 
 namespace OneShot_ModLoader
 {
-    public class LoadingBar 
+    public class LoadingBar : IDisposable
     {
         public Label text = new Label();
 
@@ -80,7 +80,7 @@ namespace OneShot_ModLoader
 
                 // set the status
                 text.Text = finalStatus;
-                //text.Refresh();
+                text.Refresh();
             }
             catch (Exception ex)
             {
@@ -91,6 +91,12 @@ namespace OneShot_ModLoader
             }
 
             await Task.Delay(0);
+        }
+
+        public void Dispose()
+        {
+            text.Dispose();
+            progress.Dispose();
         }
 
         // progress bar

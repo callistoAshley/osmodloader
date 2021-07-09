@@ -127,7 +127,8 @@ namespace OneShot_ModLoader
                     File.Delete(Static.appDataPath + "path.molly");
                 File.WriteAllText(Static.appDataPath + "path.molly", path);
 
-                
+                // dispose loading bar
+                loadingBar.Dispose();
 
                 Console.Beep();
                 MessageBox.Show("All done!");
