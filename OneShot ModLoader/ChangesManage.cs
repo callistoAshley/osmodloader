@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace OneShot_ModLoader
 {
-    public class ChangesManage
+    public static class ChangesManage
     {
         public static async Task Apply()
         {

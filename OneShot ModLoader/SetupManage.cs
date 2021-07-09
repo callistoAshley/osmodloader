@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace OneShot_ModLoader
 {
-    public class SetupManage
+    public static class SetupManage
     {
         public static bool Verify(string path)
         {

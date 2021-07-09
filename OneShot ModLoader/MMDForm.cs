@@ -131,13 +131,14 @@ namespace OneShot_ModLoader
         {
             try
             {
-                OpenFileDialog browse = new OpenFileDialog();
+                using (OpenFileDialog browse = new OpenFileDialog())
+                {
+                    browse.Title = "Please browse to the image you want to set as your icon.";
+                    browse.ShowDialog();
 
-                browse.Title = "Please browse to the image you want to set as your icon.";
-                browse.ShowDialog();
-
-                Image = Image.FromFile(browse.FileName);
-                Audio.PlaySound("sfx_decision.mp3", false);
+                    Image = Image.FromFile(browse.FileName);
+                    Audio.PlaySound("sfx_decision.mp3", false);
+                }
             }
             catch (Exception ex)
             {
@@ -167,7 +168,8 @@ namespace OneShot_ModLoader
             {
                 MMDForm.instance.Controls.Clear();
 
-                if (!Directory.Exists(MMDForm.modPath + "\\.osml")) Directory.CreateDirectory(MMDForm.modPath + "\\.osml");
+                DirectoryInfo path = new DirectoryInfo(MMDForm.modPath + "\\.osml");
+                if (!path.Exists) path.Create(); // TODO: mark this as hidden
 
                 LoadingBar loadingBar = new LoadingBar(MMDForm.instance);
                 await loadingBar.SetLoadingStatus("working, please wait...");
@@ -207,6 +209,7 @@ namespace OneShot_ModLoader
 
                 Console.Beep();
                 MessageBox.Show("All done!");
+                loadingBar.Dispose();
                 MMDForm.instance.Close();
                 Audio.Stop();
                 Audio.PlaySound("sfx_back.mp3", false);

@@ -48,14 +48,15 @@ namespace OneShot_ModLoader
                 if (args.Length == 0 && !initForm) Application.Run(new Form1());
                 else if (args.Length > 0 && !initForm) ProcessArgs(args);
 
-                initForm = true;
+                
             }
             catch (ObjectDisposedException) { }
         }
 
         private static void ProcessArgs(string[] args) // this'll be expanded on in future
         {
-            Console.WriteLine(args[0]);
+            Console.WriteLine(args.AsParallel<string>());
+            initForm = true;
 
             if (args.Contains("testform")) new Form1(true);
             else Application.Run(new OCIForm(args));
