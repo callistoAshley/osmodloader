@@ -155,7 +155,7 @@ namespace OneShot_ModLoader
                 Console.Beep();
                 MessageBox.Show("All done!");
 
-                loadingBar.text.Dispose();
+                loadingBar.Dispose();
 
                 Console.WriteLine("finished applying changes");
 
