@@ -53,10 +53,7 @@ namespace OneShot_ModLoader
             }
         }
 
-        public string GetLoadingBGM()
-        {
-            return "bgm_0" + new Random().Next(1, 6) + ".mp3";
-        }
+        public string GetLoadingBGM() => "bgm_0" + new Random().Next(1, 6) + ".mp3";
 
         public void ResetProgress() => progress.Value = 0;
 
