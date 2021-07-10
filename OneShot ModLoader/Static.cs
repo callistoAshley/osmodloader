@@ -25,6 +25,7 @@ namespace OneShot_ModLoader
         public static readonly string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OneShotModLoader\\";
         public static readonly string modInfoPath = appDataPath + "\\modinfo\\";
         public static readonly string tempPath = directory + "\\temp DO NOT OPEN\\";
+        public static readonly string miscPath = directory + "\\Misc\\";
         public static string baseOneShotPath;
 
         public static Font GetTerminusFont(float size)
