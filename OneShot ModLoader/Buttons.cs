@@ -163,6 +163,7 @@ namespace OneShot_ModLoader
             else Audio.PlaySound("sfx_denied.mp3", false);
         }
     }
+
     public class SetupPrompt : TextBox
     {
         public static SetupPrompt instance;
