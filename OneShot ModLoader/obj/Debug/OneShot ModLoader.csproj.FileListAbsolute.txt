@@ -27,3 +27,9 @@ C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Window
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\INIFileParser.dll
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\INIFileParser.xml
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot_ModLoader.TestFormLol.resources
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\IronRuby.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\IronRuby.Libraries.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\IronRuby.Libraries.Yaml.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Microsoft.Dynamic.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Microsoft.Scripting.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Microsoft.Scripting.Metadata.dll

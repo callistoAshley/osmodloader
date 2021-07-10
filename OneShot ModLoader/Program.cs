@@ -18,6 +18,7 @@ namespace OneShot_ModLoader
         [STAThread]
         static void Main(string[] args)
         {
+            //Interop.RPGScript();
             if (initForm) return; // trying to debug this :/
 
             // console out stuff
