@@ -15,6 +15,17 @@ namespace OneShot_ModLoader
             LoadingBar loadingBar = new LoadingBar(Form1.instance, LoadingBar.LoadingBarType.Efficient);
             Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
 
+            // if there is just one mod queued, wrap to DirectApply and return
+            if (ActiveMods.instance.Nodes.Count == 1)
+            {
+                Console.WriteLine("ActiveMods tree only has 1 mod, switching to DirectApply instead");
+
+                await DirectApply(loadingBar,
+                    new DirectoryInfo(Static.directory + "Mods\\" + ActiveMods.instance.Nodes[0].Text),
+                    true);
+                return;
+            }
+
             Console.WriteLine("applying changes");
             await Task.Delay(1);
 
@@ -175,7 +186,8 @@ namespace OneShot_ModLoader
                 DirectoryInfo baseOs = new DirectoryInfo(Static.baseOneShotPath);
                 if (uninstallExisting && baseOs.Exists)
                     baseOs.Delete(true);
-                if (!Directory.Exists(Static.baseOneShotPath)) Directory.CreateDirectory(Static.baseOneShotPath);
+                if (!Directory.Exists(Static.baseOneShotPath)) 
+                    Directory.CreateDirectory(Static.baseOneShotPath);
 
                 string shorten = mod.FullName;
 
@@ -186,7 +198,7 @@ namespace OneShot_ModLoader
                 // set the maximum value of the progress bar to the sum of the directories/files
                 loadingBar.progress.Maximum = directories.Length + files.Length;
 
-                await loadingBar.SetLoadingStatus("working, please wait");
+                await loadingBar.SetLoadingStatus("working, please wait (via direct apply)");
 
                 // first, create the directories
                 foreach (DirectoryInfo d in directories)
@@ -282,6 +294,11 @@ namespace OneShot_ModLoader
                     // write the file
                     File.WriteAllLines(Static.appDataPath + "activemods.molly", currentlyActive);
                 }
+
+                Console.Beep();
+                MessageBox.Show("All done!");
+
+                Audio.Stop();
             }
             catch (Exception ex)
             {
