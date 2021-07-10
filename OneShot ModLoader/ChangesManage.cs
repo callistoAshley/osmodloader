@@ -50,7 +50,7 @@ namespace OneShot_ModLoader
                 // now we do the cool stuff
                 foreach (TreeNode t in ActiveMods.instance.Nodes)
                 {
-                    await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}", t.Index + 1, ActiveMods.instance.Nodes.Count));
+                    await loadingBar.SetLoadingStatus($"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {t.Text}");
                     loadingBar.ResetProgress();
 
                     activeMods.Add(t.Text);
@@ -91,7 +91,7 @@ namespace OneShot_ModLoader
                         if (!File.Exists(destination))
                         {
                             Console.WriteLine("copying {0} to {1}", f.FullName, destination);
-                            File.Copy(f.FullName, destination);
+                            f.CopyTo(destination, true);
 
                             // update progress
                             await loadingBar.UpdateProgress();
@@ -140,7 +140,7 @@ namespace OneShot_ModLoader
                     if (!File.Exists(destination))
                     {
                         Console.WriteLine("copying {0} to {1}", f.FullName, destination);
-                        File.Copy(f.FullName, destination);
+                        f.CopyTo(destination, true);
 
                         // update progress
                         await loadingBar.UpdateProgress();

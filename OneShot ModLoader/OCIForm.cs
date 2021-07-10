@@ -144,8 +144,6 @@ namespace OneShot_ModLoader
                 await ChangesManage.DirectApply(loadingBar, new DirectoryInfo(zipDestination), OCIDeleteExisting.instance.Checked);
             }
 
-            Console.Beep();
-            MessageBox.Show("All done!");
             OCIForm.instance.Close();
         }
     }
