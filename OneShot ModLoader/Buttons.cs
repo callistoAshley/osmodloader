@@ -376,6 +376,8 @@ namespace OneShot_ModLoader
             pb.Location = new Point(20, 20);
             Form1.instance.Controls.Add(pb);
 
+            await Task.Delay(1);
+
             try 
             {
                 await ChangesManage.Apply();
