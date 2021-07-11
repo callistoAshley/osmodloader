@@ -30,9 +30,16 @@ namespace OneShot_ModLoader
 
         public static Font GetTerminusFont(float size)
         {
-            PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(fontsPath + "TerminusTTF-Bold.ttf");
-            return new Font(f.Families[0], size, FontStyle.Bold);
+            try
+            {
+                PrivateFontCollection f = new PrivateFontCollection();
+                f.AddFontFile(fontsPath + "TerminusTTF-Bold.ttf");
+                return new Font(f.Families[0], size, FontStyle.Bold);
+            }
+            catch (ArgumentException)
+            {
+                return new Font(FontFamily.GenericMonospace, size);
+            }
         }
         
         public static DirectoryInfo GetOrCreateTempDirectory()
