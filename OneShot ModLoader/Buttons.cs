@@ -413,7 +413,7 @@ namespace OneShot_ModLoader
         {
             Image = Image.FromFile(Static.spritesPath + "clover.png");
             Size = Image.Size;
-            Location = new Point(500, 290);
+            Location = new Point(500, 350);
             Enabled = true;
             BackColor = Color.Transparent;
         }
@@ -428,12 +428,8 @@ namespace OneShot_ModLoader
             text.Location = new Point(120, 140);
             text.BackColor = Color.Transparent;
             text.ForeColor = Color.MediumPurple;
-
-            PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
-            text.Font = new Font(f.Families[0], 12, FontStyle.Bold);
             text.AutoSize = true;
-            text.Enabled = true;
+            text.Font = Static.GetTerminusFont(12);
 
             Form1.instance.Controls.Add(text);
             Form1.instance.Controls.Add(new BackButton(true));

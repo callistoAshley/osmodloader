@@ -8,10 +8,11 @@ using NAudio;
 using NAudio.Wave;
 using System.Windows.Forms;
 using System.Threading;
+using System.IO;
 
 namespace OneShot_ModLoader
 {
-    public class Audio
+    public static class Audio
     {
         private static List<AudioFile> activeAudio = new List<AudioFile>();
 
@@ -20,8 +21,8 @@ namespace OneShot_ModLoader
             Console.WriteLine("attempting to play sound: " + sound);
 
             try
-            {
-                activeAudio.Add(new AudioFile(new AudioFileReader(Static.audioPath + sound), loop));
+            { 
+                activeAudio.Add(new AudioFile(new AudioFileReaderWrapped(Static.audioPath + sound), loop));
             }
             catch (Exception ex)
             {
@@ -39,19 +40,19 @@ namespace OneShot_ModLoader
 
         private struct AudioFile
         {
-            private AudioFileReader a;
+            private AudioFileReaderWrapped a;
             private LoopStream loopStream;
             private WaveOutEvent waveOut;
 
             // initialize a structure called AudioFile that contains an AudioFileReader, LoopStream and WaveOutEvent
             // that can each be disposed when playback stops
-            public AudioFile(AudioFileReader a, bool loop)
+            public AudioFile(AudioFileReaderWrapped a, bool loop)
             {
                 this.a = a;
                 loopStream = new LoopStream(this.a);
                 waveOut = new WaveOutEvent();
 
-                if (loop)
+                if (loop) 
                     waveOut.Init(loopStream);
                 else
                 {
@@ -66,8 +67,20 @@ namespace OneShot_ModLoader
             {
                 waveOut.Dispose();
                 a.Dispose();
-                if (loopStream != null) loopStream.Dispose();
+                loopStream.Dispose();
+                waveOut = null;
+                a = null;
+                loopStream = null;
             }
+        }
+
+        private class AudioFileReaderWrapped : AudioFileReader, IDisposable
+        {
+            // just call base ctor
+            public AudioFileReaderWrapped(string fileName)
+                : base(fileName) { }
+
+            public new void Dispose() => Dispose(true);
         }
     }
 }

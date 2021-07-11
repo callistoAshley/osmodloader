@@ -73,5 +73,11 @@ namespace OneShot_ModLoader
 
             return totalBytesRead;
         }
+
+        public new void Dispose()
+        {
+            sourceStream.Dispose();
+            Dispose(true);
+        }
     }
 }
