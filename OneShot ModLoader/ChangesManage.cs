@@ -5,34 +5,52 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace OneShot_ModLoader
 {
     public static class ChangesManage
     {
-        public static async Task Apply()
+        public static void CommonOnComplete()
         {
-            LoadingBar loadingBar = new LoadingBar(Form1.instance, LoadingBar.LoadingBarType.Efficient);
-            Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
+            Form1.instance.Controls.Clear();
+            Form1.instance.InitStartMenu();
+        }
 
-            // if there is just one mod queued, wrap to DirectApply and return
-            if (ActiveMods.instance.Nodes.Count == 1)
-            {
-                Console.WriteLine("ActiveMods tree only has 1 mod, switching to DirectApply instead");
-
-                await DirectApply(loadingBar,
-                    new DirectoryInfo(Static.directory + "Mods\\" + ActiveMods.instance.Nodes[0].Text),
-                    true);
-                return;
-            }
-
-            Console.WriteLine("applying changes");
-            await Task.Delay(1);
-
-            List<string> activeMods = new List<string>();
-
+        public static async void Apply(object sender, DoWorkEventArgs e)
+        {
             try
             {
+                // initialization stuff for background worker
+                ApplyArgs? args = e.Argument as ApplyArgs?;
+                if (args is null)
+                    throw new Exception("argument supplied into Apply is not an ApplyArgs structure");
+                LoadingBar loadingBar = args.Value.loadingBar;
+                BackgroundWorker backgroundWorker = args.Value.backgroundWorker;
+
+                Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
+
+                // if there is just one mod queued, wrap to DirectApply and return
+                if (ActiveMods.instance.Nodes.Count == 1)
+                {
+                    Console.WriteLine("ActiveMods tree only has 1 mod, switching to DirectApply instead");
+
+                    backgroundWorker.DoWork -= Apply;
+                    backgroundWorker.DoWork += DirectApply;
+                    backgroundWorker.RunWorkerAsync(new DirectApplyArgs(loadingBar, ref backgroundWorker));
+                    /*
+                    await DirectApply(loadingBar,
+                        new DirectoryInfo(Static.directory + "Mods\\" + ActiveMods.instance.Nodes[0].Text),
+                        true);
+                    */
+                    return;
+                }
+
+                Console.WriteLine("applying changes");
+                await Task.Delay(1);
+
+                List<string> activeMods = new List<string>();
+
                 // TreeNode t in ActiveMods.instance.Nodes
                 await loadingBar.SetLoadingStatus("creating temp directory");
                 
@@ -171,6 +189,8 @@ namespace OneShot_ModLoader
                 Console.WriteLine("finished applying changes");
 
                 Audio.Stop();
+
+                CommonOnComplete();
             }
             catch (Exception ex)
             {
@@ -179,10 +199,19 @@ namespace OneShot_ModLoader
             }
         }
 
-        public static async Task DirectApply(LoadingBar loadingBar, DirectoryInfo mod, bool uninstallExisting)
+        public static async void DirectApply(object sender, DoWorkEventArgs e)
         {
             try
             {
+                // args
+                DirectApplyArgs? args = e.Argument as DirectApplyArgs?;
+                if (args is null)
+                    throw new Exception("argument supplied into DirectApply is not a DirectApplyArgs structure");
+
+                LoadingBar loadingBar = args.Value.loadingBar;
+                DirectoryInfo mod = args.Value.mod;
+                bool uninstallExisting = args.Value.uninstallExisting;
+
                 DirectoryInfo baseOs = new DirectoryInfo(Static.baseOneShotPath);
                 if (uninstallExisting && baseOs.Exists)
                     baseOs.Delete(true);
@@ -299,6 +328,8 @@ namespace OneShot_ModLoader
                 MessageBox.Show("All done!");
 
                 Audio.Stop();
+
+                CommonOnComplete();
             }
             catch (Exception ex)
             {
@@ -338,6 +369,33 @@ namespace OneShot_ModLoader
 
             if (files.Count > 0) return true; // awesome! we found something!
             return false; // uh oh, looks like this isn't a mod - or maybe the contents aren't in the root of the directory. we should warn the player
+        }
+
+        // structures provided as arguments when the BackgroundWorker is started
+        public struct ApplyArgs
+        {
+            public LoadingBar loadingBar;
+            public BackgroundWorker backgroundWorker;
+
+            public ApplyArgs(LoadingBar loadingBar, ref BackgroundWorker backgroundWorker)
+            {
+                this.loadingBar = loadingBar;
+                this.backgroundWorker = backgroundWorker;
+            }
+        }
+
+        public struct DirectApplyArgs
+        {
+            public LoadingBar loadingBar;
+            public DirectoryInfo mod;
+            public bool uninstallExisting;
+
+            public DirectApplyArgs(LoadingBar loadingBar, DirectoryInfo mod, bool uninstallExisting)
+            {
+                this.loadingBar = loadingBar;
+                this.mod = mod;
+                this.uninstallExisting = uninstallExisting;
+            }
         }
     }
 }
