@@ -139,10 +139,12 @@ namespace OneShot_ModLoader
                 MessageBox.Show(message);
             }
 
+            /* uncomment this later
             if (OCIDirectApply.instance.Checked)
             {
                 await ChangesManage.DirectApply(loadingBar, new DirectoryInfo(zipDestination), OCIDeleteExisting.instance.Checked);
             }
+            */
 
             OCIForm.instance.Close();
         }

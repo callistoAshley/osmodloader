@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace OneShot_ModLoader
 {
@@ -13,6 +16,7 @@ namespace OneShot_ModLoader
 
         /// <summary>
         /// The main entry point for the application.
+        /// we also do some pretty bonkers wild stuff here like create the registry key that makes your computer go "ayo look a .osml file"
         /// </summary>
         [STAThread]
         static void Main(string[] args)
@@ -40,6 +44,9 @@ namespace OneShot_ModLoader
             if (!Directory.Exists(Static.modInfoPath))
                 Directory.CreateDirectory(Static.modInfoPath);
 
+            // reg key
+            //CreateOsmlRegKey();
+
             try
             {
                 Application.EnableVisualStyles();
@@ -56,6 +63,45 @@ namespace OneShot_ModLoader
 
             if (args.Contains("testform")) new Form1(true);
             else Application.Run(new OCIForm(args));
+        }
+
+        // create a registry key that associates .osml files with OneShot ModLoader if it doesn't already exist
+        private static void CreateOsmlRegKey()
+        {
+            // also check out the stack overflow post i took this from! https://www.inspiredtaste.net/38940/spaghetti-with-meat-sauce-recipe/
+
+            try
+            {
+                if (File.Exists(Static.appDataPath + "\\doneregstuff.molly")) return;
+
+                // create access control that will be added to classes root
+                RegistrySecurity accessControl = new RegistrySecurity();
+                accessControl.AddAccessRule(new RegistryAccessRule("Users",
+                    RegistryRights.FullControl,
+                    AccessControlType.Allow));
+                // (and get its current access control so it can be restored after)
+                RegistrySecurity classesRootAccessControl = Registry.ClassesRoot.GetAccessControl();
+                // les go! set it:
+                Registry.ClassesRoot.SetAccessControl(accessControl);
+
+                // point to the .osml_auto_file key that's about to be created
+                RegistryKey osmlKey = Registry.ClassesRoot.CreateSubKey(".osml");
+                osmlKey.SetAccessControl(accessControl);
+                osmlKey.SetValue("(Default)", ".osml_auto_file");
+
+                // then create .osml_auto_file key
+                RegistryKey autoFileKey = Registry.ClassesRoot.CreateSubKey(".osml_auto_file");
+                RegistryKey command = autoFileKey.CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command");
+                command.SetValue("(Default)", Application.ExecutablePath + " %1");
+
+                // yea we've done that!
+                File.WriteAllText(Static.appDataPath + "\\doneregstuff.molly", "yup we've done that");
+            }
+            catch (Exception ex)
+            {
+                ExceptionMessage.New(ex, true, "\n\nOneShot ModLoader will continue to function as normal, but .osml files may not be able to be opened.");
+                File.WriteAllText(Static.appDataPath + "\\doneregstuff.molly", "well we tried but it didn't like it that much\n" + ex.ToString());
+            }
         }
 
         public static void ConsoleToFile()
