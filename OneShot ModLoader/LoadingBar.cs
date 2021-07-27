@@ -57,11 +57,6 @@ namespace OneShot_ModLoader
 
         public void ResetProgress() => progress.Value = 0;
 
-        public async void ReportProgress(object sender, EventArgs e)
-        {
-            await UpdateProgress();
-        }
-
         public async Task UpdateProgress()
         {
             if (progress.Value < progress.Maximum) progress.Value++;

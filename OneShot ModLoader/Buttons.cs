@@ -9,7 +9,6 @@ using System.Drawing.Text;
 using System.IO;
 using System.Threading;
 using System.Windows.Input;
-using System.ComponentModel;
 
 namespace OneShot_ModLoader
 {
@@ -382,14 +381,12 @@ namespace OneShot_ModLoader
 
             try 
             {
-                BackgroundWorker b = new BackgroundWorker();
-                b.DoWork += ChangesManage.Apply;
-                b.RunWorkerAsync(new ChangesManage.ApplyArgs(
-                    new LoadingBar(Form1.instance, LoadingBar.LoadingBarType.Efficient),
-                    ref b
-                ));
+                await ChangesManage.Apply();
             }
             catch { }
+
+            Form1.instance.Controls.Clear();
+            Form1.instance.InitStartMenu();
         }
     }
     public class RefreshMods : Button
