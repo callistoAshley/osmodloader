@@ -18,7 +18,6 @@ namespace OneShot_ModLoader
 
         public static void PlaySound(string sound, bool loop)
         {
-            return;
             Console.WriteLine("attempting to play sound: " + sound);
 
             try

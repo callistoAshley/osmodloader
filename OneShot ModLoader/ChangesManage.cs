@@ -37,13 +37,7 @@ namespace OneShot_ModLoader
 
                     backgroundWorker.DoWork -= Apply;
                     backgroundWorker.DoWork += DirectApply;
-
-                    backgroundWorker.RunWorkerAsync(new DirectApplyArgs(
-                        loadingBar, 
-                        new DirectoryInfo(Static.directory + "Mods\\" + ActiveMods.instance.Nodes[0].Text),
-                        true,
-                        ref backgroundWorker
-                    ));
+                    backgroundWorker.RunWorkerAsync(new DirectApplyArgs(loadingBar, ref backgroundWorker));
                     /*
                     await DirectApply(loadingBar,
                         new DirectoryInfo(Static.directory + "Mods\\" + ActiveMods.instance.Nodes[0].Text),
@@ -395,14 +389,12 @@ namespace OneShot_ModLoader
             public LoadingBar loadingBar;
             public DirectoryInfo mod;
             public bool uninstallExisting;
-            public BackgroundWorker backgroundWorker;
 
-            public DirectApplyArgs(LoadingBar loadingBar, DirectoryInfo mod, bool uninstallExisting, ref BackgroundWorker backgroundWorker)
+            public DirectApplyArgs(LoadingBar loadingBar, DirectoryInfo mod, bool uninstallExisting)
             {
                 this.loadingBar = loadingBar;
                 this.mod = mod;
                 this.uninstallExisting = uninstallExisting;
-                this.backgroundWorker = backgroundWorker;
             }
         }
     }
