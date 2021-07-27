@@ -246,13 +246,11 @@ namespace OneShot_ModLoader
                     }
                 }
 
-                foreach (string s in files) // TODO: make this not ugly
+                foreach (string s in files)
                 {
-                    FileInfo f = new FileInfo(s);
-                    FileInfo moveTo = new FileInfo( moveFilesHere + $"\\{s.Replace(modPath, string.Empty)}");
+                    string moveTo = moveFilesHere + $"\\{s.Replace(modPath, string.Empty)}";
                     Console.WriteLine($"moving {s} to {moveTo}");
-                    if (!Directory.Exists(moveTo.DirectoryName)) Directory.CreateDirectory(moveTo.DirectoryName);
-                    File.Move(s, moveTo.FullName);
+                    File.Move(s, moveTo);
 
                     await formLoadingBar.UpdateProgress();
                 }
