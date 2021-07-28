@@ -15,6 +15,7 @@ namespace OneShot_ModLoader
         {
             FileIniDataParser parser = new FileIniDataParser();
             IniData data = new IniData();
+            data.Configuration.AssigmentSpacer = string.Empty;
 
             for (int i = 0; i < valueNames.Length; i++)
                 data["config"][valueNames[i]] = values[i];
