@@ -20,46 +20,54 @@ namespace OneShot_ModLoader
 
         public OCIForm(string[] things)
         {
-            Console.WriteLine("OCIForm intialized with args: ");
-            foreach (string s in things) Console.WriteLine(" " + s);
-            if (!Program.doneSetup)
+            try
             {
-                Console.WriteLine("base os not found, attempting to close oci form");
-                MessageBox.Show("A base oneshot could not be found. Please open the setup page and follow the instructions.");
-                Close();
-                return;
+                Console.WriteLine("OCIForm intialized with args: ");
+                foreach (string s in things) Console.WriteLine(" " + s);
+                if (!Program.doneSetup)
+                {
+                    Console.WriteLine("base os not found, attempting to close oci form");
+                    MessageBox.Show("A base oneshot could not be found. Please open the setup page and follow the instructions.");
+                    Close();
+                    return;
+                }
+
+                instance = this;
+
+                modPath = new FileInfo(things[0]);
+
+                FormBorderStyle = FormBorderStyle.FixedSingle;
+                Text = "One-Click Install";
+                Size = new Size(500, 400);
+                SetTheme();
+                Icon = new Icon(Static.spritesPath + "oci_icon.ico");
+
+                MaximizeBox = false;
+                MinimizeBox = false;
+                HelpButton = true;
+
+                Show();
+                Audio.PlaySound("bgm_oci.mp3", false);
+
+                // text
+                Label text = new Label();
+                text.Text = "OneShot ModLoader\nOne-Click Install\n" + modPath.Name;
+                text.Location = new Point(10, 10);
+                text.Font = Static.GetTerminusFont(16);
+                text.AutoSize = true;
+                text.ForeColor = Color.White;
+                text.BackColor = Color.Transparent;
+
+                Controls.Add(new OCIDoneButton());
+                Controls.Add(new OCIDirectApply());
+                Controls.Add(new OCIDeleteExisting());
+                Controls.Add(text);
             }
-
-            instance = this;
-
-            modPath = new FileInfo(things[0]);
-
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            Text = "One-Click Install";
-            Size = new Size(500, 400);
-            SetTheme();
-            Icon = new Icon(Static.spritesPath + "oci_icon.ico");
-
-            MaximizeBox = false;
-            MinimizeBox = false;
-            HelpButton = true;
-
-            Show();
-            Audio.PlaySound("bgm_oci.mp3", false);
-
-            // text
-            Label text = new Label();
-            text.Text = "OneShot ModLoader\nOne-Click Install\n" + modPath.Name;
-            text.Location = new Point(10, 10);
-            text.Font = Static.GetTerminusFont(16);
-            text.AutoSize = true;
-            text.ForeColor = Color.White;
-            text.BackColor = Color.Transparent;
-
-            Controls.Add(new OCIDoneButton());
-            Controls.Add(new OCIDirectApply());
-            Controls.Add(new OCIDeleteExisting());
-            Controls.Add(text);
+            catch (Exception ex)
+            {
+                ExceptionMessage.New(ex, true, "\nOneShot ModLoader will now close.");
+                Close();
+            }
         }
 
         protected override void OnClosed(EventArgs e)

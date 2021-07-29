@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Scripting.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,9 +37,13 @@ namespace OneShot_ModLoader
                 Static.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
             else
                 Static.baseOneShotPath = "woah";
-
+            
+            // create modinfo path (this will be used in a future update)
             if (!Directory.Exists(Static.modInfoPath))
                 Directory.CreateDirectory(Static.modInfoPath);
+
+            // append contents of osmlargs.txt to args
+            ReadArgsFile(ref args);
 
             try
             {
@@ -52,10 +57,17 @@ namespace OneShot_ModLoader
 
         private static void ProcessArgs(string[] args) // this'll be expanded on in future
         {
-            Console.WriteLine(args.AsParallel());
-
-            if (args.Contains("testform")) new Form1(true);
+            if (args.Contains("testform")) Application.Run(new Form1(true));
             else Application.Run(new OCIForm(args));
+        }
+
+        private static void ReadArgsFile(ref string[] args)
+        {
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\osmlargs.txt"))
+            {
+                // write args to console here
+                args = File.ReadAllLines(Directory.GetCurrentDirectory() + "\\osmlargs.txt");
+            }
         }
 
         public static void ConsoleToFile()

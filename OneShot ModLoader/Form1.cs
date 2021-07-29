@@ -27,11 +27,7 @@ namespace OneShot_ModLoader
         public static TextWriter consoleOut = Console.Out;
         public static StreamWriter consoleOutStream;
 
-        public Form1()
-        {
-            InitializeComponent();
-            Init();
-        }
+        public Form1() : this(false) { }
 
         public Form1(bool withTestForm)
         {
