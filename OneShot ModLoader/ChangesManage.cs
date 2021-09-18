@@ -121,8 +121,8 @@ namespace OneShot_ModLoader
                 }
                 Console.WriteLine("finished up in temp");
 
-                await loadingBar.SetLoadingStatus("finalizing, please wait");
-                loadingBar.ResetProgress();
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "finalizing, please wait"));
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.ResetProgress));
 
                 // now we copy everything in temp to the oneshot path
 
@@ -144,9 +144,7 @@ namespace OneShot_ModLoader
                         Directory.CreateDirectory(create);
 
                         // update progress
-                        await loadingBar.UpdateProgress();
-                        if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                            await loadingBar.SetLoadingStatus("final: creating directory: " + create);
+                        loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, "final: creating directory: " + create));
                     }
                 }
 
@@ -162,14 +160,12 @@ namespace OneShot_ModLoader
                         f.CopyTo(destination, true);
 
                         // update progress
-                        await loadingBar.UpdateProgress();
-                        if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                            await loadingBar.SetLoadingStatus("final: " + destination);
+                        loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, "final: creating directory: " + destination));
                     }
                 }
 
                 // done!
-                await loadingBar.SetLoadingStatus("almost done!");
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "almost done!"));
 
                 Console.WriteLine("finished copying files");
 
@@ -185,7 +181,7 @@ namespace OneShot_ModLoader
                 Console.Beep();
                 MessageBox.Show("All done!");
 
-                loadingBar.Dispose();
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Dispose));
 
                 Console.WriteLine("finished applying changes");
 
@@ -194,12 +190,14 @@ namespace OneShot_ModLoader
             catch (Exception ex)
             {
                 ExceptionMessage.New(ex, true, "OneShot ModLoader will now close.");
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Forcequit));
                 Form1.instance.Close();
             }
         }
 
         public static async Task DirectApply(LoadingBar loadingBar, DirectoryInfo mod, bool uninstallExisting)
         {
+            /*
             try
             {
                 DirectoryInfo baseOs = new DirectoryInfo(Static.baseOneShotPath);
@@ -330,6 +328,7 @@ namespace OneShot_ModLoader
 
                 OCIForm.instance.Close();
             }
+            */
         }
 
         public static bool ConfirmValid(string modPath)

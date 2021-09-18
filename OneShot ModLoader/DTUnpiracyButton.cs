@@ -95,7 +95,7 @@ namespace OneShot_ModLoader
                         Console.WriteLine("unchanged file found! " + f.FullName);
                         matches.Add(f);
                     }
-                    await formLoadingBar.UpdateProgress();
+                    //await formLoadingBar.UpdateProgress();
                 }
 
                 // make string array from file matches
@@ -105,7 +105,7 @@ namespace OneShot_ModLoader
                 matchNames.AddRange(matches.ConvertAll<string>(new Converter<FileInfo, string>(FileInfoToString)));
 
                 Console.WriteLine("all done! creating dialog");
-                await formLoadingBar.SetLoadingStatus("done!");
+                formLoadingBar.SetLoadingStatus("done!");
 
                 // create temp directory
                 Console.WriteLine("also creating temp directory lol");
@@ -181,7 +181,7 @@ namespace OneShot_ModLoader
 
                 // reset loading bar progress
                 formLoadingBar.ResetProgress();
-                await formLoadingBar.SetLoadingStatus("deleting unchanged files");
+                formLoadingBar.SetLoadingStatus("deleting unchanged files");
 
                 // get files
                 string[] files = File.ReadAllLines(Static.GetOrCreateTempDirectory().FullName + "\\file matches.txt");
@@ -191,7 +191,7 @@ namespace OneShot_ModLoader
                 {
                     Console.WriteLine($"deleting {s}");
                     File.Delete(s);
-                    await formLoadingBar.UpdateProgress();
+                    //await formLoadingBar.UpdateProgress();
                 }
 
                 // done!
@@ -221,7 +221,7 @@ namespace OneShot_ModLoader
 
                 // reset loading bar progress
                 formLoadingBar.ResetProgress();
-                await formLoadingBar.SetLoadingStatus("moving unchanged files");
+                formLoadingBar.SetLoadingStatus("moving unchanged files");
 
                 // get files
                 string[] files = File.ReadAllLines(Static.GetOrCreateTempDirectory().FullName + "\\file matches.txt");
@@ -252,7 +252,7 @@ namespace OneShot_ModLoader
                     Console.WriteLine($"moving {s} to {moveTo}");
                     File.Move(s, moveTo);
 
-                    await formLoadingBar.UpdateProgress();
+                    //formLoadingBar.UpdateProgress();
                 }
 
                 // done!

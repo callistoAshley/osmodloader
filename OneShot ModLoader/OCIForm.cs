@@ -125,7 +125,7 @@ namespace OneShot_ModLoader
 
             Audio.Stop();
             LoadingBar loadingBar = new LoadingBar(OCIForm.instance);
-            await loadingBar.SetLoadingStatus(string.Format("Extracting {0}, please wait...", OCIForm.instance.modPath.Name));
+            loadingBar.SetLoadingStatus(string.Format("Extracting {0}, please wait...", OCIForm.instance.modPath.Name));
             Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
 
             string zipDestination = Static.modsPath + mod;

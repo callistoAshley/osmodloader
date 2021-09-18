@@ -30,6 +30,7 @@ namespace OneShot_ModLoader
         public enum ProgressType
         {
             ResetProgress,
+            Dispose,
             Forcequit,
         }
 
@@ -71,6 +72,9 @@ namespace OneShot_ModLoader
                 {
                     case ProgressType.ResetProgress:
                         ResetProgress();
+                        break;
+                    case ProgressType.Dispose:
+                        Dispose();
                         break;
                     case ProgressType.Forcequit:
                         form.Close();

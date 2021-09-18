@@ -33,7 +33,7 @@ namespace OneShot_ModLoader
                     {
                         LoadingBar loadingBar = new LoadingBar(DevToolsForm.instance);
                         Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
-                        await loadingBar.SetLoadingStatus("Please wait a moment...");
+                        loadingBar.SetLoadingStatus("Please wait a moment...");
 
                         await Task.Run(() =>
                         {
