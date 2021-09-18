@@ -8,9 +8,11 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Threading;
 using System.IO;
+using System.ComponentModel;
 
 namespace OneShot_ModLoader
 {
+    // TODO: make this nicer please
     public class LoadingBar : IDisposable
     {
         public Label text = new Label();
@@ -24,6 +26,12 @@ namespace OneShot_ModLoader
         }
         public LoadingBarType displayType;
         #endregion
+
+        public enum ProgressType
+        {
+            ResetProgress,
+            Forcequit,
+        }
 
         public LoadingProgress progress = new LoadingProgress();
         private Form form;
@@ -53,17 +61,38 @@ namespace OneShot_ModLoader
             }
         }
 
+        public void ReportProgress(object sender, ProgressChangedEventArgs e)
+        {
+            UpdateProgressBar(e.ProgressPercentage);
+
+            if (e.UserState is ProgressType)
+            {
+                switch (e.UserState)
+                {
+                    case ProgressType.ResetProgress:
+                        ResetProgress();
+                        break;
+                    case ProgressType.Forcequit:
+                        form.Close();
+                        break;
+                }
+            }
+            else
+            {
+                SetLoadingStatus(e.UserState.ToString());
+            }
+        }
+
         public string GetLoadingBGM() => "bgm_0" + new Random().Next(1, 6) + ".mp3";
 
         public void ResetProgress() => progress.Value = 0;
 
-        public async Task UpdateProgress()
+        public void UpdateProgressBar(int yo)
         {
-            if (progress.Value < progress.Maximum) progress.Value++;
-            await Task.Delay(0);
+            if (progress.Value < progress.Maximum) progress.Value += yo;
         }
 
-        public async Task SetLoadingStatus(string status)
+        public void SetLoadingStatus(string status)
         {
             try
             {
@@ -86,8 +115,6 @@ namespace OneShot_ModLoader
 
                 Console.WriteLine(message + "\n---\n" + ex.ToString());
             }
-
-            await Task.Delay(0);
         }
 
         public void Dispose()
