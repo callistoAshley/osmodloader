@@ -172,7 +172,7 @@ namespace OneShot_ModLoader
                 if (!path.Exists) path.Create(); // TODO: mark this as hidden
 
                 LoadingBar loadingBar = new LoadingBar(MMDForm.instance);
-                await loadingBar.SetLoadingStatus("working, please wait...");
+                loadingBar.SetLoadingStatus("working, please wait...");
                 Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
 
                 // values
@@ -182,7 +182,7 @@ namespace OneShot_ModLoader
                 string description = MMDForm.descriptionInstance.Text;
 
                 // parse the ini file
-                await loadingBar.SetLoadingStatus("writing ini data to metadata.ini");
+                loadingBar.SetLoadingStatus("writing ini data to metadata.ini");
 
                 await INIManage.Parse(MMDForm.modPath + "\\.osml\\metadata.ini",
                     new string[4]
@@ -201,11 +201,11 @@ namespace OneShot_ModLoader
                     }
                 );
 
-                await loadingBar.SetLoadingStatus("saving icon");
+                loadingBar.SetLoadingStatus("saving icon");
 
                 MMDForm.icon.Image.Save(MMDForm.modPath + "\\.osml\\icon.png");
 
-                await loadingBar.SetLoadingStatus("almost done!");
+                loadingBar.SetLoadingStatus("almost done!");
 
                 Console.Beep();
                 MessageBox.Show("All done!");

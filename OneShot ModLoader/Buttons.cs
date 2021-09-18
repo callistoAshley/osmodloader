@@ -379,9 +379,9 @@ namespace OneShot_ModLoader
 
             await Task.Delay(1);
 
-            try 
+            try // why is this in a try catch i can't remember
             {
-                await ChangesManage.Apply();
+                ChangesManage.MultithreadStuff(false);
             }
             catch { }
 

@@ -43,7 +43,7 @@ namespace OneShot_ModLoader
             {
                 Console.WriteLine("setup begin");
 
-                await loadingBar.SetLoadingStatus("working, please wait a moment");
+                loadingBar.SetLoadingStatus("working, please wait a moment");
 
                 // get directories and files from base os
                 DirectoryInfo baseOs = new DirectoryInfo(path);
@@ -53,7 +53,7 @@ namespace OneShot_ModLoader
                 loadingBar.progress.Maximum = directories.Length + files.Length; // set the maximum of the loading bar to the length of the directories and files
 
                 // create directories
-                await loadingBar.SetLoadingStatus("setting up directories");
+                loadingBar.SetLoadingStatus("setting up directories");
                 foreach (DirectoryInfo d in directories)
                 {
                     string create = d.FullName.Replace(path, string.Empty); // create the name of the directory to create
@@ -64,13 +64,13 @@ namespace OneShot_ModLoader
 
                     // update loading bar
                     if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                        await loadingBar.SetLoadingStatus("setup: " + d.FullName);
+                        loadingBar.SetLoadingStatus("setup: " + d.FullName);
 
-                    await loadingBar.UpdateProgress();
+                    //loadingBar.UpdateProgress();
                 }
 
                 // copy files
-                await loadingBar.SetLoadingStatus("setting up files");
+                loadingBar.SetLoadingStatus("setting up files");
                 foreach (FileInfo f in files)
                 {
                     string copyPath = f.FullName.Replace(path, string.Empty); // create the name of the file to create
@@ -80,9 +80,9 @@ namespace OneShot_ModLoader
                         f.CopyTo(Static.modsPath + "/base oneshot/" + copyPath, true); // overwrite
 
                     if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                        await loadingBar.SetLoadingStatus("setup: " + f.FullName);
+                        loadingBar.SetLoadingStatus("setup: " + f.FullName);
 
-                    await loadingBar.UpdateProgress();
+                    //loadingBar.UpdateProgress();
                 }
 
                 #region ---------------OLD---------------
@@ -121,7 +121,7 @@ namespace OneShot_ModLoader
                 */
                 #endregion
 
-                await loadingBar.SetLoadingStatus("almost done!");
+                loadingBar.SetLoadingStatus("almost done!");
 
                 if (File.Exists(Static.appDataPath + "path.molly"))
                     File.Delete(Static.appDataPath + "path.molly");

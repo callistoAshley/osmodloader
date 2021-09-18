@@ -177,7 +177,7 @@ namespace OneShot_ModLoader
             // now we extract any existing zip files
             foreach (FileInfo zip in new DirectoryInfo(Static.modsPath).GetFiles()) 
             {
-                await loadingBar.SetLoadingStatus(string.Format("attempting to extract {0},\nplease wait a moment", zip.Name));
+                loadingBar.SetLoadingStatus(string.Format("attempting to extract {0},\nplease wait a moment", zip.Name));
                 Console.WriteLine("attempting to extract {0}", zip.FullName);
                 try
                 {
