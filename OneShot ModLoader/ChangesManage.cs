@@ -5,14 +5,37 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace OneShot_ModLoader
 {
     public static class ChangesManage
     {
-        public static async Task Apply()
+        // i am actually going to cry
+        public static void MultithreadStuff(bool directApply)
         {
-            LoadingBar loadingBar = new LoadingBar(Form1.instance, LoadingBar.LoadingBarType.Efficient);
+            // start by creating the loading bar
+            LoadingBar loadingBar = new LoadingBar(Form1.instance);
+
+            // then the background worker
+            BackgroundWorker pleaseSpareMyLife = new BackgroundWorker();
+            pleaseSpareMyLife.DoWork += Apply;
+            pleaseSpareMyLife.WorkerReportsProgress = true;
+            pleaseSpareMyLife.ProgressChanged += loadingBar.ReportProgress;
+
+            // run
+            pleaseSpareMyLife.RunWorkerAsync(new ApplyArgs(pleaseSpareMyLife, loadingBar));
+        }
+
+        public static async void Apply(object sender, DoWorkEventArgs e)
+        {
+            // get the parameter from the event args
+            ApplyArgs? bogus = e.Argument as ApplyArgs?;
+            if (bogus is null) throw new Exception("absolutely no idea how you did that but good work");
+            BackgroundWorker backgroundWorker = bogus.Value.backgroundWorker;
+            LoadingBar loadingBar = bogus.Value.loadingBar;
+
+            // start bgm
             Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
 
             // if there is just one mod queued, wrap to DirectApply and return
@@ -33,8 +56,8 @@ namespace OneShot_ModLoader
 
             try
             {
-                // TreeNode t in ActiveMods.instance.Nodes
-                await loadingBar.SetLoadingStatus("creating temp directory");
+                // using a string as the progress parameter sets the loading status
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "creating temp directory"));
                 
                 DirectoryInfo tempDir = new DirectoryInfo(Static.GetOrCreateTempDirectory().FullName + "\\MODCOPY\\");
                 DirectoryInfo baseOs = new DirectoryInfo(Static.baseOneShotPath);
@@ -50,7 +73,7 @@ namespace OneShot_ModLoader
                 // now we do the cool stuff
                 foreach (TreeNode t in ActiveMods.instance.Nodes)
                 {
-                    await loadingBar.SetLoadingStatus($"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {t.Text}");
+                    loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, $"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {t.Text}"));
                     loadingBar.ResetProgress();
 
                     activeMods.Add(t.Text);
@@ -77,9 +100,7 @@ namespace OneShot_ModLoader
                             Directory.CreateDirectory(create);
 
                             // update progress
-                            await loadingBar.UpdateProgress();
-                            if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                                await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, create));
+                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, $"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {create}"));
                         }
                     }
                     
@@ -94,9 +115,7 @@ namespace OneShot_ModLoader
                             f.CopyTo(destination, true);
 
                             // update progress
-                            await loadingBar.UpdateProgress();
-                            if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                                await loadingBar.SetLoadingStatus(string.Format("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, f.FullName));
+                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, $"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {f.FullName}"));
                         }
                     }
                 }
@@ -338,6 +357,18 @@ namespace OneShot_ModLoader
 
             if (files.Count > 0) return true; // awesome! we found something!
             return false; // uh oh, looks like this isn't a mod - or maybe the contents aren't in the root of the directory. we should warn the player
+        }
+
+        public struct ApplyArgs
+        {
+            public BackgroundWorker backgroundWorker;
+            public LoadingBar loadingBar;
+
+            public ApplyArgs(BackgroundWorker backgroundWorker, LoadingBar loadingBar)
+            {
+                this.backgroundWorker = backgroundWorker;
+                this.loadingBar = loadingBar;
+            }
         }
     }
 }
