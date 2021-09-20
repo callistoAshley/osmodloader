@@ -69,7 +69,6 @@ namespace OneShot_ModLoader
                 if (!Directory.Exists(tempDir.FullName)) Directory.CreateDirectory(tempDir.FullName);
 
                 // delete the base os path
-                File.SetAttributes(Static.baseOneShotPath, FileAttributes.Normal); // set file attributes
                 if (baseOs.Exists) baseOs.Delete(true);
 
                 // now we do the cool stuff
@@ -87,7 +86,7 @@ namespace OneShot_ModLoader
                     FileInfo[] files = mod.GetFiles("*", SearchOption.AllDirectories);
 
                     // set the maximum value of the progress bar to the sum of the directories/files
-                    loadingBar.progress.Maximum = directories.Length + files.Length;
+                    loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(directories.Length + files.Length, LoadingBar.ProgressType.SetMaximumProgress));
 
                     Console.WriteLine("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, mod.FullName);
 
@@ -133,7 +132,7 @@ namespace OneShot_ModLoader
                 FileInfo[] files2 = tempDir.GetFiles("*", SearchOption.AllDirectories);
 
                 // set the maximum value of the progress bar to the sum of the directories and files
-                loadingBar.progress.Maximum = directories2.Length + files2.Length;
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(directories2.Length + files2.Length, LoadingBar.ProgressType.SetMaximumProgress));
 
                 foreach (DirectoryInfo d in directories2)
                 {

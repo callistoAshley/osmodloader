@@ -29,6 +29,7 @@ namespace OneShot_ModLoader
 
         public enum ProgressType
         {
+            SetMaximumProgress,
             ResetProgress,
             Dispose,
             Forcequit,
@@ -64,12 +65,13 @@ namespace OneShot_ModLoader
 
         public void ReportProgress(object sender, ProgressChangedEventArgs e)
         {
-            UpdateProgressBar(e.ProgressPercentage);
-
             if (e.UserState is ProgressType)
             {
                 switch (e.UserState)
                 {
+                    case ProgressType.SetMaximumProgress:
+                        SetMaximumProgress(e.ProgressPercentage);
+                        return; // return instead of break so we don't update the progress bar, pretty sure this is evil
                     case ProgressType.ResetProgress:
                         ResetProgress();
                         break;
@@ -92,15 +94,33 @@ namespace OneShot_ModLoader
             {
                 SetLoadingStatus(e.UserState.ToString());
             }
+
+            UpdateProgressBar(e.ProgressPercentage);
         }
 
         public string GetLoadingBGM() => "bgm_0" + new Random().Next(1, 6) + ".mp3";
 
         public void ResetProgress() => progress.Value = 0;
 
+        public void SetMaximumProgress(int amount)
+        {
+            Action thingy = new Action(() => { progress.Maximum = amount; });
+
+            if (progress.InvokeRequired)
+                progress.Invoke(thingy);
+            else
+                thingy.Invoke();
+        }
+
         public void UpdateProgressBar(int yo)
         {
-            if (progress.Value < progress.Maximum) progress.Value += yo;
+            // you know the drill
+            Action whaddayacallit = new Action(() => { if (progress.Value < progress.Maximum) progress.Value += yo; } );
+
+            if (progress.InvokeRequired)
+                progress.Invoke(whaddayacallit);
+            else
+                whaddayacallit.Invoke();
         }
 
         public void SetLoadingStatus(string status)
@@ -159,13 +179,23 @@ namespace OneShot_ModLoader
 
             protected override void OnPaint(PaintEventArgs e)
             {
-                Rectangle rec = e.ClipRectangle;
+                // create action
+                Action thing = new Action(() =>
+                {
+                    Rectangle rec = e.ClipRectangle;
 
-                rec.Width = (int)(rec.Width * ((double)Value / Maximum)) - 4;
-                if (ProgressBarRenderer.IsSupported)
-                    ProgressBarRenderer.DrawHorizontalBar(e.Graphics, e.ClipRectangle);
-                rec.Height = rec.Height - 4;
-                e.Graphics.FillRectangle(Brushes.MediumPurple, 2, 2, rec.Width, rec.Height);
+                    rec.Width = (int)(rec.Width * ((double)Value / Maximum)) - 4;
+                    if (ProgressBarRenderer.IsSupported)
+                        ProgressBarRenderer.DrawHorizontalBar(e.Graphics, e.ClipRectangle);
+                    rec.Height = rec.Height - 4;
+                    e.Graphics.FillRectangle(Brushes.MediumPurple, 2, 2, rec.Width, rec.Height);
+                });
+
+                // invoke on control if invoke is required
+                if (InvokeRequired)
+                    Invoke(thing);
+                else
+                    thing.Invoke(); // otherwise just invoke it directly on the same thread
             }
         }
     }
