@@ -32,8 +32,10 @@ namespace OneShot_ModLoader
             // get the parameter from the event args
             ApplyArgs? bogus = e.Argument as ApplyArgs?;
             if (bogus is null) throw new Exception("absolutely no idea how you did that but good work");
-            BackgroundWorker backgroundWorker = bogus.Value.backgroundWorker;
-            LoadingBar loadingBar = bogus.Value.loadingBar;
+
+            // set field stuff
+            BackgroundWorker backgroundWorker = bogus.Value.backgroundWorker; // provide this as an argument into DirectApplyArgs
+            LoadingBar loadingBar = bogus.Value.loadingBar; // self explanatory i guess
 
             // start bgm
             Audio.PlaySound(loadingBar.GetLoadingBGM(), true);

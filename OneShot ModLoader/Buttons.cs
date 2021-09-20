@@ -385,8 +385,8 @@ namespace OneShot_ModLoader
             }
             catch { }
 
-            Form1.instance.Controls.Clear();
-            Form1.instance.InitStartMenu();
+            //Form1.instance.Controls.Clear();
+            //Form1.instance.InitStartMenu();
         }
     }
     public class RefreshMods : Button
@@ -404,7 +404,7 @@ namespace OneShot_ModLoader
 
         protected override async void OnClick(EventArgs e)
         {
-            await InactiveMods.instance.RefreshMods();
+            InactiveMods.instance.RefreshMods();
         }
     }
     public class CloverSecret : PictureBox

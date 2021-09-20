@@ -148,12 +148,10 @@ namespace OneShot_ModLoader
             Location = new Point(70, 50);
             Size = new Size(176, 175);
 
-            Cool();
+            RefreshMods();
         }
 
-        private async void Cool() => await RefreshMods(); // can't await in ctor lol
-
-        public async Task RefreshMods ()
+        public void RefreshMods ()
         {
             StringBuilder sb = new StringBuilder("***REMOVED***"); // i can't remember why i made this but i'm scared to remove it in case it'll break everything beyond repair
             Nodes.Clear();
@@ -265,24 +263,6 @@ namespace OneShot_ModLoader
             // now readd the nodes from the cloned collection
             foreach (string s in currentActivatedMods)
                 Nodes.Add(s);
-        }
-
-        public async void ToggleQuickChange()
-        {
-            if (!quickChange)
-            {
-                title.Text = "Quick Changes";
-                Nodes.Clear();
-                await InactiveMods.instance.RefreshMods();
-            }
-            else
-            {
-                title.Text = "Active Mods";
-                Nodes.Clear();
-                RefreshMods();
-                await InactiveMods.instance.RefreshMods();
-            }
-            quickChange = !quickChange;
         }
 
         public void RefreshMods()
