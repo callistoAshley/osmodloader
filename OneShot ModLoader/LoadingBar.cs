@@ -77,7 +77,14 @@ namespace OneShot_ModLoader
                         Dispose();
                         break;
                     case ProgressType.Forcequit:
-                        form.Close();
+                        if (form.InvokeRequired)
+                        {
+                            form.Invoke(new Action(() => form.Close() ));
+                        }
+                        else
+                        {
+                            form.Close();
+                        }
                         break;
                 }
             }
@@ -98,26 +105,40 @@ namespace OneShot_ModLoader
 
         public void SetLoadingStatus(string status)
         {
-            try
+            // create the delegate for what we're actually doing
+            Action thingimabob = new Action(() =>
             {
-                string finalStatus = status;
+                try
+                {
+                    string finalStatus = status;
 
-                // replace the working directory or oneshot path with an empty string to shorten the status
-                if (finalStatus.Contains(Directory.GetCurrentDirectory()))
-                    finalStatus = finalStatus.Replace(Directory.GetCurrentDirectory(), string.Empty);
-                else if (finalStatus.Contains(Static.baseOneShotPath))
-                    finalStatus = finalStatus.Replace(Static.baseOneShotPath, string.Empty);
+                    // replace the working directory or oneshot path with an empty string to shorten the status
+                    if (finalStatus.Contains(Directory.GetCurrentDirectory()))
+                        finalStatus = finalStatus.Replace(Directory.GetCurrentDirectory(), string.Empty);
+                    else if (finalStatus.Contains(Static.baseOneShotPath))
+                        finalStatus = finalStatus.Replace(Static.baseOneShotPath, string.Empty);
 
-                // set the status
-                text.Text = finalStatus;
-                text.Refresh();
+                    // set the status
+                    text.Text = finalStatus;
+                    text.Refresh();
+                }
+                catch (Exception ex)
+                {
+                    text.Font = new Font(new FontFamily(GenericFontFamilies.Monospace), 10);
+                    string message = "exception encountered in loading bar: " + ex.Message;
+
+                    Console.WriteLine(message + "\n---\n" + ex.ToString());
+                }
+            });
+
+            // then we check for whether the text needs to be invoked
+            if (text.InvokeRequired)
+            {
+                text.Invoke(thingimabob);
             }
-            catch (Exception ex)
+            else
             {
-                text.Font = new Font(new FontFamily(GenericFontFamilies.Monospace), 10);
-                string message = "exception encountered in loading bar: " + ex.Message;
-
-                Console.WriteLine(message + "\n---\n" + ex.ToString());
+                thingimabob.Invoke();
             }
         }
 
