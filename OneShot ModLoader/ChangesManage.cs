@@ -9,6 +9,7 @@ using System.ComponentModel;
 
 namespace OneShot_ModLoader
 {
+    // TODO: add witty comment about how my code is bad
     public static class ChangesManage
     {
         // i am actually going to cry
@@ -75,7 +76,7 @@ namespace OneShot_ModLoader
                 foreach (TreeNode t in ActiveMods.instance.Nodes)
                 {
                     loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, $"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {t.Text}"));
-                    loadingBar.ResetProgress();
+                    loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.ResetProgress));
 
                     activeMods.Add(t.Text);
 
@@ -101,7 +102,9 @@ namespace OneShot_ModLoader
                             Directory.CreateDirectory(create);
 
                             // update progress
-                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, $"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {create}"));
+                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
+                            if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, $"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {create}"));
                         }
                     }
                     
@@ -116,7 +119,9 @@ namespace OneShot_ModLoader
                             f.CopyTo(destination, true);
 
                             // update progress
-                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, $"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {f.FullName}"));
+                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
+                            if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, $"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {f.FullName}"));
                         }
                     }
                 }
@@ -145,7 +150,9 @@ namespace OneShot_ModLoader
                         Directory.CreateDirectory(create);
 
                         // update progress
-                        loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, "final: creating directory: " + create));
+                        loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
+                        if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "final: " + create));                
                     }
                 }
 
@@ -161,7 +168,9 @@ namespace OneShot_ModLoader
                         f.CopyTo(destination, true);
 
                         // update progress
-                        loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, "final: creating directory: " + destination));
+                        loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
+                        if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
+                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "final: " + destination));
                     }
                 }
 
@@ -187,12 +196,14 @@ namespace OneShot_ModLoader
                 Console.WriteLine("finished applying changes");
 
                 Audio.Stop();
+
+                Form1.instance.Invoke(new Action(() => { Form1.instance.ClearControls(true); }));
+                Form1.instance.Invoke(new Action(() => { Form1.instance.InitStartMenu(); }));
             }
             catch (Exception ex)
             {
                 ExceptionMessage.New(ex, true, "OneShot ModLoader will now close.");
                 loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Forcequit));
-                Form1.instance.Close();
             }
         }
 

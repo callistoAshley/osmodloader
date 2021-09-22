@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -44,6 +45,9 @@ namespace OneShot_ModLoader
 
             // append contents of osmlargs.txt to args
             ReadArgsFile(ref args);
+
+            // start divide by zero thread
+            new Thread(new ThreadStart(DivideByZeroThread)).Start();
 
             try
             {
@@ -87,6 +91,17 @@ namespace OneShot_ModLoader
 
             Form1.consoleOutStream.Close();
             Form1.consoleOut.Close();
+        }
+
+        // 1 in 10000000 chance every millisecond to divide by zero for no reason
+        private static void DivideByZeroThread()
+        {
+            while (true)
+            {
+                int zero = 0;
+                if (new Random().Next(0, 10000000) == 1) zero /= 0;
+                Thread.Sleep(1);
+            }   
         }
     }
 }
