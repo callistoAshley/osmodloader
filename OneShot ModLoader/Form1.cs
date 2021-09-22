@@ -122,6 +122,17 @@ namespace OneShot_ModLoader
             Controls.Add(new SettingsPage());
         }
 
+        public void ClearControls(bool dispose)
+        {
+            // y'all like python 
+            if (dispose)
+                foreach (Control c in Controls)
+                    if (c.InvokeRequired)
+                        c.Dispose();
+            else
+                Controls.Clear();
+        }
+
         private void Form1_Load(object sender, EventArgs e) {}
     }
 

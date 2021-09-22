@@ -29,6 +29,7 @@ namespace OneShot_ModLoader
 
         public enum ProgressType
         {
+            UpdateProgress,
             SetMaximumProgress,
             ResetProgress,
             Dispose,
@@ -69,24 +70,26 @@ namespace OneShot_ModLoader
             {
                 switch (e.UserState)
                 {
+                    case ProgressType.UpdateProgress:
+                        UpdateProgressBar(e.ProgressPercentage);
+                        break;
                     case ProgressType.SetMaximumProgress:
                         SetMaximumProgress(e.ProgressPercentage);
-                        return; // return instead of break so we don't update the progress bar, pretty sure this is evil
+                        break;
                     case ProgressType.ResetProgress:
-                        ResetProgress();
+                        if (progress.InvokeRequired)
+                            progress.Invoke(new Action(() => { ResetProgress(); }));
+                        else
+                            ResetProgress();
                         break;
                     case ProgressType.Dispose:
                         Dispose();
                         break;
                     case ProgressType.Forcequit:
                         if (form.InvokeRequired)
-                        {
                             form.Invoke(new Action(() => form.Close() ));
-                        }
                         else
-                        {
                             form.Close();
-                        }
                         break;
                 }
             }
@@ -94,8 +97,6 @@ namespace OneShot_ModLoader
             {
                 SetLoadingStatus(e.UserState.ToString());
             }
-
-            UpdateProgressBar(e.ProgressPercentage);
         }
 
         public string GetLoadingBGM() => "bgm_0" + new Random().Next(1, 6) + ".mp3";
@@ -125,6 +126,7 @@ namespace OneShot_ModLoader
 
         public void SetLoadingStatus(string status)
         {
+            //return;
             // create the delegate for what we're actually doing
             Action thingimabob = new Action(() =>
             {
@@ -164,8 +166,8 @@ namespace OneShot_ModLoader
 
         public void Dispose()
         {
-            text.Dispose();
-            progress.Dispose();
+            text.Invoke(new Action(() => { text.Dispose(); } ));
+            progress.Invoke(new Action(() => { text.Dispose(); } ));
         }
 
         // progress bar
