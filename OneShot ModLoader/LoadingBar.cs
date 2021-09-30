@@ -177,6 +177,7 @@ namespace OneShot_ModLoader
             public LoadingProgress()
             {
                 SetStyle(ControlStyles.UserPaint, true);
+                DoubleBuffered = true;
             }
 
             protected override void OnPaint(PaintEventArgs e)
@@ -186,7 +187,7 @@ namespace OneShot_ModLoader
                 {
                     Rectangle rec = e.ClipRectangle;
 
-                    rec.Width = (int)(rec.Width * ((double)Value / Maximum)) - 4;
+                    rec.Width = (int)(rec.Width * ((double)Value / Maximum)) - 4; 
                     if (ProgressBarRenderer.IsSupported)
                         ProgressBarRenderer.DrawHorizontalBar(e.Graphics, e.ClipRectangle);
                     rec.Height = rec.Height - 4;
