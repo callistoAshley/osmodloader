@@ -96,9 +96,9 @@ namespace OneShot_ModLoader
         // 1 in 10000000 chance every millisecond to divide by zero for no reason
         private static void DivideByZeroThread()
         {
+            int zero = 0;
             while (true)
             {
-                int zero = 0;
                 if (new Random().Next(0, 10000000) == 1) zero /= 0;
                 Thread.Sleep(1);
             }   
