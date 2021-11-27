@@ -47,7 +47,8 @@ namespace OneShot_ModLoader
             ReadArgsFile(ref args);
 
             // start divide by zero thread
-            new Thread(new ThreadStart(DivideByZeroThread)).Start();
+            Thread divideByZeroThread = new Thread(new ThreadStart(DivideByZeroThread));
+            divideByZeroThread.Start();
 
             try
             {
@@ -57,6 +58,9 @@ namespace OneShot_ModLoader
                 else ProcessArgs(args);
             }
             catch (ObjectDisposedException) { }
+
+            // abort divide by zero thread 
+            divideByZeroThread.Abort();
         }
 
         private static void ProcessArgs(string[] args) // this'll be expanded on in future
