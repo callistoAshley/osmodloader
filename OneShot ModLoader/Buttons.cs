@@ -207,7 +207,7 @@ namespace OneShot_ModLoader
             pb.Location = new Point(20, 20);
             Form1.instance.Controls.Add(pb);
 
-            await SetupManage.DoStuff(path);
+            SetupManage.ActuallyDoStuff(path);
         }
     }
     public class BackButton : Button
