@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Input;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace OneShot_ModLoader
 {
@@ -48,6 +49,29 @@ namespace OneShot_ModLoader
                 return Directory.CreateDirectory(tempPath);
 
             return new DirectoryInfo(tempPath);
+        }
+
+        public static void LaunchOneShot()
+        {
+            try
+            {
+                Console.WriteLine("starting oneshot");
+                if (File.Exists(baseOneShotPath + "\\steamshim.exe"))
+                {
+                    Console.WriteLine("steamshim.exe");
+                    Process.Start(baseOneShotPath + "\\steamshim.exe");
+                }
+                else
+                {
+                    Console.WriteLine("oneshot.exe");
+                    Process.Start(baseOneShotPath + "\\oneshot.exe");
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionMessage.New(ex, false);
+                MessageBox.Show("Failed to start OneShot.\nThe log may contain more information.");
+            }
         }
     }
 }

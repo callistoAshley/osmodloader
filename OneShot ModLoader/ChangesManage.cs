@@ -13,21 +13,54 @@ namespace OneShot_ModLoader
     public static class ChangesManage
     {
         // i am actually going to cry
-        public static void MultithreadStuff(bool directApply)
+        public static void MultithreadStuff(bool directApply, DirectoryInfo mod = null, bool uninstallExisting = true)
         {
-            // start by creating the loading bar
-            LoadingBar loadingBar = new LoadingBar(Form1.instance);
+            try
+            {
+                // start by creating the loading bar
+                LoadingBar loadingBar = new LoadingBar(Form1.instance);
 
-            // then the background worker
-            BackgroundWorker pleaseSpareMyLife = new BackgroundWorker();
-            pleaseSpareMyLife.DoWork += Apply;
-            pleaseSpareMyLife.WorkerReportsProgress = true;
-            pleaseSpareMyLife.ProgressChanged += loadingBar.ReportProgress;
+                // then the background worker
+                BackgroundWorker pleaseSpareMyLife = new BackgroundWorker();
+                pleaseSpareMyLife.WorkerReportsProgress = true;
+                pleaseSpareMyLife.ProgressChanged += loadingBar.ReportProgress;
 
-            // run
-            pleaseSpareMyLife.RunWorkerAsync(new ApplyArgs(pleaseSpareMyLife, loadingBar));
+                if (directApply)
+                {
+                    if (mod is null)
+                    {
+                        throw new ArgumentNullException("Tried to call DirectApply, but the mod is null");
+                    }
+                    else
+                    {
+                        pleaseSpareMyLife.DoWork += DirectApply;
+
+                        // run
+                        pleaseSpareMyLife.RunWorkerAsync(new DirectApplyArgs(loadingBar, mod, uninstallExisting));
+                    }
+                }
+                else
+                {
+                    pleaseSpareMyLife.DoWork += Apply;
+
+                    // run
+                    pleaseSpareMyLife.RunWorkerAsync(new ApplyArgs(pleaseSpareMyLife, loadingBar));
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionMessage.New(ex, true, "OneShot ModLoader will now close.");
+
+                if (Form1.instance.InvokeRequired)
+                    Form1.instance.Invoke(new Action(() => Form1.instance.Close()));
+                else
+                    Form1.instance.Close();
+            }
         }
 
+        /// ===================================================================
+        ///                         Apply Changes
+        /// ===================================================================
         public static async void Apply(object sender, DoWorkEventArgs e)
         {
             // get the parameter from the event args
@@ -45,10 +78,9 @@ namespace OneShot_ModLoader
             if (ActiveMods.instance.Nodes.Count == 1)
             {
                 Console.WriteLine("ActiveMods tree only has 1 mod, switching to DirectApply instead");
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Dispose));
 
-                await DirectApply(loadingBar,
-                    new DirectoryInfo(Static.directory + "Mods\\" + ActiveMods.instance.Nodes[0].Text),
-                    true);
+                MultithreadStuff(true, new DirectoryInfo(Static.modsPath + ActiveMods.instance.Nodes[0].Text));
                 return;
             }
 
@@ -189,6 +221,10 @@ namespace OneShot_ModLoader
                 File.WriteAllLines(Static.appDataPath + "activemods.molly", activeMods);
 
                 Console.Beep();
+                /*
+                DialogResult dr = MessageBox.Show("All done! Would you like to launch OneShot?", string.Empty, MessageBoxButtons.YesNo);
+                if (dr == DialogResult.Yes)
+                    Static.LaunchOneShot();*/
                 MessageBox.Show("All done!");
 
                 loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Dispose));
@@ -207,9 +243,20 @@ namespace OneShot_ModLoader
             }
         }
 
-        public static async Task DirectApply(LoadingBar loadingBar, DirectoryInfo mod, bool uninstallExisting)
+        /// ===================================================================
+        ///                         Direct Apply
+        /// ===================================================================
+        public static void DirectApply(object sender, DoWorkEventArgs e)
         {
-            /*
+            // get parameter from event args
+            DirectApplyArgs? thingy = e.Argument as DirectApplyArgs?;
+            if (thingy is null) throw new Exception("absolutely no idea how you did that but good work");
+
+            // make local stuff from the DirectApplyArgs
+            LoadingBar loadingBar = thingy.Value.loadingBar;
+            DirectoryInfo mod = thingy.Value.mod;
+            bool uninstallExisting = thingy.Value.uninstallExisting;
+
             try
             {
                 DirectoryInfo baseOs = new DirectoryInfo(Static.baseOneShotPath);
@@ -225,23 +272,24 @@ namespace OneShot_ModLoader
                 FileInfo[] files = mod.GetFiles("*", SearchOption.AllDirectories);
 
                 // set the maximum value of the progress bar to the sum of the directories/files
-                loadingBar.progress.Maximum = directories.Length + files.Length;
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(directories.Length + files.Length, LoadingBar.ProgressType.SetMaximumProgress));
 
-                await loadingBar.SetLoadingStatus("working, please wait (via direct apply)");
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "working, please wait (via direct apply)"));
 
                 // first, create the directories
                 foreach (DirectoryInfo d in directories)
                 {
                     string newDir = d.FullName.Replace(shorten, string.Empty);
-                    //MessageBox.Show(string.Format("base os path: {0}\nnew dir to combine w: {1}", Form1.baseOneShotPath, newDir));
+
                     if (!Directory.Exists(Static.baseOneShotPath + newDir))
                     {
                         Directory.CreateDirectory(Static.baseOneShotPath + newDir);
-                        Console.WriteLine("creating directory {0}", Static.baseOneShotPath + newDir);
+                        Console.WriteLine($"creating directory {Static.baseOneShotPath + newDir}");
 
-                        await loadingBar.UpdateProgress();
+                        // update progress
+                        loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
                         if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                            await loadingBar.SetLoadingStatus(string.Format("creating directory {0}", newDir));
+                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, $"creating directory {newDir}"));
                     }
                 }
 
@@ -254,13 +302,18 @@ namespace OneShot_ModLoader
                         File.Copy(f.FullName, newLocation);
                         Console.WriteLine("copied {0} to {1}", f.FullName, newLocation);
 
-                        await loadingBar.UpdateProgress();
+                        // update progress
+                        loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
                         if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                            await loadingBar.SetLoadingStatus(newLocation);
+                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, newLocation));
                     }
                 }
 
-                loadingBar.ResetProgress();
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.ResetProgress));
+
+                /// ===================================================================
+                ///                       Copy Base OS Stuff
+                /// ===================================================================
 
                 // if the user chose to uninstall any existing mods, we copy over the stuff from the base oneshot path too
                 DirectoryInfo cool = new DirectoryInfo(Static.modsPath + "base oneshot/");
@@ -271,7 +324,7 @@ namespace OneShot_ModLoader
                 FileInfo[] files2 = cool.GetFiles("*", SearchOption.AllDirectories);
 
                 // set the maximum value of the progress bar to the sum of the directories/files
-                loadingBar.progress.Maximum = directories.Length + files.Length;
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(directories.Length + files.Length, LoadingBar.ProgressType.SetMaximumProgress));
 
                 if (uninstallExisting)
                 {
@@ -283,9 +336,10 @@ namespace OneShot_ModLoader
                         {
                             Console.WriteLine("creating directory " + Directory.CreateDirectory(Static.baseOneShotPath + "/" + newDir).ToString());
 
-                            await loadingBar.UpdateProgress();
+                            // update progress
+                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
                             if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                                await loadingBar.SetLoadingStatus(string.Format("final: creating directory {0}", newDir));
+                                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, $"final: creating directory: {newDir}"));
                         }
                     }
 
@@ -298,9 +352,10 @@ namespace OneShot_ModLoader
                             File.Copy(f.FullName, newLocation);
                             Console.WriteLine("coping {0} to {1}", f.FullName, newLocation);
 
-                            await loadingBar.UpdateProgress();
+                            // update progress
+                            loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
                             if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                                await loadingBar.SetLoadingStatus("final: " + newLocation);
+                                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, $"final: {newLocation}"));
                         }
                     }
 
@@ -325,24 +380,32 @@ namespace OneShot_ModLoader
                 }
 
                 Console.Beep();
+                /*
+                DialogResult dr = MessageBox.Show("All done! Would you like to launch OneShot?", string.Empty, MessageBoxButtons.YesNo);
+                if (dr == DialogResult.Yes)
+                    Static.LaunchOneShot();*/
                 MessageBox.Show("All done!");
 
                 Audio.Stop();
             }
             catch (Exception ex)
             {
-                string message = "An exception was encountered:\n---------------\n"
-                    + ex.Message + "\n---------------\n" + ex.ToString() +
-                    "\nOneShot ModLoader will now close.";
+                ExceptionMessage.New(ex, true, "OneShot ModLoader will now close.");
 
-                Console.WriteLine(message);
-                MessageBox.Show(message);
-
-                OCIForm.instance.Close();
+                // force quit
+                if (!(OCIForm.instance is null))
+                    loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.ForcequitOCI));
+                else
+                    loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Forcequit));
             }
-            */
         }
 
+        /// ===================================================================
+        ///                      Confirm Valid Mod
+        /// ===================================================================
+        // this method confirms whether a mod is actually, well, a mod
+        // we just check for some directories and files and stuff
+        // this method is called when the mods menu is opened
         public static bool ConfirmValid(string modPath)
         {
             string[] directoriesToSearch = new string[]
@@ -370,15 +433,34 @@ namespace OneShot_ModLoader
             return false; // uh oh, looks like this isn't a mod - or maybe the contents aren't in the root of the directory. we should warn the player
         }
 
+        /// ===================================================================
+        ///                          Apply Args
+        /// ===================================================================
+        // these are structures supplied as arguments through the background worker 
+        // so the changes methods can have parameters and stuff
         public struct ApplyArgs
         {
-            public BackgroundWorker backgroundWorker;
+            public BackgroundWorker backgroundWorker; // completely forgot why i use the background worker here lol
             public LoadingBar loadingBar;
 
             public ApplyArgs(BackgroundWorker backgroundWorker, LoadingBar loadingBar)
             {
                 this.backgroundWorker = backgroundWorker;
                 this.loadingBar = loadingBar;
+            }
+        }
+
+        public struct DirectApplyArgs
+        {
+            public LoadingBar loadingBar;
+            public DirectoryInfo mod;
+            public bool uninstallExisting;
+
+            public DirectApplyArgs(LoadingBar loadingBar, DirectoryInfo mod, bool uninstallExisting)
+            {
+                this.loadingBar = loadingBar;
+                this.mod = mod;
+                this.uninstallExisting = uninstallExisting;
             }
         }
     }

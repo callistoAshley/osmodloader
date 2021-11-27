@@ -149,10 +149,8 @@ namespace OneShot_ModLoader
 
             if (OCIDirectApply.instance.Checked)
             {
-                await ChangesManage.DirectApply(loadingBar, new DirectoryInfo(zipDestination), OCIDeleteExisting.instance.Checked);
+                ChangesManage.MultithreadStuff(true, new DirectoryInfo(mod), OCIDeleteExisting.instance.Checked);
             }
-
-            OCIForm.instance.Close();
         }
     }
 
