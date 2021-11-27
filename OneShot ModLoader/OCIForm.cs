@@ -18,6 +18,8 @@ namespace OneShot_ModLoader
         public FileInfo modPath;
         public static OCIForm instance;
 
+        public static bool ghajshdfjhjahskgkdjfahajsldkfGoodVariableName;
+
         public OCIForm(string[] things)
         {
             try
@@ -32,6 +34,7 @@ namespace OneShot_ModLoader
                     return;
                 }
 
+                ghajshdfjhjahskgkdjfahajsldkfGoodVariableName = true;
                 instance = this;
 
                 modPath = new FileInfo(things[0]);
@@ -103,7 +106,7 @@ namespace OneShot_ModLoader
 
             new OCILoadingBuddy(theme);
 
-            BackgroundImage = Image.FromFile(string.Format(Static.spritesPath + "oci_bg_{0}.png", themeString));
+            BackgroundImage = Image.FromFile($"{Static.spritesPath}oci_bg_{themeString}.png");
             BackgroundImageLayout = ImageLayout.Stretch;
         }
     }

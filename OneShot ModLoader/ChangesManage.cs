@@ -387,6 +387,15 @@ namespace OneShot_ModLoader
                 MessageBox.Show("All done!");
 
                 Audio.Stop();
+
+                if (OCIForm.ghajshdfjhjahskgkdjfahajsldkfGoodVariableName)
+                {
+                    loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.ForcequitOCI));
+                }
+                else
+                {
+                    loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.ReturnToMenu));
+                }
             }
             catch (Exception ex)
             {
