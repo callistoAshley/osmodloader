@@ -215,7 +215,7 @@ namespace OneShot_ModLoader
                 // check if the mod is valid. if not, warn the player
                 if (!ChangesManage.ConfirmValid(s))
                 {
-                    Audio.PlaySound("sfx_denied.mp3", false);
+                    Audio.PlaySound("sfx_denied", false);
                     MessageBox.Show($"Could not confirm that {modName} is a valid OneShot mod or add-on." +
                         "\nThis could be because the contents of the mod are not in the root of the directory." +
                         "\nPlease double check that this is the case, and if so, move them." +

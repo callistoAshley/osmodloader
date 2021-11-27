@@ -102,7 +102,7 @@ namespace OneShot_ModLoader
 
         protected override void OnClosed(EventArgs e)
         {
-            Audio.PlaySound("sfx_back.mp3", false);
+            Audio.PlaySound("sfx_back", false);
         }
     }
 
@@ -137,7 +137,7 @@ namespace OneShot_ModLoader
                     browse.ShowDialog();
 
                     Image = Image.FromFile(browse.FileName);
-                    Audio.PlaySound("sfx_decision.mp3", false);
+                    Audio.PlaySound("sfx_decision", false);
                 }
             }
             catch (Exception ex)
@@ -212,7 +212,7 @@ namespace OneShot_ModLoader
                 loadingBar.Dispose();
                 MMDForm.instance.Close();
                 Audio.Stop();
-                Audio.PlaySound("sfx_back.mp3", false);
+                Audio.PlaySound("sfx_back", false);
             }
 
             catch (Exception ex)

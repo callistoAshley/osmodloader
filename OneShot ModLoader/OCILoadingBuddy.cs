@@ -29,13 +29,13 @@ namespace OneShot_ModLoader
             switch (theme)
             {
                 case Theme.Blue:
-                    Audio.PlaySound("sfx_robot.mp3", false);
+                    Audio.PlaySound("sfx_robot", false);
                     break;
                 case Theme.Green:
-                    Audio.PlaySound("sfx_ram.mp3", false);
+                    Audio.PlaySound("sfx_ram", false);
                     break;
                 case Theme.Red:
-                    Audio.PlaySound("sfx_scientist.mp3", false);
+                    Audio.PlaySound("sfx_scientist", false);
                     break;
             }   
         }

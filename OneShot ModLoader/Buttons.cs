@@ -38,7 +38,7 @@ namespace OneShot_ModLoader
         protected override void OnMouseEnter(EventArgs e) 
         {
             ButtonsStaticStuff.Glow(this, "button_mods");
-            Audio.PlaySound("sfx_select.mp3", false); 
+            Audio.PlaySound("sfx_select", false); 
         }
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -47,7 +47,7 @@ namespace OneShot_ModLoader
 
         protected override void OnClick(EventArgs e)
         {
-            Audio.PlaySound("sfx_decision.mp3", false);
+            Audio.PlaySound("sfx_decision", false);
             Form1.instance.Controls.Clear();
             Form1.instance.InitModsMenu();
         }
@@ -66,7 +66,7 @@ namespace OneShot_ModLoader
         protected override void OnMouseEnter(EventArgs e)
         {
             ButtonsStaticStuff.Glow(this, "button_browse");
-            Audio.PlaySound("sfx_select.mp3", false);
+            Audio.PlaySound("sfx_select", false);
         }
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -75,7 +75,7 @@ namespace OneShot_ModLoader
 
         protected override void OnClick(EventArgs e)
         {
-            Audio.PlaySound("sfx_decision.mp3", false);
+            Audio.PlaySound("sfx_decision", false);
             
             MessageBox.Show("browse mods button also this isn't done yet");
         }
@@ -93,7 +93,7 @@ namespace OneShot_ModLoader
         protected override void OnMouseEnter(EventArgs e)
         {
             ButtonsStaticStuff.Glow(this, "button_setup");
-            Audio.PlaySound("sfx_select.mp3", false);
+            Audio.PlaySound("sfx_select", false);
         }
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -102,7 +102,7 @@ namespace OneShot_ModLoader
 
         protected override void OnClick(EventArgs e)
         {
-            Audio.PlaySound("sfx_decision.mp3", false);
+            Audio.PlaySound("sfx_decision", false);
             Form1.instance.Controls.Clear();
             Form1.instance.InitSetupMenu();
         }
@@ -120,7 +120,7 @@ namespace OneShot_ModLoader
         protected override void OnMouseEnter(EventArgs e)
         {
             ButtonsStaticStuff.Glow(this, "button_settings");
-            Audio.PlaySound("sfx_select.mp3", false);
+            Audio.PlaySound("sfx_select", false);
         }
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -129,7 +129,7 @@ namespace OneShot_ModLoader
 
         protected override void OnClick(EventArgs e)
         {
-            Audio.PlaySound("sfx_decision.mp3", false);
+            Audio.PlaySound("sfx_decision", false);
             Form1.instance.Controls.Clear();
             Form1.instance.InitSettingsMenu();
         }
@@ -146,7 +146,7 @@ namespace OneShot_ModLoader
         protected override void OnMouseEnter(EventArgs e)
         {
             ButtonsStaticStuff.Glow(this, "button_tools");
-            Audio.PlaySound("sfx_select.mp3", false);
+            Audio.PlaySound("sfx_select", false);
         }
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -157,10 +157,10 @@ namespace OneShot_ModLoader
         {
             if (DevToolsForm.instance == null)
             {
-                Audio.PlaySound("sfx_decision.mp3", false);
+                Audio.PlaySound("sfx_decision", false);
                 new DevToolsForm();
             }
-            else Audio.PlaySound("sfx_denied.mp3", false);
+            else Audio.PlaySound("sfx_denied", false);
         }
     }
 
@@ -252,7 +252,7 @@ namespace OneShot_ModLoader
 
         protected override void OnClick(EventArgs e)
         {
-            Audio.PlaySound("sfx_back.mp3", false);
+            Audio.PlaySound("sfx_back", false);
             Form1.instance.Controls.Clear();
             Form1.instance.InitStartMenu();
 
@@ -284,7 +284,7 @@ namespace OneShot_ModLoader
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            Audio.PlaySound("sfx_select.mp3", false);
+            Audio.PlaySound("sfx_select", false);
         }
 
         protected override void OnClick(EventArgs e)
@@ -295,7 +295,7 @@ namespace OneShot_ModLoader
                 ActiveMods.instance.ActivateMod(node.Text);
                 InactiveMods.instance.Nodes.Remove(node);
 
-                Audio.PlaySound("sfx_decision.mp3", false);
+                Audio.PlaySound("sfx_decision", false);
             }
         }
     }
@@ -323,7 +323,7 @@ namespace OneShot_ModLoader
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            Audio.PlaySound("sfx_select.mp3", false);
+            Audio.PlaySound("sfx_select", false);
         }
 
         protected override void OnClick(EventArgs e)
@@ -335,7 +335,7 @@ namespace OneShot_ModLoader
                 InactiveMods.instance.Nodes.Add((TreeNode)node.Clone());
                 ActiveMods.instance.Nodes.Remove(node);
 
-                Audio.PlaySound("sfx_back.mp3", false);
+                Audio.PlaySound("sfx_back", false);
             }
         }
     }
@@ -363,7 +363,7 @@ namespace OneShot_ModLoader
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            Audio.PlaySound("sfx_select.mp3", false);
+            Audio.PlaySound("sfx_select", false);
         }
 
         protected override async void OnClick(EventArgs e)
@@ -434,7 +434,7 @@ namespace OneShot_ModLoader
             Form1.instance.Controls.Add(text);
             Form1.instance.Controls.Add(new BackButton(true));
 
-            Audio.PlaySound("bgm_countdown.mp3", false);
+            Audio.PlaySound("bgm_countdown", false);
         }
     }
     public class MoveScreen : PictureBox

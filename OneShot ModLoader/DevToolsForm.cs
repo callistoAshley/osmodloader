@@ -44,7 +44,7 @@ namespace OneShot_ModLoader
         protected override void OnClosed(EventArgs e)
         {
             instance = null;
-            Audio.PlaySound("sfx_back.mp3", false);
+            Audio.PlaySound("sfx_back", false);
         }
     }
 }

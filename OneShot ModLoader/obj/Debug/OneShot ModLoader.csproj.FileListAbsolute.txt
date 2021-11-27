@@ -33,3 +33,16 @@ C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\IronRu
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Microsoft.Dynamic.dll
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Microsoft.Scripting.dll
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Microsoft.Scripting.Metadata.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.Vorbis.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NVorbis.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Buffers.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Memory.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.ValueTuple.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NVorbis.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Buffers.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Memory.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.ValueTuple.xml
