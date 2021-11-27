@@ -35,6 +35,7 @@ namespace OneShot_ModLoader
             Dispose,
             Forcequit,
             ForcequitOCI,
+            ReturnToMenu,
         }
 
         public LoadingProgress progress = new LoadingProgress();
@@ -105,6 +106,21 @@ namespace OneShot_ModLoader
                             OCIForm.instance.Invoke(new Action(() => OCIForm.instance.Close()));
                         else
                             OCIForm.instance.Close();
+                        break;
+                    case ProgressType.ReturnToMenu:
+                        if (Form1.instance.InvokeRequired)
+                        {
+                            Form1.instance.Invoke(new Action(() =>
+                            {
+                                Form1.instance.Controls.Clear();
+                                Form1.instance.InitSetupMenu();
+                            }));
+                        }
+                        else
+                        {
+                            Form1.instance.Controls.Clear();
+                            Form1.instance.InitSetupMenu();
+                        }
                         break;
                 }
             }

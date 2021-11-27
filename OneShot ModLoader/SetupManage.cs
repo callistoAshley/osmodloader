@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace OneShot_ModLoader
 {
@@ -25,17 +26,48 @@ namespace OneShot_ModLoader
             return amountFound == check.Length;
         }
 
-        public static async Task DoStuff(string path)
+        public static void ActuallyDoStuff(string path)
         {
-            LoadingBar loadingBar = new LoadingBar(Form1.instance);
+            try
+            {
+                // start by creating the loading bar
+                LoadingBar loadingBar = new LoadingBar(Form1.instance);
+
+                // then the background worker
+                BackgroundWorker pleaseSpareMyLife = new BackgroundWorker();
+                pleaseSpareMyLife.WorkerReportsProgress = true;
+                pleaseSpareMyLife.ProgressChanged += loadingBar.ReportProgress;
+                pleaseSpareMyLife.DoWork += DoStuff;
+
+                // run
+                pleaseSpareMyLife.RunWorkerAsync(new SetupArgs(path, loadingBar));
+            }
+            catch (Exception ex)
+            {
+                ExceptionMessage.New(ex, true, "OneShot ModLoader will now close.");
+
+                if (Form1.instance.InvokeRequired)
+                    Form1.instance.Invoke(new Action(() => Form1.instance.Close()));
+                else
+                    Form1.instance.Close();
+            }
+        }
+
+        private static void DoStuff(object sender, DoWorkEventArgs e)
+        {
+            SetupArgs? booga = e.Argument as SetupArgs?;
+            if (booga is null) throw new Exception("absolutely no idea how you did that but good work");
+
+            string path = booga.Value.path;
+            LoadingBar loadingBar = booga.Value.loadingBar;
+
             Audio.PlaySound(loadingBar.GetLoadingBGM(), true);
 
             if (!Verify(path)) // verify the installation
             {
                 MessageBox.Show("Could not find a valid OneShot installation at that location. Please double-check for typos in your path.");
                 Audio.Stop();
-                Form1.instance.Controls.Clear();
-                Form1.instance.InitSetupMenu();
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.ReturnToMenu));
                 return;
             }
 
@@ -43,17 +75,19 @@ namespace OneShot_ModLoader
             {
                 Console.WriteLine("setup begin");
 
-                loadingBar.SetLoadingStatus("working, please wait a moment");
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "working, please wait a moment"));
 
                 // get directories and files from base os
                 DirectoryInfo baseOs = new DirectoryInfo(path);
                 DirectoryInfo[] directories = baseOs.GetDirectories("*", SearchOption.AllDirectories);
                 FileInfo[] files = baseOs.GetFiles("*", SearchOption.AllDirectories);
 
-                loadingBar.progress.Maximum = directories.Length + files.Length; // set the maximum of the loading bar to the length of the directories and files
+                // set the maximum of the loading bar to the length of the directories and files
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs
+                    (directories.Length + files.Length, LoadingBar.ProgressType.SetMaximumProgress));
 
                 // create directories
-                loadingBar.SetLoadingStatus("setting up directories");
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "setting up directories"));
                 foreach (DirectoryInfo d in directories)
                 {
                     string create = d.FullName.Replace(path, string.Empty); // create the name of the directory to create
@@ -64,13 +98,16 @@ namespace OneShot_ModLoader
 
                     // update loading bar
                     if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                        loadingBar.SetLoadingStatus("setup: " + d.FullName);
+                        loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, $"setup: {d.FullName}"));
+                    loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
 
                     //loadingBar.UpdateProgress();
                 }
 
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.ResetProgress));
+
                 // copy files
-                loadingBar.SetLoadingStatus("setting up files");
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "setting up files"));
                 foreach (FileInfo f in files)
                 {
                     string copyPath = f.FullName.Replace(path, string.Empty); // create the name of the file to create
@@ -80,7 +117,8 @@ namespace OneShot_ModLoader
                         f.CopyTo(Static.modsPath + "/base oneshot/" + copyPath, true); // overwrite
 
                     if (loadingBar.displayType == LoadingBar.LoadingBarType.Detailed)
-                        loadingBar.SetLoadingStatus("setup: " + f.FullName);
+                        loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, $"setup: {f.FullName}"));
+                    loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
 
                     //loadingBar.UpdateProgress();
                 }
@@ -121,14 +159,11 @@ namespace OneShot_ModLoader
                 */
                 #endregion
 
-                loadingBar.SetLoadingStatus("almost done!");
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "almost done"));
 
                 if (File.Exists(Static.appDataPath + "path.molly"))
                     File.Delete(Static.appDataPath + "path.molly");
                 File.WriteAllText(Static.appDataPath + "path.molly", path);
-
-                // dispose loading bar
-                loadingBar.Dispose();
 
                 Console.Beep();
                 MessageBox.Show("All done!");
@@ -137,8 +172,11 @@ namespace OneShot_ModLoader
 
                 Program.doneSetup = true;
 
-                Form1.instance.Controls.Clear();
-                Form1.instance.InitStartMenu();
+                // return to menu
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.ReturnToMenu));
+
+                // dispose loading bar
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Dispose));
             }
             catch (Exception ex)
             {
@@ -146,7 +184,19 @@ namespace OneShot_ModLoader
                     ex.Message + "\n------------------\n" + ex.ToString() + "\nOneShot ModLoader will now close.";
 
                 MessageBox.Show(message);
-                Form1.instance.Close();
+                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Forcequit));
+            }
+        }
+
+        private struct SetupArgs
+        {
+            public string path;
+            public LoadingBar loadingBar;
+
+            public SetupArgs(string path, LoadingBar loadingBar)
+            {
+                this.path = path;
+                this.loadingBar = loadingBar;
             }
         }
     }
