@@ -50,7 +50,7 @@ namespace OneShot_ModLoader
                 HelpButton = true;
 
                 Show();
-                Audio.PlaySound("bgm_oci.mp3", false);
+                Audio.PlaySound("bgm_oci", false);
 
                 // text
                 Label text = new Label();
@@ -177,7 +177,7 @@ namespace OneShot_ModLoader
 
         protected override void OnHelpRequested(HelpEventArgs hevent)
         {
-            Audio.PlaySound("sfx_select.mp3", false);
+            Audio.PlaySound("sfx_select", false);
             MessageBox.Show("Directly apply to OneShot\n" +
                 "after extracting the .osml file to your mods directory,\n" +
                 "OneShot ModLoader will directly apply the mod into OneShot.");
@@ -185,7 +185,7 @@ namespace OneShot_ModLoader
 
         protected override void OnCheckedChanged(EventArgs e)
         {
-            Audio.PlaySound(Checked ? "sfx_decision.mp3" : "sfx_back.mp3", false);
+            Audio.PlaySound(Checked ? "sfx_decision" : "sfx_back", false);
         }
     }
 
@@ -209,7 +209,7 @@ namespace OneShot_ModLoader
 
         protected override void OnHelpRequested(HelpEventArgs hevent)
         {
-            Audio.PlaySound("sfx_select.mp3", false);
+            Audio.PlaySound("sfx_select", false);
             MessageBox.Show("Uninstall already activated mod(s)\n" +
                 "when \"Directly apply to OneShot\" is checked,\n" +
                 "OneShot ModLoader will uninstall any already installed mods");
@@ -217,7 +217,7 @@ namespace OneShot_ModLoader
 
         protected override void OnCheckedChanged(EventArgs e)
         {
-            Audio.PlaySound(Checked ? "sfx_decision.mp3" : "sfx_back.mp3", false);
+            Audio.PlaySound(Checked ? "sfx_decision" : "sfx_back", false);
         }
     }
 }

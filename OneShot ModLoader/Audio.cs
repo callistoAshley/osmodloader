@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Media;
 using NAudio;
 using NAudio.Wave;
+using NAudio.Vorbis;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
@@ -14,15 +15,43 @@ namespace OneShot_ModLoader
 {
     public static class Audio
     {
-        private static List<AudioFile> activeAudio = new List<AudioFile>();
+        private static List<WaveOutEvent> activeAudio = new List<WaveOutEvent>();
 
         public static void PlaySound(string sound, bool loop)
         {
-            Console.WriteLine("attempting to play sound: " + sound);
+            Console.WriteLine($"attempting to play sound: {sound}");
 
             try
-            { 
-                activeAudio.Add(new AudioFile(new AudioFileReaderWrapped(Static.audioPath + sound), loop));
+            {
+                // create vorbis wave reader
+                VorbisWaveReader v = new VorbisWaveReader($"{Static.audioPath}\\{sound}.ogg");
+
+                // create wave out event and initialize it with the vorbis wave reader
+                WaveOutEvent waveOut = new WaveOutEvent();
+
+                // also create a loop stream and initialize the wave out event with the loop stream instead of loop is true
+                LoopStream loopStream = new LoopStream(v);
+                if (loop)
+                    waveOut.Init(loopStream);
+                else
+                    waveOut.Init(v);
+
+                // flush and dispose the streams after playback stops
+                void Whatever(object sender, StoppedEventArgs e)
+                {
+                    v.Flush();
+                    v.Dispose();
+                    waveOut.Dispose();
+                    loopStream.Flush();
+                    loopStream.Dispose();
+                }
+                waveOut.PlaybackStopped += Whatever;
+
+                // play
+                waveOut.Play();
+
+                // add the wave out event to the active audio list so it can be stopped manually
+                activeAudio.Add(waveOut);
             }
             catch (Exception ex)
             {
@@ -33,8 +62,11 @@ namespace OneShot_ModLoader
         public static void Stop()
         {
             // dispose the fields of each file
-            foreach (AudioFile a in activeAudio)
-                a.DisposeStuff(new object(), new StoppedEventArgs());
+            foreach (WaveOutEvent w in activeAudio)
+                // stop the playback
+                // this will also invoke the playback stopped event i think 
+                // i don't really know github is down right now so i can't check the source code
+                w.Stop();
             activeAudio.Clear();
         }
 
