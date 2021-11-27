@@ -34,6 +34,7 @@ namespace OneShot_ModLoader
             ResetProgress,
             Dispose,
             Forcequit,
+            ForcequitOCI,
         }
 
         public LoadingProgress progress = new LoadingProgress();
@@ -52,7 +53,10 @@ namespace OneShot_ModLoader
             this.displayType = displayType;
 
             this.form = form;
-            this.form.Controls.Add(text);
+            if (this.form.InvokeRequired)
+                this.form.Invoke(new Action(() => this.form.Controls.Add(text)));
+            else
+                this.form.Controls.Add(text);
 
             if (showProgressBar)
             {
@@ -60,7 +64,12 @@ namespace OneShot_ModLoader
                 progress.Location = new Point(0, 230);
                 progress.Size = new Size(500, 20);
                 progress.Style = ProgressBarStyle.Continuous;
-                form.Controls.Add(progress);
+
+                // yeah this is readable! don't feel like commenting it lol
+                if (this.form.InvokeRequired)
+                    this.form.Invoke(new Action(() => this.form.Controls.Add(progress)));
+                else
+                    this.form.Controls.Add(progress);
             }
         }
 
@@ -90,6 +99,12 @@ namespace OneShot_ModLoader
                             form.Invoke(new Action(() => form.Close() ));
                         else
                             form.Close();
+                        break;
+                    case ProgressType.ForcequitOCI:
+                        if (OCIForm.instance.InvokeRequired)
+                            OCIForm.instance.Invoke(new Action(() => OCIForm.instance.Close()));
+                        else
+                            OCIForm.instance.Close();
                         break;
                 }
             }
