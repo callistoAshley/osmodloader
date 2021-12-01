@@ -27,7 +27,7 @@ namespace OneShot_ModLoader
             {
                 Thread.Sleep(1000);
                 new TV(tvs);
-                Console.WriteLine("new tv");
+                Logger.WriteLine("new tv");
             }
         }
     }

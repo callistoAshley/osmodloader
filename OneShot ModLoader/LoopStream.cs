@@ -1,5 +1,6 @@
 ﻿using NAudio.Wave;
 using System;
+using System.Windows.Forms;
 
 namespace OneShot_ModLoader
 {

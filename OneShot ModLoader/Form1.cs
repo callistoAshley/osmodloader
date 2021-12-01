@@ -50,7 +50,7 @@ namespace OneShot_ModLoader
 
         public void InitStartMenu()
         {
-            Console.WriteLine("drawing start menu");
+            Logger.WriteLine("drawing start menu");
 
             // logo
             Image image = Image.FromFile(Static.spritesPath + "logo2.png");
@@ -86,7 +86,7 @@ namespace OneShot_ModLoader
 
         public void InitModsMenu()
         {
-            Console.WriteLine("drawing mods menu");
+            Logger.WriteLine("drawing mods menu");
             Controls.Add(new BackButton());
             Controls.Add(new ActiveMods());
             Controls.Add(new RemoveFromList());
@@ -97,7 +97,7 @@ namespace OneShot_ModLoader
         
         public void InitSetupMenu()
         {
-            Console.WriteLine("drawing setup menu");
+            Logger.WriteLine("drawing setup menu");
 
             // first, initialize the instructions
             Label instructions = new Label
@@ -117,7 +117,7 @@ namespace OneShot_ModLoader
 
         public void InitSettingsMenu()
         {
-            Console.WriteLine("drawing settings menu");
+            Logger.WriteLine("drawing settings menu");
 
             Controls.Add(new SettingsPage());
         }
@@ -179,7 +179,7 @@ namespace OneShot_ModLoader
             }
 
             Static.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
-            Console.WriteLine("oneshot path is " + Static.baseOneShotPath);
+            Logger.WriteLine("oneshot path is " + Static.baseOneShotPath);
 
             LoadingBar loadingBar = new LoadingBar(Form1.instance, showProgressBar: false);
 
@@ -187,7 +187,7 @@ namespace OneShot_ModLoader
             foreach (FileInfo zip in new DirectoryInfo(Static.modsPath).GetFiles()) 
             {
                 loadingBar.SetLoadingStatus(string.Format("attempting to extract {0},\nplease wait a moment", zip.Name));
-                Console.WriteLine("attempting to extract {0}", zip.FullName);
+                Logger.WriteLine($"attempting to extract {zip.FullName}");
                 try
                 {
                     if (zip.Extension == ".zip")
@@ -282,14 +282,14 @@ namespace OneShot_ModLoader
             FileInfo activeModsFile = new FileInfo(Static.appDataPath + "activemods.molly");
             if (activeModsFile.Exists)
             {
-                Console.WriteLine("active mods file exists");
+                Logger.WriteLine("active mods file exists");
                 string[] active = File.ReadAllLines(Static.appDataPath + "activemods.molly");
                 foreach (string s in active)
                 {
-                    Console.WriteLine("found {0} in the active mods file", s);
+                    Logger.WriteLine($"found {s} in the active mods file");
                     if (InactiveMods.instance.Nodes.ContainsKey(s))
                     {
-                        Console.WriteLine("removing {0} from InactiveMods and adding it to ActiveMods", s);
+                        Logger.WriteLine($"removing {s} from InactiveMods and adding it to ActiveMods");
                         InactiveMods.instance.Nodes.RemoveByKey(s);
                         ActivateMod(s);
                     }

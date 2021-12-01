@@ -73,7 +73,7 @@ namespace OneShot_ModLoader
 
             try
             {
-                Console.WriteLine("setup begin");
+                Logger.WriteLine("setup begin");
 
                 loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "working, please wait a moment"));
 
@@ -128,7 +128,7 @@ namespace OneShot_ModLoader
                 // first we need to copy all of the directories
                 string[] dirs = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
 
-                Console.WriteLine("dirs.Length {0}", dirs.Length);
+                Logger.WriteLine("dirs.Length {0}", dirs.Length);
 
                 string shortDirCut = path; // shorten the directories ready to be cloned
                 string[] shortDirs = dirs;
@@ -148,7 +148,7 @@ namespace OneShot_ModLoader
                 string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
                 string finalPath = Constants.modsPath + "base oneshot";
 
-                Console.WriteLine("files.Length {0}", files.Length);
+                Logger.WriteLine("files.Length {0}", files.Length);
                 for (int i = 0; i < files.Length; i++)
                 {
                     string fileName = files[i].Replace(path, "");

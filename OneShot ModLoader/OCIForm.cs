@@ -24,11 +24,11 @@ namespace OneShot_ModLoader
         {
             try
             {
-                Console.WriteLine("OCIForm intialized with args: ");
-                foreach (string s in things) Console.WriteLine(" " + s);
+                Logger.WriteLine("OCIForm intialized with args: ");
+                foreach (string s in things) Logger.WriteLine(" " + s);
                 if (!Program.doneSetup)
                 {
-                    Console.WriteLine("base os not found, attempting to close oci form");
+                    Logger.WriteLine("base os not found, attempting to close oci form");
                     MessageBox.Show("A base oneshot could not be found. Please open the setup page and follow the instructions.");
                     Close();
                     return;
@@ -75,7 +75,7 @@ namespace OneShot_ModLoader
 
         protected override void OnClosed(EventArgs e)
         {
-            Program.ConsoleToFile();
+            Logger.ToFile();
         }
 
         private void SetTheme ()

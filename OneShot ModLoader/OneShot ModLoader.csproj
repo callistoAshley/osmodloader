@@ -157,6 +157,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Interop.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="SettingsPage.cs">
       <SubType>Component</SubType>
     </Compile>

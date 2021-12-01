@@ -29,7 +29,7 @@ namespace OneShot_ModLoader
 
             message += append;
 
-            Console.WriteLine(message.ToString());
+            Logger.WriteLine(message.ToString());
 
             if (show) MessageBox.Show(message.ToString());
         }

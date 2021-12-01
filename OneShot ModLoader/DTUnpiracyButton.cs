@@ -34,7 +34,7 @@ namespace OneShot_ModLoader
 
         protected override void OnClick(EventArgs e)
         {
-            Console.WriteLine("doin the unpiracyifier");
+            Logger.WriteLine("doin the unpiracyifier");
             DevToolsForm.instance.Controls.Clear();
 
             // bring up a folder browser to browse to the mod's path
@@ -84,7 +84,7 @@ namespace OneShot_ModLoader
                 foreach (FileInfo f in modFiles) 
                 {
                     // compare each file
-                    Console.WriteLine("comparing file to base os: " + f.FullName);
+                    Logger.WriteLine("comparing file to base os: " + f.FullName);
 
                     string fileName = Static.baseOneShotPath + f.FullName.Replace(modPath, string.Empty);
 
@@ -92,7 +92,7 @@ namespace OneShot_ModLoader
                     if (File.Exists(fileName)
                         && File.ReadAllText(fileName) == File.ReadAllText(f.FullName))
                     {
-                        Console.WriteLine("unchanged file found! " + f.FullName);
+                        Logger.WriteLine("unchanged file found! " + f.FullName);
                         matches.Add(f);
                     }
                     //await formLoadingBar.UpdateProgress();
@@ -104,11 +104,11 @@ namespace OneShot_ModLoader
                 // that refers to the FileInfoToString method
                 matchNames.AddRange(matches.ConvertAll<string>(new Converter<FileInfo, string>(FileInfoToString)));
 
-                Console.WriteLine("all done! creating dialog");
+                Logger.WriteLine("all done! creating dialog");
                 formLoadingBar.SetLoadingStatus("done!");
 
                 // create temp directory
-                Console.WriteLine("also creating temp directory lol");
+                Logger.WriteLine("also creating temp directory lol");
                 File.WriteAllLines(Static.GetOrCreateTempDirectory().FullName + "\\file matches.txt", matchNames);
 
                 // then create dialog form
@@ -170,7 +170,7 @@ namespace OneShot_ModLoader
 
         public async void DeleteFiles(object sender, EventArgs e)
         {
-            Console.WriteLine("deleting unchanged files");
+            Logger.WriteLine("deleting unchanged files");
 
             try
             {
@@ -189,13 +189,13 @@ namespace OneShot_ModLoader
 
                 foreach (string s in files)
                 {
-                    Console.WriteLine($"deleting {s}");
+                    Logger.WriteLine($"deleting {s}");
                     File.Delete(s);
                     //await formLoadingBar.UpdateProgress();
                 }
 
                 // done!
-                Console.WriteLine("done!");
+                Logger.WriteLine("done!");
                 MessageBox.Show("All done!");
 
                 // clear controls
@@ -210,7 +210,7 @@ namespace OneShot_ModLoader
 
         public async void MoveFiles(object sender, EventArgs e)
         {
-            Console.WriteLine("moving unchanged files");
+            Logger.WriteLine("moving unchanged files");
 
             try
             {
@@ -240,7 +240,7 @@ namespace OneShot_ModLoader
                     if (!Directory.Exists(dir))
                     {
                         moveFilesHere = dir;
-                        Console.WriteLine($"creating directory: {dir}");
+                        Logger.WriteLine($"creating directory: {dir}");
                         Directory.CreateDirectory(dir);
                         break;
                     }
@@ -249,14 +249,14 @@ namespace OneShot_ModLoader
                 foreach (string s in files)
                 {
                     string moveTo = moveFilesHere + $"\\{s.Replace(modPath, string.Empty)}";
-                    Console.WriteLine($"moving {s} to {moveTo}");
+                    Logger.WriteLine($"moving {s} to {moveTo}");
                     File.Move(s, moveTo);
 
                     //formLoadingBar.UpdateProgress();
                 }
 
                 // done!
-                Console.WriteLine("done!");
+                Logger.WriteLine("done!");
                 MessageBox.Show("All done!");
 
                 // clear controls
