@@ -19,8 +19,6 @@ namespace OneShot_ModLoader
         [STAThread]
         static void Main(string[] args)
         {
-            //Interop.RPGScript();
-
             // initialize logger
             if (!Directory.Exists(Static.appDataPath + "logs")) Directory.CreateDirectory(Static.appDataPath + "logs");
             Logger.Init();
@@ -55,6 +53,10 @@ namespace OneShot_ModLoader
                 else ProcessArgs(args);
             }
             catch (ObjectDisposedException) { }
+            catch (Exception ex)
+            {
+                ExceptionMessage.New(ex, true, "OneShot ModLoader will now close.");
+            }
 
             // abort divide by zero thread 
             divideByZeroThread.Abort();
@@ -77,8 +79,6 @@ namespace OneShot_ModLoader
                 args = File.ReadAllLines(Directory.GetCurrentDirectory() + "\\osmlargs.txt");
             }
         }
-
-        
 
         // 1 in 10000000 chance every millisecond to divide by zero for no reason
         private static void DivideByZeroThread()

@@ -184,7 +184,7 @@ namespace OneShot_ModLoader
                 // parse the ini file
                 loadingBar.SetLoadingStatus("writing ini data to metadata.ini");
 
-                await INIManage.Parse(MMDForm.modPath + "\\.osml\\metadata.ini",
+                INIManage.Parse(MMDForm.modPath + "\\.osml\\metadata.ini",
                     new string[4]
                     {
                         "displayName",

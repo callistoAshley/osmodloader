@@ -107,33 +107,6 @@ namespace OneShot_ModLoader
             Form1.instance.InitSetupMenu();
         }
     }
-    public class SettingsButton : PictureBox
-    {
-        public SettingsButton()
-        {
-            Image button = Image.FromFile(Static.spritesPath + "button_settings.png");
-            Image = button;
-            Size = button.Size;
-            Location = new Point(390, 150);
-        }
-
-        protected override void OnMouseEnter(EventArgs e)
-        {
-            ButtonsStaticStuff.Glow(this, "button_settings");
-            Audio.PlaySound("sfx_select", false);
-        }
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            ButtonsStaticStuff.GlowOut(this, "button_settings");
-        }
-
-        protected override void OnClick(EventArgs e)
-        {
-            Audio.PlaySound("sfx_decision", false);
-            Form1.instance.Controls.Clear();
-            Form1.instance.InitSettingsMenu();
-        }
-    }
     public class DevToolsButton : PictureBox
     {
         public DevToolsButton()
@@ -195,7 +168,7 @@ namespace OneShot_ModLoader
             ForeColor = Color.MediumPurple;
         }
 
-        protected override async void OnClick(EventArgs e)
+        protected override void OnClick(EventArgs e)
         {
             string path = SetupPrompt.instance.Text;
             Form1.instance.Controls.Clear();
@@ -400,7 +373,7 @@ namespace OneShot_ModLoader
             Text = "Refresh Mods";
         }
 
-        protected override async void OnClick(EventArgs e)
+        protected override void OnClick(EventArgs e)
         {
             InactiveMods.instance.RefreshMods();
         }

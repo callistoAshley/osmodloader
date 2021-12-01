@@ -156,11 +156,8 @@
     <Compile Include="DTUnpiracyButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Interop.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="SettingsPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="SettingsManage.cs" />
     <Compile Include="Static.cs" />
     <Compile Include="DevToolsForm.cs">
       <SubType>Form</SubType>
@@ -193,9 +190,6 @@
     <Compile Include="TestFormLol.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Textbox.cs" />
-    <Compile Include="TV.cs" />
-    <Compile Include="TVManage.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -224,7 +218,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

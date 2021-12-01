@@ -1,23 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using System.Threading;
-using System.Drawing.Text;
 using System.IO.Compression;
-using System.Security.AccessControl;
-using System.Windows.Input;
-using Microsoft.Win32;
-using System.Reflection;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using OneShot_ModLoaderm;
 
 namespace OneShot_ModLoader
 {
@@ -113,13 +100,6 @@ namespace OneShot_ModLoader
             Controls.Add(new SetupPrompt());
             Controls.Add(new SetupDone());
             Controls.Add(new BackButton());
-        }
-
-        public void InitSettingsMenu()
-        {
-            Logger.WriteLine("drawing settings menu");
-
-            Controls.Add(new SettingsPage());
         }
 
         public void ClearControls(bool dispose)
