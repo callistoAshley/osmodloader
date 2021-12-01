@@ -67,7 +67,7 @@ namespace OneShot_ModLoader
             Controls.Add(new ModsButton());
             //new BrowseMods();
             Controls.Add(new SetupButton());
-            Controls.Add(new SettingsButton());
+            //Controls.Add(new SettingsButton());
             Controls.Add(new DevToolsButton());
             Controls.Add(new Label
             {

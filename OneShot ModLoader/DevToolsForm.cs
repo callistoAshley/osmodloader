@@ -38,7 +38,7 @@ namespace OneShot_ModLoader
         {
             Controls.Add(new DTCompressionButton());
             Controls.Add(new DTMetadataButton());
-            Controls.Add(new DTUnpiracyButton());
+            //Controls.Add(new DTUnpiracyButton());
         }
 
         protected override void OnClosed(EventArgs e)
