@@ -19,56 +19,92 @@ namespace OneShot_ModLoader
         [STAThread]
         static void Main(string[] args)
         {
-            // initialize logger
-            if (!Directory.Exists(Static.appDataPath + "logs")) Directory.CreateDirectory(Static.appDataPath + "logs");
-            Logger.Init();
-
-            Logger.WriteLine("les goooooooooooooo");
-            Logger.WriteLine(Static.ver);
-
-            // base os stuff
-            doneSetup = Directory.Exists(Static.modsPath + "/base oneshot") && File.Exists(Static.appDataPath + "path.molly");
-
-            if (File.Exists(Static.appDataPath + "path.molly"))
-                Static.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
-            else
-                Static.baseOneShotPath = "woah";
-            
-            // create modinfo path (this will be used in a future update)
-            if (!Directory.Exists(Static.modInfoPath))
-                Directory.CreateDirectory(Static.modInfoPath);
-
-            // append contents of osmlargs.txt to args
-            ReadArgsFile(ref args);
-
-            // start divide by zero thread
-            Thread divideByZeroThread = new Thread(new ThreadStart(DivideByZeroThread));
-            divideByZeroThread.Start();
-
             try
             {
+                // initialize logger
+                if (!Directory.Exists(Static.appDataPath + "logs")) Directory.CreateDirectory(Static.appDataPath + "logs");
+                Logger.Init();
+
+                Logger.WriteLine("les goooooooooooooo");
+                Logger.WriteLine(Static.ver);
+
+                // base os stuff
+                doneSetup = Directory.Exists(Static.modsPath + "/base oneshot") && File.Exists(Static.appDataPath + "path.molly");
+
+                if (File.Exists(Static.appDataPath + "path.molly"))
+                    Static.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
+                else
+                    Static.baseOneShotPath = "woah";
+
+                // create modinfo path (this will be used in a future update)
+                if (!Directory.Exists(Static.modInfoPath))
+                    Directory.CreateDirectory(Static.modInfoPath);
+
+                // append contents of osmlargs.txt to args
+                ReadArgsFile(ref args);
+
+                // start divide by zero thread
+                Thread divideByZeroThread = new Thread(new ThreadStart(DivideByZeroThread));
+                divideByZeroThread.Start();
+
+                //////////////////////////////////////////////////////////////
+                // Run Application
+                //////////////////////////////////////////////////////////////
+                
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 if (args.Length == 0) Application.Run(new Form1());
                 else ProcessArgs(args);
+
+                //////////////////////////////////////////////////////////////
+                // After the application has finished running
+                //////////////////////////////////////////////////////////////
+                
+                // abort background threads
+                divideByZeroThread.Abort();
+
+                // write the logger to a file
+                Logger.ToFile();
             }
             catch (ObjectDisposedException) { }
             catch (Exception ex)
             {
+                Logger.WriteLine("caught in Program.Main():");
                 ExceptionMessage.New(ex, true, "OneShot ModLoader will now close.");
             }
-
-            // abort divide by zero thread 
-            divideByZeroThread.Abort();
-
-            // write the logger to a file
-            Logger.ToFile();
         }
 
         private static void ProcessArgs(string[] args) // this'll be expanded on in future
         {
-            if (args.Contains("testform")) Application.Run(new Form1(true));
-            else Application.Run(new OCIForm(args));
+            string[] argsThatDoStuff = new string[]
+            {
+                "-testform",
+                "-soundtest"
+            };
+
+            bool doneSomething = false;
+            foreach (string s in argsThatDoStuff)
+            {
+                if (args.Contains(s))
+                {
+                    // we've done something and shouldn't run the application in oci
+                    doneSomething = true;
+
+                    // process
+                    switch (s)
+                    {
+                        case "-testform":
+                            Application.Run(new TestFormLol());
+                            break;
+                        case "-soundtest":
+                            Application.Run(new SoundTestForm());
+                            break;
+                    }
+                }
+            }
+
+            // if none of the args did anything, run oci
+            if (!doneSomething) Application.Run(new OCIForm(args));
         }
 
         private static void ReadArgsFile(ref string[] args)

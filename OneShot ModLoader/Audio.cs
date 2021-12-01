@@ -72,56 +72,12 @@ namespace OneShot_ModLoader
         {
             // dispose the fields of each file
             foreach (WaveOutEvent w in activeAudio)
-                // stop the playback
-                // this will also invoke the playback stopped event i think 
-                // i don't really know github is down right now so i can't check the source code
+            {
+                // stop the playback and dispose
                 w.Stop();
+                w.Dispose();
+            }
             activeAudio.Clear();
-        }
-
-        private struct AudioFile
-        {
-            private AudioFileReaderWrapped a;
-            private LoopStream loopStream;
-            private WaveOutEvent waveOut;
-
-            // initialize a structure called AudioFile that contains an AudioFileReader, LoopStream and WaveOutEvent
-            // that can each be disposed when playback stops
-            public AudioFile(AudioFileReaderWrapped a, bool loop)
-            {
-                this.a = a;
-                loopStream = new LoopStream(this.a);
-                waveOut = new WaveOutEvent();
-
-                if (loop) 
-                    waveOut.Init(loopStream);
-                else
-                {
-                    waveOut.Init(a);
-                    waveOut.PlaybackStopped += DisposeStuff;
-                }
-
-                waveOut.Play();
-            }
-
-            public void DisposeStuff(object sender, StoppedEventArgs e)
-            {
-                waveOut.Dispose();
-                a.Dispose();
-                loopStream.Dispose();
-                waveOut = null;
-                a = null;
-                loopStream = null;
-            }
-        }
-
-        private class AudioFileReaderWrapped : AudioFileReader, IDisposable
-        {
-            // just call base ctor
-            public AudioFileReaderWrapped(string fileName)
-                : base(fileName) { }
-
-            public new void Dispose() => Dispose(true);
         }
     }
 }
