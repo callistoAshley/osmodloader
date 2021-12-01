@@ -158,6 +158,9 @@
     </Compile>
     <Compile Include="Logger.cs" />
     <Compile Include="SettingsManage.cs" />
+    <Compile Include="SoundTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Static.cs" />
     <Compile Include="DevToolsForm.cs">
       <SubType>Form</SubType>

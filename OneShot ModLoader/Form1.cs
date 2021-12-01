@@ -14,13 +14,10 @@ namespace OneShot_ModLoader
         public static TextWriter consoleOut = Console.Out;
         public static StreamWriter consoleOutStream;
 
-        public Form1() : this(false) { }
-
-        public Form1(bool withTestForm)
+        public Form1() 
         {
             InitializeComponent();
             Init();
-            if (withTestForm) new TestFormLol();
         }
 
         public void Init()
