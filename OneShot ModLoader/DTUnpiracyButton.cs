@@ -208,7 +208,7 @@ namespace OneShot_ModLoader
             }
         }
 
-        public async void MoveFiles(object sender, EventArgs e)
+        public void MoveFiles(object sender, EventArgs e)
         {
             Logger.WriteLine("moving unchanged files");
 

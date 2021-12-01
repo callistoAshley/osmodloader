@@ -11,7 +11,7 @@ namespace OneShot_ModLoader
 {
     public class INIManage
     {
-        public static async Task Parse(string path, string[] valueNames, string[] values)
+        public static void Parse(string path, string[] valueNames, string[] values)
         {
             FileIniDataParser parser = new FileIniDataParser();
             IniData data = new IniData();
@@ -22,7 +22,6 @@ namespace OneShot_ModLoader
 
             parser.WriteFile(path, data);
 
-            await Task.Delay(0);
         }
 
         public static IniData Read(string path)

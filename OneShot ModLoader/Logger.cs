@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace OneShot_ModLoader
 {
@@ -18,6 +19,11 @@ namespace OneShot_ModLoader
 
         public static void WriteLine(string line)
         {
+            // regex replace C:\Users\username\ with just C:\username\ so we don't catch someone's real name in case they have to send a log file
+            line = new Regex(@"C:\\.*?\\").Replace(line, "C:\\Users\\username\\");
+            // and one more replace here just in case
+            line = line.Replace(Environment.UserName, "username");
+
             writer.WriteLine(line);
         }
 
@@ -33,7 +39,7 @@ namespace OneShot_ModLoader
             }
             foreach (string s in delete) new FileInfo(s).Delete(); // then delete every file in that collection
 
-            // close and flush the stream writer
+            // close the stream writer
             writer.Close();
         }
     }
