@@ -17,41 +17,50 @@ namespace OneShot_ModLoader
     {
         private static List<WaveOutEvent> activeAudio = new List<WaveOutEvent>();
 
-        public static void PlaySound(string sound, bool loop)
+        public static async void PlaySound(string sound, bool loop)
         {
             Console.WriteLine($"attempting to play sound: {sound}");
 
             try
             {
-                // create vorbis wave reader
-                VorbisWaveReader v = new VorbisWaveReader($"{Static.audioPath}\\{sound}.ogg");
-
+                // gc isn't happy rn
                 // create wave out event and initialize it with the vorbis wave reader
-                WaveOutEvent waveOut = new WaveOutEvent();
-
-                // also create a loop stream and initialize the wave out event with the loop stream instead of loop is true
-                LoopStream loopStream = new LoopStream(v);
-                if (loop)
-                    waveOut.Init(loopStream);
-                else
-                    waveOut.Init(v);
-
-                // flush and dispose the streams after playback stops
-                void Whatever(object sender, StoppedEventArgs e)
+                using (WaveOutEvent waveOut = new WaveOutEvent())
                 {
-                    v.Flush();
-                    v.Dispose();
-                    waveOut.Dispose();
-                    loopStream.Flush();
-                    loopStream.Dispose();
+                    // create vorbis wave reader
+                    using (VorbisWaveReader v = new VorbisWaveReader($"{Static.audioPath}\\{sound}.ogg"))
+                    {
+                        // also create a loop stream and initialize the wave out event with the loop stream instead of loop is true
+                        using (LoopStream loopStream = new LoopStream(v))
+                        {
+                            if (loop)
+                                waveOut.Init(loopStream);
+                            else
+                                waveOut.Init(v);
+
+                            // flush and dispose the streams after playback stops
+                            void Dispose(object sender, StoppedEventArgs e)
+                            {
+                                v.Flush();
+                                v.Dispose();
+                                waveOut.Dispose();
+                                loopStream.Flush();
+                                loopStream.Dispose();
+                            }
+                            waveOut.PlaybackStopped += Dispose;
+
+                            // play
+                            waveOut.Play();
+
+                            // add the wave out event to the active audio list so it can be stopped manually
+                            activeAudio.Add(waveOut);
+
+                            // wait the duration of the sound
+                            await Task.Delay(v.TotalTime);
+                        }
+                    }
                 }
-                waveOut.PlaybackStopped += Whatever;
-
-                // play
-                waveOut.Play();
-
-                // add the wave out event to the active audio list so it can be stopped manually
-                activeAudio.Add(waveOut);
+                
             }
             catch (Exception ex)
             {
