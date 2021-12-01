@@ -21,15 +21,12 @@ namespace OneShot_ModLoader
         {
             //Interop.RPGScript();
 
-            // console out stuff
+            // initialize logger
             if (!Directory.Exists(Static.appDataPath + "logs")) Directory.CreateDirectory(Static.appDataPath + "logs");
+            Logger.Init();
 
-            Form1.consoleOutStream = new StreamWriter(Static.appDataPath + "logs\\output " + DateTime.Now.ToString().Replace("/", ".").Replace(":", ".") + ".txt");
-            Console.SetOut(Form1.consoleOutStream);
-            Console.SetError(Form1.consoleOutStream);
-
-            Console.WriteLine("les goooooooooooooo");
-            Console.WriteLine(Static.ver);
+            Logger.WriteLine("les goooooooooooooo");
+            Logger.WriteLine(Static.ver);
 
             // base os stuff
             doneSetup = Directory.Exists(Static.modsPath + "/base oneshot") && File.Exists(Static.appDataPath + "path.molly");
@@ -61,6 +58,9 @@ namespace OneShot_ModLoader
 
             // abort divide by zero thread 
             divideByZeroThread.Abort();
+
+            // write the logger to a file
+            Logger.ToFile();
         }
 
         private static void ProcessArgs(string[] args) // this'll be expanded on in future
@@ -78,24 +78,7 @@ namespace OneShot_ModLoader
             }
         }
 
-        public static void ConsoleToFile()
-        {
-            List<string> delete = new List<string>();
-            foreach (FileInfo f in new DirectoryInfo(Static.appDataPath + "/logs").GetFiles())
-            {
-                // for every file in the /logs folder, check if it has been alive for more than 6 hours
-                DateTime lifespan = DateTime.Now - new TimeSpan(6, 0, 0);
-
-                if (f.CreationTime <= lifespan) delete.Add(f.FullName); // and if it has, add it to a collection
-            }
-            foreach (string s in delete) new FileInfo(s).Delete(); // then delete every file in that collection
-
-            Console.SetOut(Form1.consoleOut);
-            Console.SetError(Form1.consoleOut);
-
-            Form1.consoleOutStream.Close();
-            Form1.consoleOut.Close();
-        }
+        
 
         // 1 in 10000000 chance every millisecond to divide by zero for no reason
         private static void DivideByZeroThread()

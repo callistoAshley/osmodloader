@@ -24,7 +24,7 @@ namespace OneShot_ModLoader
 
         public MMDForm(string path)
         {
-            Console.WriteLine("initalized mod metadata form with path: " + path);
+            Logger.WriteLine("initalized mod metadata form with path: " + path);
             modPath = path;
 
             instance = this;
@@ -144,7 +144,7 @@ namespace OneShot_ModLoader
             {
                 string message = "An exception was encountered:\n" + ex.Message +
                         "\n------------------\n" + ex.ToString();
-                Console.WriteLine(message);
+                Logger.WriteLine(message);
                 MessageBox.Show(message);
             }
         }
@@ -219,7 +219,7 @@ namespace OneShot_ModLoader
             {
                 string message = "An exception was encountered:\n" + ex.Message +
                         "\n------------------\n" + ex.ToString();
-                Console.WriteLine(message);
+                Logger.WriteLine(message);
                 MessageBox.Show(message);
             }
         }

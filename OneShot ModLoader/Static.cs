@@ -56,15 +56,15 @@ namespace OneShot_ModLoader
         {
             try
             {
-                Console.WriteLine("starting oneshot");
+                Logger.WriteLine("starting oneshot");
                 if (File.Exists(baseOneShotPath + "\\steamshim.exe"))
                 {
-                    Console.WriteLine("steamshim.exe");
+                    Logger.WriteLine("steamshim.exe");
                     Process.Start(baseOneShotPath + "\\steamshim.exe");
                 }
                 else
                 {
-                    Console.WriteLine("oneshot.exe");
+                    Logger.WriteLine("oneshot.exe");
                     Process.Start(baseOneShotPath + "\\oneshot.exe");
                 }
             }

@@ -77,14 +77,14 @@ namespace OneShot_ModLoader
             // if there is just one mod queued, wrap to DirectApply and return
             if (ActiveMods.instance.Nodes.Count == 1)
             {
-                Console.WriteLine("ActiveMods tree only has 1 mod, switching to DirectApply instead");
+                Logger.WriteLine("ActiveMods tree only has 1 mod, switching to DirectApply instead");
                 loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Dispose));
 
                 MultithreadStuff(true, new DirectoryInfo(Static.modsPath + ActiveMods.instance.Nodes[0].Text));
                 return;
             }
 
-            Console.WriteLine("applying changes");
+            Logger.WriteLine("applying changes");
             await Task.Delay(1);
 
             List<string> activeMods = new List<string>();
@@ -121,7 +121,7 @@ namespace OneShot_ModLoader
                     // set the maximum value of the progress bar to the sum of the directories/files
                     loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(directories.Length + files.Length, LoadingBar.ProgressType.SetMaximumProgress));
 
-                    Console.WriteLine("mod {0} out of {1}: {2}", t.Index + 1, ActiveMods.instance.Nodes.Count, mod.FullName);
+                    Logger.WriteLine($"mod {t.Index + 1} out of {ActiveMods.instance.Nodes.Count}: {mod.FullName}");
 
                     foreach (DirectoryInfo d in directories)
                     {
@@ -130,7 +130,7 @@ namespace OneShot_ModLoader
 
                         if (!Directory.Exists(create))
                         {
-                            Console.WriteLine("creating directory: " + create);
+                            Logger.WriteLine("creating directory: " + create);
                             Directory.CreateDirectory(create);
 
                             // update progress
@@ -147,7 +147,7 @@ namespace OneShot_ModLoader
 
                         if (!File.Exists(destination))
                         {
-                            Console.WriteLine("copying {0} to {1}", f.FullName, destination);
+                            Logger.WriteLine($"copying {f.FullName} to {destination}");
                             f.CopyTo(destination, true);
 
                             // update progress
@@ -157,7 +157,7 @@ namespace OneShot_ModLoader
                         }
                     }
                 }
-                Console.WriteLine("finished up in temp");
+                Logger.WriteLine("finished up in temp");
 
                 loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "finalizing, please wait"));
                 loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.ResetProgress));
@@ -178,7 +178,7 @@ namespace OneShot_ModLoader
 
                     if (!Directory.Exists(create))
                     {
-                        Console.WriteLine("creating directory: " + create);
+                        Logger.WriteLine("creating directory: " + create);
                         Directory.CreateDirectory(create);
 
                         // update progress
@@ -196,7 +196,7 @@ namespace OneShot_ModLoader
 
                     if (!File.Exists(destination))
                     {
-                        Console.WriteLine("copying {0} to {1}", f.FullName, destination);
+                        Logger.WriteLine($"copying {f.FullName} to {destination}");
                         f.CopyTo(destination, true);
 
                         // update progress
@@ -209,12 +209,12 @@ namespace OneShot_ModLoader
                 // done!
                 loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, "almost done!"));
 
-                Console.WriteLine("finished copying files");
+                Logger.WriteLine("finished copying files");
 
                 Static.GetOrCreateTempDirectory().Delete(true);
-                Console.WriteLine("successfully deleted temp");
+                Logger.WriteLine("successfully deleted temp");
 
-                Console.WriteLine("activeMods.Count " + activeMods.Count);
+                Logger.WriteLine("activeMods.Count " + activeMods.Count);
                 // write the active mods to a file
                 if (File.Exists(Static.appDataPath + "activemods.molly"))
                     File.Delete(Static.appDataPath + "activemods.molly");
@@ -229,7 +229,7 @@ namespace OneShot_ModLoader
 
                 loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Dispose));
 
-                Console.WriteLine("finished applying changes");
+                Logger.WriteLine("finished applying changes");
 
                 Audio.Stop();
 
@@ -284,7 +284,7 @@ namespace OneShot_ModLoader
                     if (!Directory.Exists(Static.baseOneShotPath + newDir))
                     {
                         Directory.CreateDirectory(Static.baseOneShotPath + newDir);
-                        Console.WriteLine($"creating directory {Static.baseOneShotPath + newDir}");
+                        Logger.WriteLine($"creating directory {Static.baseOneShotPath + newDir}");
 
                         // update progress
                         loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
@@ -300,7 +300,7 @@ namespace OneShot_ModLoader
                     if (!File.Exists(newLocation))
                     {
                         File.Copy(f.FullName, newLocation);
-                        Console.WriteLine("copied {0} to {1}", f.FullName, newLocation);
+                        Logger.WriteLine($"copied {f.FullName} to {newLocation}");
 
                         // update progress
                         loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
@@ -334,7 +334,7 @@ namespace OneShot_ModLoader
                         string newDir = d.FullName.Replace(shorten, string.Empty);
                         if (!Directory.Exists(Static.baseOneShotPath + "/" + newDir))
                         {
-                            Console.WriteLine("creating directory " + Directory.CreateDirectory(Static.baseOneShotPath + "/" + newDir).ToString());
+                            Logger.WriteLine("creating directory " + Directory.CreateDirectory(Static.baseOneShotPath + "/" + newDir).ToString());
 
                             // update progress
                             loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
@@ -350,7 +350,7 @@ namespace OneShot_ModLoader
                         if (!File.Exists(newLocation))
                         {
                             File.Copy(f.FullName, newLocation);
-                            Console.WriteLine("coping {0} to {1}", f.FullName, newLocation);
+                            Logger.WriteLine($"coping {f.FullName} to {newLocation}");
 
                             // update progress
                             loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));

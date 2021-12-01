@@ -19,7 +19,7 @@ namespace OneShot_ModLoader
 
         public static async void PlaySound(string sound, bool loop)
         {
-            Console.WriteLine($"attempting to play sound: {sound}");
+            Logger.WriteLine($"attempting to play sound: {sound}");
 
             try
             {
