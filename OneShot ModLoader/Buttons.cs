@@ -221,9 +221,7 @@ namespace OneShot_ModLoader
             Size = new Size(65, 50);
             Text = "Back";
 
-            PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
-            Font = new Font(f.Families[0], 8, FontStyle.Bold);
+            Font = Static.GetTerminusFont(8);
 
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderColor = Color.MediumPurple;
