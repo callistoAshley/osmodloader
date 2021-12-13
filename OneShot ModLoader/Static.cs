@@ -14,7 +14,7 @@ namespace OneShot_ModLoader
 {
     public static class Static
     {
-        public static readonly string ver = "1.2.dev";
+        public static readonly string ver = "1.3";
 
         // cry about it
         public static readonly string directory = Application.ExecutablePath.Replace(Application.ProductName + ".exe", string.Empty);
