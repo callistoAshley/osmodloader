@@ -39,7 +39,6 @@ namespace OneShot_ModLoader
             }
             catch (ArgumentException)
             {
-                MessageBox.Show("caught argument exception");
                 return new Font(FontFamily.GenericMonospace, size);
             }
         }
