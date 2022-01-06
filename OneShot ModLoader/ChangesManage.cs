@@ -347,7 +347,7 @@ namespace OneShot_ModLoader
                         if (!File.Exists(newLocation))
                         {
                             File.Copy(f.FullName, newLocation);
-                            Logger.WriteLine($"coping {f.FullName} to {newLocation}");
+                            Logger.WriteLine($"copying {f.FullName} to {newLocation}");
 
                             // update progress
                             loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(1, LoadingBar.ProgressType.UpdateProgress));
