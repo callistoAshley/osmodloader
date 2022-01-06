@@ -11,8 +11,6 @@ namespace OneShot_ModLoader
     public partial class Form1 : Form
     {
         public static Form1 instance;
-        public static TextWriter consoleOut = Console.Out;
-        public static StreamWriter consoleOutStream;
 
         public Form1() 
         {

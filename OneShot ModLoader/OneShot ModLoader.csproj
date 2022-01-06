@@ -159,7 +159,9 @@
     <Compile Include="DTUnpiracyButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Kaitai\RubyMarshal.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="RubyMarshalWrapper.cs" />
     <Compile Include="ScriptUnpacker.cs" />
     <Compile Include="SettingsManage.cs" />
     <Compile Include="SoundTestForm.cs">

@@ -20,7 +20,7 @@ namespace OneShot_ModLoader
         public static void WriteLine(string line)
         {
             // regex replace C:\Users\username\ with just C:\username\ so we don't catch someone's real name in case they have to send a log file
-            line = new Regex(@"C:\\.*?\\").Replace(line, "C:\\Users\\username\\");
+            line = new Regex(@"C:\\Users\\.*?\\").Replace(line, "C:\\Users\\username\\");
             // and one more replace here just in case
             line = line.Replace(Environment.UserName, "username");
 

@@ -40,7 +40,7 @@ namespace OneShot_ModLoader
         }
 
         public LoadingProgress progress = new LoadingProgress();
-        private Form form;
+        public readonly Form form;
 
         public LoadingBar(Form form, LoadingBarType displayType = LoadingBarType.Efficient, bool showProgressBar = true)
         {

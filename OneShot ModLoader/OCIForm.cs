@@ -18,6 +18,7 @@ namespace OneShot_ModLoader
         public FileInfo modPath;
         public static OCIForm instance;
 
+        // did you know? having easily readable variables names for your c# programs that accurately describe their existence as briefly as possible is good practice!
         public static bool ghajshdfjhjahskgkdjfahajsldkfGoodVariableName;
 
         public OCIForm(string[] things)
@@ -123,7 +124,6 @@ namespace OneShot_ModLoader
 
         protected override async void OnClick(EventArgs e)
         {
-            string mod = OCIForm.instance.modPath.Name;
             OCIForm.instance.Controls.Clear();
 
             Audio.Stop();
@@ -131,7 +131,7 @@ namespace OneShot_ModLoader
             loadingBar.SetLoadingStatus(string.Format("Extracting {0}, please wait...", OCIForm.instance.modPath.Name));
             Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
 
-            string zipDestination = Static.modsPath + mod;
+            string zipDestination = Static.modsPath + OCIForm.instance.modPath.Name;
             try
             {
                 if (!Directory.Exists(zipDestination))
@@ -152,7 +152,7 @@ namespace OneShot_ModLoader
 
             if (OCIDirectApply.instance.Checked)
             {
-                ChangesManage.MultithreadStuff(true, new DirectoryInfo(mod), OCIDeleteExisting.instance.Checked);
+                ChangesManage.MultithreadStuff(true, loadingBar, new DirectoryInfo(Static.modsPath + OCIForm.instance.modPath.Name), OCIDeleteExisting.instance.Checked);
             }
         }
     }

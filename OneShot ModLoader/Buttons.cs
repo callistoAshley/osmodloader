@@ -352,7 +352,7 @@ namespace OneShot_ModLoader
 
             try // why is this in a try catch i can't remember
             {
-                ChangesManage.MultithreadStuff(false);
+                ChangesManage.MultithreadStuff(false, new LoadingBar(Form1.instance));
             }
             catch { }
 
