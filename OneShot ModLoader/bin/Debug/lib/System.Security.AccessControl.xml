@@ -17,7 +17,7 @@
       <summary>Specifies read-only access.</summary>
     </member>
     <member name="T:System.Security.AccessControl.AccessControlModification">
-      <summary>Specifies the type of access control modification to perform. This enumeration is used by methods of the <see cref="T:System.Security.AccessControl.ObjectSecurity" /> class and its descendents.</summary>
+      <summary>Specifies the type of access control modification to perform. This enumeration is used by methods of the <see cref="T:System.Security.AccessControl.ObjectSecurity" /> class and its descendants.</summary>
     </member>
     <member name="F:System.Security.AccessControl.AccessControlModification.Add">
       <summary>Add the specified authorization rule to the access control list (ACL).</summary>
@@ -125,24 +125,24 @@
     <member name="T:System.Security.AccessControl.AceEnumerator">
       <summary>Provides the ability to iterate through the access control entries (ACEs) in an access control list (ACL).</summary>
     </member>
-    <member name="P:System.Security.AccessControl.AceEnumerator.Current">
-      <summary>Gets the current element in the <see cref="T:System.Security.AccessControl.GenericAce" /> collection. This property gets the type-friendly version of the object.</summary>
-      <returns>The current element in the <see cref="T:System.Security.AccessControl.GenericAce" /> collection.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.AceEnumerator.MoveNext">
       <summary>Advances the enumerator to the next element of the <see cref="T:System.Security.AccessControl.GenericAce" /> collection.</summary>
+      <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created.</exception>
       <returns>
         <see langword="true" /> if the enumerator was successfully advanced to the next element; <see langword="false" /> if the enumerator has passed the end of the collection.</returns>
-      <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created.</exception>
     </member>
     <member name="M:System.Security.AccessControl.AceEnumerator.Reset">
       <summary>Sets the enumerator to its initial position, which is before the first element in the <see cref="T:System.Security.AccessControl.GenericAce" /> collection.</summary>
       <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created.</exception>
     </member>
+    <member name="P:System.Security.AccessControl.AceEnumerator.Current">
+      <summary>Gets the current element in the <see cref="T:System.Security.AccessControl.GenericAce" /> collection. This property gets the type-friendly version of the object.</summary>
+      <returns>The current element in the <see cref="T:System.Security.AccessControl.GenericAce" /> collection.</returns>
+    </member>
     <member name="P:System.Security.AccessControl.AceEnumerator.System#Collections#IEnumerator#Current">
       <summary>Gets the current element in the collection.</summary>
-      <returns>The current element in the collection.</returns>
       <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created.</exception>
+      <returns>The current element in the collection.</returns>
     </member>
     <member name="T:System.Security.AccessControl.AceFlags">
       <summary>Specifies the inheritance and auditing behavior of an access control entry (ACE).</summary>
@@ -384,10 +384,6 @@
         <see langword="true" /> to specify that the new ACE is a callback type ACE.</param>
       <param name="opaque">Opaque data associated with the new ACE. Opaque data is allowed only for callback ACE types. The length of this array must not be greater than the return value of the <see cref="M:System.Security.AccessControl.CommonAce.MaxOpaqueLength(System.Boolean)" /> method.</param>
     </member>
-    <member name="P:System.Security.AccessControl.CommonAce.BinaryLength">
-      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CommonAce" /> object. Use this length with the <see cref="M:System.Security.AccessControl.CommonAce.GetBinaryForm(System.Byte[],System.Int32)" /> method before marshaling the ACL into a binary array.</summary>
-      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CommonAce" /> object.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.CommonAce.GetBinaryForm(System.Byte[],System.Int32)">
       <summary>Marshals the contents of the <see cref="T:System.Security.AccessControl.CommonAce" /> object into the specified byte array beginning at the specified offset.</summary>
       <param name="binaryForm">The byte array into which the contents of the <see cref="T:System.Security.AccessControl.CommonAce" /> object is marshaled.</param>
@@ -401,8 +397,24 @@
         <see langword="true" /> to specify that the <see cref="T:System.Security.AccessControl.CommonAce" /> object is a callback ACE type.</param>
       <returns>The allowed length of an opaque data BLOB.</returns>
     </member>
+    <member name="P:System.Security.AccessControl.CommonAce.BinaryLength">
+      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CommonAce" /> object. Use this length with the <see cref="M:System.Security.AccessControl.CommonAce.GetBinaryForm(System.Byte[],System.Int32)" /> method before marshaling the ACL into a binary array.</summary>
+      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CommonAce" /> object.</returns>
+    </member>
     <member name="T:System.Security.AccessControl.CommonAcl">
       <summary>Represents an access control list (ACL) and is the base class for the <see cref="T:System.Security.AccessControl.DiscretionaryAcl" /> and <see cref="T:System.Security.AccessControl.SystemAcl" /> classes.</summary>
+    </member>
+    <member name="M:System.Security.AccessControl.CommonAcl.GetBinaryForm(System.Byte[],System.Int32)">
+      <summary>Marshals the contents of the <see cref="T:System.Security.AccessControl.CommonAcl" /> object into the specified byte array beginning at the specified offset.</summary>
+      <param name="binaryForm">The byte array into which the contents of the <see cref="T:System.Security.AccessControl.CommonAcl" /> is marshaled.</param>
+      <param name="offset">The offset at which to start marshaling.</param>
+    </member>
+    <member name="M:System.Security.AccessControl.CommonAcl.Purge(System.Security.Principal.SecurityIdentifier)">
+      <summary>Removes all access control entries (ACEs) contained by this <see cref="T:System.Security.AccessControl.CommonAcl" /> object that are associated with the specified <see cref="T:System.Security.Principal.SecurityIdentifier" /> object.</summary>
+      <param name="sid">The <see cref="T:System.Security.Principal.SecurityIdentifier" /> object to check for.</param>
+    </member>
+    <member name="M:System.Security.AccessControl.CommonAcl.RemoveInheritedAces">
+      <summary>Removes all inherited access control entries (ACEs) from this <see cref="T:System.Security.AccessControl.CommonAcl" /> object.</summary>
     </member>
     <member name="P:System.Security.AccessControl.CommonAcl.BinaryLength">
       <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CommonAcl" /> object. This length should be used before marshaling the access control list (ACL) into a binary array by using the <see cref="M:System.Security.AccessControl.CommonAcl.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
@@ -411,11 +423,6 @@
     <member name="P:System.Security.AccessControl.CommonAcl.Count">
       <summary>Gets the number of access control entries (ACEs) in the current <see cref="T:System.Security.AccessControl.CommonAcl" /> object.</summary>
       <returns>The number of ACEs in the current <see cref="T:System.Security.AccessControl.CommonAcl" /> object.</returns>
-    </member>
-    <member name="M:System.Security.AccessControl.CommonAcl.GetBinaryForm(System.Byte[],System.Int32)">
-      <summary>Marshals the contents of the <see cref="T:System.Security.AccessControl.CommonAcl" /> object into the specified byte array beginning at the specified offset.</summary>
-      <param name="binaryForm">The byte array into which the contents of the <see cref="T:System.Security.AccessControl.CommonAcl" /> is marshaled.</param>
-      <param name="offset">The offset at which to start marshaling.</param>
     </member>
     <member name="P:System.Security.AccessControl.CommonAcl.IsCanonical">
       <summary>Gets a Boolean value that specifies whether the access control entries (ACEs) in the current <see cref="T:System.Security.AccessControl.CommonAcl" /> object are in canonical order.</summary>
@@ -436,13 +443,6 @@
       <summary>Gets or sets the <see cref="T:System.Security.AccessControl.CommonAce" /> at the specified index.</summary>
       <param name="index">The zero-based index of the <see cref="T:System.Security.AccessControl.CommonAce" /> to get or set.</param>
       <returns>The <see cref="T:System.Security.AccessControl.CommonAce" /> at the specified index.</returns>
-    </member>
-    <member name="M:System.Security.AccessControl.CommonAcl.Purge(System.Security.Principal.SecurityIdentifier)">
-      <summary>Removes all access control entries (ACEs) contained by this <see cref="T:System.Security.AccessControl.CommonAcl" /> object that are associated with the specified <see cref="T:System.Security.Principal.SecurityIdentifier" /> object.</summary>
-      <param name="sid">The <see cref="T:System.Security.Principal.SecurityIdentifier" /> object to check for.</param>
-    </member>
-    <member name="M:System.Security.AccessControl.CommonAcl.RemoveInheritedAces">
-      <summary>Removes all inherited access control entries (ACEs) from this <see cref="T:System.Security.AccessControl.CommonAcl" /> object.</summary>
     </member>
     <member name="P:System.Security.AccessControl.CommonAcl.Revision">
       <summary>Gets the revision level of the <see cref="T:System.Security.AccessControl.CommonAcl" />.</summary>
@@ -470,7 +470,7 @@
         <see langword="true" /> to include access rules explicitly set for the object.</param>
       <param name="includeInherited">
         <see langword="true" /> to include inherited access rules.</param>
-      <param name="targetType">Specifies whether the security identifier for which to retrieve access rules is of type T:System.Security.Principal.SecurityIdentifier or type T:System.Security.Principal.NTAccount. The value of this parameter must be a type that can be translated to  the <see cref="T:System.Security.Principal.SecurityIdentifier" /> type.</param>
+      <param name="targetType">Specifies whether the security identifier for which to retrieve access rules is of type <see cref="T:System.Security.Principal.SecurityIdentifier" /> or type <see cref="T:System.Security.Principal.NTAccount" />. The value of this parameter must be a type that can be translated to  the <see cref="T:System.Security.Principal.SecurityIdentifier" /> type.</param>
       <returns>The collection of access rules associated with the specified <see cref="T:System.Security.Principal.SecurityIdentifier" /> object.</returns>
     </member>
     <member name="M:System.Security.AccessControl.CommonObjectSecurity.GetAuditRules(System.Boolean,System.Boolean,System.Type)">
@@ -590,6 +590,28 @@
       <param name="revision">The revision level of the new <see cref="T:System.Security.AccessControl.SystemAcl" /> object.</param>
       <param name="trusted">The number of Access Control Entries (ACEs) this <see cref="T:System.Security.AccessControl.SystemAcl" /> object can contain. This number should only be used as a hint.</param>
     </member>
+    <member name="M:System.Security.AccessControl.CommonSecurityDescriptor.PurgeAccessControl(System.Security.Principal.SecurityIdentifier)">
+      <summary>Removes all access rules for the specified security identifier from the Discretionary Access Control List (DACL) associated with this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object.</summary>
+      <param name="sid">The security identifier for which to remove access rules.</param>
+    </member>
+    <member name="M:System.Security.AccessControl.CommonSecurityDescriptor.PurgeAudit(System.Security.Principal.SecurityIdentifier)">
+      <summary>Removes all audit rules for the specified security identifier from the System Access Control List (SACL) associated with this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object.</summary>
+      <param name="sid">The security identifier for which to remove audit rules.</param>
+    </member>
+    <member name="M:System.Security.AccessControl.CommonSecurityDescriptor.SetDiscretionaryAclProtection(System.Boolean,System.Boolean)">
+      <summary>Sets the inheritance protection for the Discretionary Access Control List (DACL) associated with this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object. DACLs that are protected do not inherit access rules from parent containers.</summary>
+      <param name="isProtected">
+        <see langword="true" /> to protect the DACL from inheritance.</param>
+      <param name="preserveInheritance">
+        <see langword="true" /> to keep inherited access rules in the DACL; <see langword="false" /> to remove inherited access rules from the DACL.</param>
+    </member>
+    <member name="M:System.Security.AccessControl.CommonSecurityDescriptor.SetSystemAclProtection(System.Boolean,System.Boolean)">
+      <summary>Sets the inheritance protection for the System Access Control List (SACL) associated with this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object. SACLs that are protected do not inherit audit rules from parent containers.</summary>
+      <param name="isProtected">
+        <see langword="true" /> to protect the SACL from inheritance.</param>
+      <param name="preserveInheritance">
+        <see langword="true" /> to keep inherited audit rules in the SACL; <see langword="false" /> to remove inherited audit rules from the SACL.</param>
+    </member>
     <member name="P:System.Security.AccessControl.CommonSecurityDescriptor.ControlFlags">
       <summary>Gets values that specify behavior of the <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object.</summary>
       <returns>One or more values of the <see cref="T:System.Security.AccessControl.ControlFlags" /> enumeration combined with a logical OR operation.</returns>
@@ -626,28 +648,6 @@
       <summary>Gets or sets the owner of the object associated with this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object.</summary>
       <returns>The owner of the object associated with this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object.</returns>
     </member>
-    <member name="M:System.Security.AccessControl.CommonSecurityDescriptor.PurgeAccessControl(System.Security.Principal.SecurityIdentifier)">
-      <summary>Removes all access rules for the specified security identifier from the Discretionary Access Control List (DACL) associated with this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object.</summary>
-      <param name="sid">The security identifier for which to remove access rules.</param>
-    </member>
-    <member name="M:System.Security.AccessControl.CommonSecurityDescriptor.PurgeAudit(System.Security.Principal.SecurityIdentifier)">
-      <summary>Removes all audit rules for the specified security identifier from the System Access Control List (SACL) associated with this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object.</summary>
-      <param name="sid">The security identifier for which to remove audit rules.</param>
-    </member>
-    <member name="M:System.Security.AccessControl.CommonSecurityDescriptor.SetDiscretionaryAclProtection(System.Boolean,System.Boolean)">
-      <summary>Sets the inheritance protection for the Discretionary Access Control List (DACL) associated with this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object. DACLs that are protected do not inherit access rules from parent containers.</summary>
-      <param name="isProtected">
-        <see langword="true" /> to protect the DACL from inheritance.</param>
-      <param name="preserveInheritance">
-        <see langword="true" /> to keep inherited access rules in the DACL; <see langword="false" /> to remove inherited access rules from the DACL.</param>
-    </member>
-    <member name="M:System.Security.AccessControl.CommonSecurityDescriptor.SetSystemAclProtection(System.Boolean,System.Boolean)">
-      <summary>Sets the inheritance protection for the System Access Control List (SACL) associated with this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object. SACLs that are protected do not inherit audit rules from parent containers.</summary>
-      <param name="isProtected">
-        <see langword="true" /> to protect the SACL from inheritance.</param>
-      <param name="preserveInheritance">
-        <see langword="true" /> to keep inherited audit rules in the SACL; <see langword="false" /> to remove inherited audit rules from the SACL.</param>
-    </member>
     <member name="P:System.Security.AccessControl.CommonSecurityDescriptor.SystemAcl">
       <summary>Gets or sets the System Access Control List (SACL) for this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object. The SACL contains audit rules.</summary>
       <returns>The SACL for this <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> object.</returns>
@@ -662,6 +662,13 @@
       <param name="compoundAceType">A value from the <see cref="T:System.Security.AccessControl.CompoundAceType" /> enumeration.</param>
       <param name="sid">The <see cref="T:System.Security.Principal.SecurityIdentifier" /> associated with the new ACE.</param>
     </member>
+    <member name="M:System.Security.AccessControl.CompoundAce.GetBinaryForm(System.Byte[],System.Int32)">
+      <summary>Marshals the contents of the <see cref="T:System.Security.AccessControl.CompoundAce" /> object into the specified byte array beginning at the specified offset.</summary>
+      <param name="binaryForm">The byte array into which the contents of the <see cref="T:System.Security.AccessControl.CompoundAce" /> is marshaled.</param>
+      <param name="offset">The offset at which to start marshaling.</param>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="offset" /> is negative or too high to allow the entire <see cref="T:System.Security.AccessControl.CompoundAce" /> to be copied into <paramref name="array" />.</exception>
+    </member>
     <member name="P:System.Security.AccessControl.CompoundAce.BinaryLength">
       <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CompoundAce" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.CompoundAce.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
       <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CompoundAce" /> object.</returns>
@@ -669,13 +676,6 @@
     <member name="P:System.Security.AccessControl.CompoundAce.CompoundAceType">
       <summary>Gets or sets the type of this <see cref="T:System.Security.AccessControl.CompoundAce" /> object.</summary>
       <returns>The type of this <see cref="T:System.Security.AccessControl.CompoundAce" /> object.</returns>
-    </member>
-    <member name="M:System.Security.AccessControl.CompoundAce.GetBinaryForm(System.Byte[],System.Int32)">
-      <summary>Marshals the contents of the <see cref="T:System.Security.AccessControl.CompoundAce" /> object into the specified byte array beginning at the specified offset.</summary>
-      <param name="binaryForm">The byte array into which the contents of the <see cref="T:System.Security.AccessControl.CompoundAce" /> is marshaled.</param>
-      <param name="offset">The offset at which to start marshaling.</param>
-      <exception cref="T:System.ArgumentOutOfRangeException">
-        <paramref name="offset" /> is negative or too high to allow the entire <see cref="T:System.Security.AccessControl.CompoundAce" /> to be copied into <paramref name="array" />.</exception>
     </member>
     <member name="T:System.Security.AccessControl.CompoundAceType">
       <summary>Specifies the type of a <see cref="T:System.Security.AccessControl.CompoundAce" /> object.</summary>
@@ -740,16 +740,15 @@
     <member name="T:System.Security.AccessControl.CustomAce">
       <summary>Represents an Access Control Entry (ACE) that is not defined by one of the members of the <see cref="T:System.Security.AccessControl.AceType" /> enumeration.</summary>
     </member>
+    <member name="F:System.Security.AccessControl.CustomAce.MaxOpaqueLength">
+      <summary>Returns the maximum allowed length of an opaque data blob for this <see cref="T:System.Security.AccessControl.CustomAce" /> object.</summary>
+    </member>
     <member name="M:System.Security.AccessControl.CustomAce.#ctor(System.Security.AccessControl.AceType,System.Security.AccessControl.AceFlags,System.Byte[])">
       <summary>Initializes a new instance of the <see cref="T:System.Security.AccessControl.CustomAce" /> class.</summary>
       <param name="type">Type of the new Access Control Entry (ACE). This value must be greater than <see cref="F:System.Security.AccessControl.AceType.MaxDefinedAceType" />.</param>
       <param name="flags">Flags that specify information about the inheritance, inheritance propagation, and auditing conditions for the new ACE.</param>
       <param name="opaque">An array of byte values that contains the data for the new ACE. This value can be <see langword="null" />. The length of this array must not be greater than the value of the <see cref="F:System.Security.AccessControl.CustomAce.MaxOpaqueLength" /> field, and must be a multiple of four.</param>
       <exception cref="T:System.ArgumentOutOfRangeException">The value of the <paramref name="type" /> parameter is not greater than <see cref="F:System.Security.AccessControl.AceType.MaxDefinedAceType" /> or the length of the <paramref name="opaque" /> array is either greater than the value of the <see cref="F:System.Security.AccessControl.CustomAce.MaxOpaqueLength" /> field or not a multiple of four.</exception>
-    </member>
-    <member name="P:System.Security.AccessControl.CustomAce.BinaryLength">
-      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CustomAce" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.CustomAce.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
-      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CustomAce" /> object.</returns>
     </member>
     <member name="M:System.Security.AccessControl.CustomAce.GetBinaryForm(System.Byte[],System.Int32)">
       <summary>Marshals the contents of the <see cref="T:System.Security.AccessControl.CustomAce" /> object into the specified byte array beginning at the specified offset.</summary>
@@ -762,16 +761,17 @@
       <summary>Returns the opaque data associated with this <see cref="T:System.Security.AccessControl.CustomAce" /> object.</summary>
       <returns>An array of byte values that represents the opaque data associated with this <see cref="T:System.Security.AccessControl.CustomAce" /> object.</returns>
     </member>
-    <member name="F:System.Security.AccessControl.CustomAce.MaxOpaqueLength">
-      <summary>Returns the maximum allowed length of an opaque data blob for this <see cref="T:System.Security.AccessControl.CustomAce" /> object.</summary>
+    <member name="M:System.Security.AccessControl.CustomAce.SetOpaque(System.Byte[])">
+      <summary>Sets the opaque callback data associated with this <see cref="T:System.Security.AccessControl.CustomAce" /> object.</summary>
+      <param name="opaque">An array of byte values that represents the opaque callback data for this <see cref="T:System.Security.AccessControl.CustomAce" /> object.</param>
+    </member>
+    <member name="P:System.Security.AccessControl.CustomAce.BinaryLength">
+      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CustomAce" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.CustomAce.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
+      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.CustomAce" /> object.</returns>
     </member>
     <member name="P:System.Security.AccessControl.CustomAce.OpaqueLength">
       <summary>Gets the length of the opaque data associated with this <see cref="T:System.Security.AccessControl.CustomAce" /> object.</summary>
       <returns>The length of the opaque callback data.</returns>
-    </member>
-    <member name="M:System.Security.AccessControl.CustomAce.SetOpaque(System.Byte[])">
-      <summary>Sets the opaque callback data associated with this <see cref="T:System.Security.AccessControl.CustomAce" /> object.</summary>
-      <param name="opaque">An array of byte values that represents the opaque callback data for this <see cref="T:System.Security.AccessControl.CustomAce" /> object.</param>
     </member>
     <member name="T:System.Security.AccessControl.DiscretionaryAcl">
       <summary>Represents a Discretionary Access Control List (DACL).</summary>
@@ -909,22 +909,6 @@
     <member name="T:System.Security.AccessControl.GenericAce">
       <summary>Represents an Access Control Entry (ACE), and is the base class for all other ACE classes.</summary>
     </member>
-    <member name="P:System.Security.AccessControl.GenericAce.AceFlags">
-      <summary>Gets or sets the <see cref="T:System.Security.AccessControl.AceFlags" /> associated with this <see cref="T:System.Security.AccessControl.GenericAce" /> object.</summary>
-      <returns>The <see cref="T:System.Security.AccessControl.AceFlags" /> associated with this <see cref="T:System.Security.AccessControl.GenericAce" /> object.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.GenericAce.AceType">
-      <summary>Gets the type of this Access Control Entry (ACE).</summary>
-      <returns>The type of this ACE.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.GenericAce.AuditFlags">
-      <summary>Gets the audit information associated with this Access Control Entry (ACE).</summary>
-      <returns>The audit information associated with this Access Control Entry (ACE).</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.GenericAce.BinaryLength">
-      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericAce" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.GenericAce.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
-      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericAce" /> object.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.GenericAce.Copy">
       <summary>Creates a deep copy of this Access Control Entry (ACE).</summary>
       <returns>The <see cref="T:System.Security.AccessControl.GenericAce" /> object that this method creates.</returns>
@@ -952,15 +936,6 @@
       <summary>Serves as a hash function for the <see cref="T:System.Security.AccessControl.GenericAce" /> class. The  <see cref="M:System.Security.AccessControl.GenericAce.GetHashCode" /> method is suitable for use in hashing algorithms and data structures like a hash table.</summary>
       <returns>A hash code for the current <see cref="T:System.Security.AccessControl.GenericAce" /> object.</returns>
     </member>
-    <member name="P:System.Security.AccessControl.GenericAce.InheritanceFlags">
-      <summary>Gets flags that specify the inheritance properties of this Access Control Entry (ACE).</summary>
-      <returns>Flags that specify the inheritance properties of this ACE.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.GenericAce.IsInherited">
-      <summary>Gets a Boolean value that specifies whether this Access Control Entry (ACE) is inherited or is set explicitly.</summary>
-      <returns>
-        <see langword="true" /> if this ACE is inherited; otherwise, <see langword="false" />.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.GenericAce.op_Equality(System.Security.AccessControl.GenericAce,System.Security.AccessControl.GenericAce)">
       <summary>Determines whether the specified <see cref="T:System.Security.AccessControl.GenericAce" /> objects are considered equal.</summary>
       <param name="left">The first <see cref="T:System.Security.AccessControl.GenericAce" /> object to compare.</param>
@@ -975,6 +950,31 @@
       <returns>
         <see langword="true" /> if the two <see cref="T:System.Security.AccessControl.GenericAce" /> objects are unequal; otherwise, <see langword="false" />.</returns>
     </member>
+    <member name="P:System.Security.AccessControl.GenericAce.AceFlags">
+      <summary>Gets or sets the <see cref="T:System.Security.AccessControl.AceFlags" /> associated with this <see cref="T:System.Security.AccessControl.GenericAce" /> object.</summary>
+      <returns>The <see cref="T:System.Security.AccessControl.AceFlags" /> associated with this <see cref="T:System.Security.AccessControl.GenericAce" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericAce.AceType">
+      <summary>Gets the type of this Access Control Entry (ACE).</summary>
+      <returns>The type of this ACE.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericAce.AuditFlags">
+      <summary>Gets the audit information associated with this Access Control Entry (ACE).</summary>
+      <returns>The audit information associated with this Access Control Entry (ACE).</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericAce.BinaryLength">
+      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericAce" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.GenericAce.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
+      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericAce" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericAce.InheritanceFlags">
+      <summary>Gets flags that specify the inheritance properties of this Access Control Entry (ACE).</summary>
+      <returns>Flags that specify the inheritance properties of this ACE.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericAce.IsInherited">
+      <summary>Gets a Boolean value that specifies whether this Access Control Entry (ACE) is inherited or is set explicitly.</summary>
+      <returns>
+        <see langword="true" /> if this ACE is inherited; otherwise, <see langword="false" />.</returns>
+    </member>
     <member name="P:System.Security.AccessControl.GenericAce.PropagationFlags">
       <summary>Gets flags that specify the inheritance propagation properties of this Access Control Entry (ACE).</summary>
       <returns>Flags that specify the inheritance propagation properties of this ACE.</returns>
@@ -982,27 +982,22 @@
     <member name="T:System.Security.AccessControl.GenericAcl">
       <summary>Represents an access control list (ACL) and is the base class for the <see cref="T:System.Security.AccessControl.CommonAcl" />, <see cref="T:System.Security.AccessControl.DiscretionaryAcl" />, <see cref="T:System.Security.AccessControl.RawAcl" />, and <see cref="T:System.Security.AccessControl.SystemAcl" /> classes.</summary>
     </member>
-    <member name="M:System.Security.AccessControl.GenericAcl.#ctor">
-      <summary>Initializes a new instance of the <see cref="T:System.Security.AccessControl.GenericAcl" /> class.</summary>
-    </member>
     <member name="F:System.Security.AccessControl.GenericAcl.AclRevision">
       <summary>The revision level of the current <see cref="T:System.Security.AccessControl.GenericAcl" />. This value is returned by the <see cref="P:System.Security.AccessControl.GenericAcl.Revision" /> property for Access Control Lists (ACLs) that are not associated with Directory Services objects.</summary>
     </member>
     <member name="F:System.Security.AccessControl.GenericAcl.AclRevisionDS">
       <summary>The revision level of the current <see cref="T:System.Security.AccessControl.GenericAcl" />. This value is returned by the <see cref="P:System.Security.AccessControl.GenericAcl.Revision" /> property for Access Control Lists (ACLs) that are associated with Directory Services objects.</summary>
     </member>
-    <member name="P:System.Security.AccessControl.GenericAcl.BinaryLength">
-      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericAcl" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.GenericAcl.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
-      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericAcl" /> object.</returns>
+    <member name="F:System.Security.AccessControl.GenericAcl.MaxBinaryLength">
+      <summary>The maximum allowed binary length of a <see cref="T:System.Security.AccessControl.GenericAcl" /> object.</summary>
+    </member>
+    <member name="M:System.Security.AccessControl.GenericAcl.#ctor">
+      <summary>Initializes a new instance of the <see cref="T:System.Security.AccessControl.GenericAcl" /> class.</summary>
     </member>
     <member name="M:System.Security.AccessControl.GenericAcl.CopyTo(System.Security.AccessControl.GenericAce[],System.Int32)">
       <summary>Copies each <see cref="T:System.Security.AccessControl.GenericAce" /> of the current <see cref="T:System.Security.AccessControl.GenericAcl" /> into the specified array.</summary>
       <param name="array">The array into which copies of the <see cref="T:System.Security.AccessControl.GenericAce" /> objects contained by the current <see cref="T:System.Security.AccessControl.GenericAcl" /> are placed.</param>
       <param name="index">The zero-based index of <paramref name="array" /> where the copying begins.</param>
-    </member>
-    <member name="P:System.Security.AccessControl.GenericAcl.Count">
-      <summary>Gets the number of access control entries (ACEs) in the current <see cref="T:System.Security.AccessControl.GenericAcl" /> object.</summary>
-      <returns>The number of ACEs in the current <see cref="T:System.Security.AccessControl.GenericAcl" /> object.</returns>
     </member>
     <member name="M:System.Security.AccessControl.GenericAcl.GetBinaryForm(System.Byte[],System.Int32)">
       <summary>Marshals the contents of the <see cref="T:System.Security.AccessControl.GenericAcl" /> object into the specified byte array beginning at the specified offset.</summary>
@@ -1015,26 +1010,6 @@
       <summary>Retrieves an object that you can use to iterate through the access control entries (ACEs) in an access control list (ACL).</summary>
       <returns>An enumerator object.</returns>
     </member>
-    <member name="P:System.Security.AccessControl.GenericAcl.IsSynchronized">
-      <summary>This property is always set to <see langword="false" />. It is implemented only because it is required for the implementation of the <see cref="T:System.Collections.ICollection" /> interface.</summary>
-      <returns>Always <see langword="false" />.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.GenericAcl.Item(System.Int32)">
-      <summary>Gets or sets the <see cref="T:System.Security.AccessControl.GenericAce" /> at the specified index.</summary>
-      <param name="index">The zero-based index of the <see cref="T:System.Security.AccessControl.GenericAce" /> to get or set.</param>
-      <returns>The <see cref="T:System.Security.AccessControl.GenericAce" /> at the specified index.</returns>
-    </member>
-    <member name="F:System.Security.AccessControl.GenericAcl.MaxBinaryLength">
-      <summary>The maximum allowed binary length of a <see cref="T:System.Security.AccessControl.GenericAcl" /> object.</summary>
-    </member>
-    <member name="P:System.Security.AccessControl.GenericAcl.Revision">
-      <summary>Gets the revision level of the <see cref="T:System.Security.AccessControl.GenericAcl" />.</summary>
-      <returns>A byte value that specifies the revision level of the <see cref="T:System.Security.AccessControl.GenericAcl" />.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.GenericAcl.SyncRoot">
-      <summary>This property always returns <see langword="null" />. It is implemented only because it is required for the implementation of the <see cref="T:System.Collections.ICollection" /> interface.</summary>
-      <returns>Always returns <see langword="null" />.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.GenericAcl.System#Collections#ICollection#CopyTo(System.Array,System.Int32)">
       <summary>Copies each <see cref="T:System.Security.AccessControl.GenericAce" /> of the current <see cref="T:System.Security.AccessControl.GenericAcl" /> into the specified array.</summary>
       <param name="array">The array into which copies of the <see cref="T:System.Security.AccessControl.GenericAce" /> objects contained by the current <see cref="T:System.Security.AccessControl.GenericAcl" /> are placed.</param>
@@ -1044,16 +1019,33 @@
       <summary>Returns a new instance of the <see cref="T:System.Security.AccessControl.AceEnumerator" /> class cast as an instance of the <see cref="T:System.Collections.IEnumerator" /> interface.</summary>
       <returns>A new <see cref="T:System.Security.AccessControl.AceEnumerator" /> object, cast as an instance of the <see cref="T:System.Collections.IEnumerator" /> interface.</returns>
     </member>
+    <member name="P:System.Security.AccessControl.GenericAcl.BinaryLength">
+      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericAcl" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.GenericAcl.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
+      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericAcl" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericAcl.Count">
+      <summary>Gets the number of access control entries (ACEs) in the current <see cref="T:System.Security.AccessControl.GenericAcl" /> object.</summary>
+      <returns>The number of ACEs in the current <see cref="T:System.Security.AccessControl.GenericAcl" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericAcl.IsSynchronized">
+      <summary>This property is always set to <see langword="false" />. It is implemented only because it is required for the implementation of the <see cref="T:System.Collections.ICollection" /> interface.</summary>
+      <returns>Always <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericAcl.Item(System.Int32)">
+      <summary>Gets or sets the <see cref="T:System.Security.AccessControl.GenericAce" /> at the specified index.</summary>
+      <param name="index">The zero-based index of the <see cref="T:System.Security.AccessControl.GenericAce" /> to get or set.</param>
+      <returns>The <see cref="T:System.Security.AccessControl.GenericAce" /> at the specified index.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericAcl.Revision">
+      <summary>Gets the revision level of the <see cref="T:System.Security.AccessControl.GenericAcl" />.</summary>
+      <returns>A byte value that specifies the revision level of the <see cref="T:System.Security.AccessControl.GenericAcl" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericAcl.SyncRoot">
+      <summary>This property always returns <see langword="null" />. It is implemented only because it is required for the implementation of the <see cref="T:System.Collections.ICollection" /> interface.</summary>
+      <returns>Always returns <see langword="null" />.</returns>
+    </member>
     <member name="T:System.Security.AccessControl.GenericSecurityDescriptor">
       <summary>Represents a security descriptor. A security descriptor includes an owner, a primary group, a Discretionary Access Control List (DACL), and a System Access Control List (SACL).</summary>
-    </member>
-    <member name="P:System.Security.AccessControl.GenericSecurityDescriptor.BinaryLength">
-      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.GenericSecurityDescriptor.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
-      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.GenericSecurityDescriptor.ControlFlags">
-      <summary>Gets values that specify behavior of the <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</summary>
-      <returns>One or more values of the <see cref="T:System.Security.AccessControl.ControlFlags" /> enumeration combined with a logical OR operation.</returns>
     </member>
     <member name="M:System.Security.AccessControl.GenericSecurityDescriptor.GetBinaryForm(System.Byte[],System.Int32)">
       <summary>Returns an array of byte values that represents the information contained in this <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</summary>
@@ -1067,14 +1059,22 @@
       <param name="includeSections">Specifies which sections (access rules, audit rules, primary group, owner) of the security descriptor to get.</param>
       <returns>The SDDL representation of the specified sections of the security descriptor associated with this <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</returns>
     </member>
-    <member name="P:System.Security.AccessControl.GenericSecurityDescriptor.Group">
-      <summary>Gets or sets the primary group for this <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</summary>
-      <returns>The primary group for this <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.GenericSecurityDescriptor.IsSddlConversionSupported">
       <summary>Returns a boolean value that specifies whether the security descriptor associated with this  <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object can be converted to the Security Descriptor Definition Language (SDDL) format.</summary>
       <returns>
         <see langword="true" /> if the security descriptor associated with this  <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object can be converted to the Security Descriptor Definition Language (SDDL) format; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericSecurityDescriptor.BinaryLength">
+      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.GenericSecurityDescriptor.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
+      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericSecurityDescriptor.ControlFlags">
+      <summary>Gets values that specify behavior of the <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</summary>
+      <returns>One or more values of the <see cref="T:System.Security.AccessControl.ControlFlags" /> enumeration combined with a logical OR operation.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.GenericSecurityDescriptor.Group">
+      <summary>Gets or sets the primary group for this <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</summary>
+      <returns>The primary group for this <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</returns>
     </member>
     <member name="P:System.Security.AccessControl.GenericSecurityDescriptor.Owner">
       <summary>Gets or sets the owner of the object associated with this <see cref="T:System.Security.AccessControl.GenericSecurityDescriptor" /> object.</summary>
@@ -1160,14 +1160,6 @@
       <param name="exceptionFromErrorCode">A delegate implemented by integrators that provides custom exceptions.</param>
       <param name="exceptionContext">An object that contains contextual information about the source or destination of the exception.</param>
     </member>
-    <member name="T:System.Security.AccessControl.NativeObjectSecurity.ExceptionFromErrorCode">
-      <summary>Provides a way for integrators to map numeric error codes to specific exceptions that they create.</summary>
-      <param name="errorCode">The numeric error code.</param>
-      <param name="name">The name of the securable object with which the <see cref="T:System.Security.AccessControl.NativeObjectSecurity" /> object is associated.</param>
-      <param name="handle">The handle of the securable object with which the <see cref="T:System.Security.AccessControl.NativeObjectSecurity" /> object is associated.</param>
-      <param name="context">An object that contains contextual information about the source or destination of the exception.</param>
-      <returns>The <see cref="T:System.Exception" /> this delegate creates.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.NativeObjectSecurity.Persist(System.Runtime.InteropServices.SafeHandle,System.Security.AccessControl.AccessControlSections)">
       <summary>Saves the specified sections of the security descriptor associated with this <see cref="T:System.Security.AccessControl.NativeObjectSecurity" /> object to permanent storage. We recommend.persist that the values of the <paramref name="includeSections" /> parameters passed to the constructor and persist methods be identical.</summary>
       <param name="handle">The handle of the securable object with which this <see cref="T:System.Security.AccessControl.NativeObjectSecurity" /> object is associated.</param>
@@ -1193,6 +1185,14 @@
       <param name="includeSections">One of the <see cref="T:System.Security.AccessControl.AccessControlSections" /> enumeration values that specifies the sections of the security descriptor (access rules, audit rules, owner, primary group) of the securable object to save.</param>
       <param name="exceptionContext">An object that contains contextual information about the source or destination of the exception.</param>
       <exception cref="T:System.IO.FileNotFoundException">The securable object with which this <see cref="T:System.Security.AccessControl.NativeObjectSecurity" /> object is associated is either a directory or a file, and that directory or file could not be found.</exception>
+    </member>
+    <member name="T:System.Security.AccessControl.NativeObjectSecurity.ExceptionFromErrorCode">
+      <summary>Provides a way for integrators to map numeric error codes to specific exceptions that they create.</summary>
+      <param name="errorCode">The numeric error code.</param>
+      <param name="name">The name of the securable object with which the <see cref="T:System.Security.AccessControl.NativeObjectSecurity" /> object is associated.</param>
+      <param name="handle">The handle of the securable object with which the <see cref="T:System.Security.AccessControl.NativeObjectSecurity" /> object is associated.</param>
+      <param name="context">An object that contains contextual information about the source or destination of the exception.</param>
+      <returns>The <see cref="T:System.Exception" /> this delegate creates.</returns>
     </member>
     <member name="T:System.Security.AccessControl.ObjectAccessRule">
       <summary>Represents a combination of a user's identity, an access mask, and an access control type (allow or deny). An <see cref="T:System.Security.AccessControl.ObjectAccessRule" /> object also contains information about the type of object to which the rule applies, the type of child object that can inherit the rule, how the rule is inherited by child objects, and how that inheritance is propagated.</summary>
@@ -1241,10 +1241,6 @@
       <param name="opaque">Opaque data associated with the new ACE. This is allowed only for callback ACE types. The length of this array must not be greater than the return value of the <see cref="M:System.Security.AccessControl.ObjectAce.MaxOpaqueLength(System.Boolean)" /> method.</param>
       <exception cref="T:System.ArgumentOutOfRangeException">The qualifier parameter contains an invalid value or the length of the value of the opaque parameter is greater than the return value of the <see cref="M:System.Security.AccessControl.ObjectAce.MaxOpaqueLength(System.Boolean)" /> method.</exception>
     </member>
-    <member name="P:System.Security.AccessControl.ObjectAce.BinaryLength">
-      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.ObjectAce" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.ObjectAce.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
-      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.ObjectAce" /> object.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.ObjectAce.GetBinaryForm(System.Byte[],System.Int32)">
       <summary>Marshals the contents of the <see cref="T:System.Security.AccessControl.ObjectAce" /> object into the specified byte array beginning at the specified offset.</summary>
       <param name="binaryForm">The byte array into which the contents of the <see cref="T:System.Security.AccessControl.ObjectAce" /> is marshaled.</param>
@@ -1252,14 +1248,18 @@
       <exception cref="T:System.ArgumentOutOfRangeException">
         <paramref name="offset" /> is negative or too high to allow the entire <see cref="T:System.Security.AccessControl.ObjectAce" /> to be copied into <paramref name="array" />.</exception>
     </member>
-    <member name="P:System.Security.AccessControl.ObjectAce.InheritedObjectAceType">
-      <summary>Gets or sets the GUID of the object type that can inherit the Access Control Entry (ACE) that this <see cref="T:System.Security.AccessControl.ObjectAce" /> object represents.</summary>
-      <returns>The GUID of the object type that can inherit the Access Control Entry (ACE) that this <see cref="T:System.Security.AccessControl.ObjectAce" /> object represents.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.ObjectAce.MaxOpaqueLength(System.Boolean)">
       <summary>Returns the maximum allowed length, in bytes, of an opaque data BLOB for callback Access Control Entries (ACEs).</summary>
       <param name="isCallback">True if the <see cref="T:System.Security.AccessControl.ObjectAce" /> is a callback ACE type.</param>
       <returns>The maximum allowed length, in bytes, of an opaque data BLOB for callback Access Control Entries (ACEs).</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectAce.BinaryLength">
+      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.ObjectAce" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.ObjectAce.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
+      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.ObjectAce" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectAce.InheritedObjectAceType">
+      <summary>Gets or sets the GUID of the object type that can inherit the Access Control Entry (ACE) that this <see cref="T:System.Security.AccessControl.ObjectAce" /> object represents.</summary>
+      <returns>The GUID of the object type that can inherit the Access Control Entry (ACE) that this <see cref="T:System.Security.AccessControl.ObjectAce" /> object represents.</returns>
     </member>
     <member name="P:System.Security.AccessControl.ObjectAce.ObjectAceFlags">
       <summary>Gets or sets flags that specify whether the <see cref="P:System.Security.AccessControl.ObjectAce.ObjectAceType" /> and <see cref="P:System.Security.AccessControl.ObjectAce.InheritedObjectAceType" /> properties contain values that identify valid object types.</summary>
@@ -1328,10 +1328,6 @@
       <summary>Initializes a new instance of the <see cref="T:System.Security.AccessControl.ObjectSecurity" /> class.</summary>
       <param name="securityDescriptor">The <see cref="T:System.Security.AccessControl.CommonSecurityDescriptor" /> of the new <see cref="T:System.Security.AccessControl.CommonObjectSecurity" /> instance.</param>
     </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.AccessRightType">
-      <summary>Gets the <see cref="T:System.Type" /> of the securable object associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</summary>
-      <returns>The type of the securable object associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity.AccessRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AccessControlType)">
       <summary>Initializes a new instance of the <see cref="T:System.Security.AccessControl.AccessRule" /> class with the specified values.</summary>
       <param name="identityReference">The identity to which the access rule applies.  It must be an object that can be cast as a <see cref="T:System.Security.Principal.SecurityIdentifier" />.</param>
@@ -1341,35 +1337,6 @@
       <param name="propagationFlags">Specifies whether inherited access rules are automatically propagated. The propagation flags are ignored if <paramref name="inheritanceFlags" /> is set to <see cref="F:System.Security.AccessControl.InheritanceFlags.None" />.</param>
       <param name="type">Specifies the valid access control type.</param>
       <returns>The <see cref="T:System.Security.AccessControl.AccessRule" /> object that this method creates.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.AccessRulesModified">
-      <summary>Gets or sets a Boolean value that specifies whether the access rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object have been modified.</summary>
-      <returns>
-        <see langword="true" /> if the access rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object have been modified; otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.AccessRuleType">
-      <summary>Gets the <see cref="T:System.Type" /> of the object associated with the access rules of this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object. The <see cref="T:System.Type" /> object must be an object that can be cast as a <see cref="T:System.Security.Principal.SecurityIdentifier" /> object.</summary>
-      <returns>The type of the object associated with the access rules of this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.AreAccessRulesCanonical">
-      <summary>Gets a Boolean value that specifies whether the access rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object are in canonical order.</summary>
-      <returns>
-        <see langword="true" /> if the access rules are in canonical order; otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.AreAccessRulesProtected">
-      <summary>Gets a Boolean value that specifies whether the Discretionary Access Control List (DACL) associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is protected.</summary>
-      <returns>
-        <see langword="true" /> if the DACL is protected; otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.AreAuditRulesCanonical">
-      <summary>Gets a Boolean value that specifies whether the audit rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object are in canonical order.</summary>
-      <returns>
-        <see langword="true" /> if the audit rules are in canonical order; otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.AreAuditRulesProtected">
-      <summary>Gets a Boolean value that specifies whether the System Access Control List (SACL) associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is protected.</summary>
-      <returns>
-        <see langword="true" /> if the SACL is protected; otherwise, <see langword="false" />.</returns>
     </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity.AuditRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AuditFlags)">
       <summary>Initializes a new instance of the <see cref="T:System.Security.AccessControl.AuditRule" /> class with the specified values.</summary>
@@ -1382,15 +1349,6 @@
       <param name="flags">Specifies the conditions for which the rule is audited.</param>
       <returns>The <see cref="T:System.Security.AccessControl.AuditRule" /> object that this method creates.</returns>
     </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.AuditRulesModified">
-      <summary>Gets or sets a Boolean value that specifies whether the audit rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object have been modified.</summary>
-      <returns>
-        <see langword="true" /> if the audit rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object have been modified; otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.AuditRuleType">
-      <summary>Gets the <see cref="T:System.Type" /> object associated with the audit rules of this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object. The <see cref="T:System.Type" /> object must be an object that can be cast as a <see cref="T:System.Security.Principal.SecurityIdentifier" /> object.</summary>
-      <returns>The type of the object associated with the audit rules of this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity.GetGroup(System.Type)">
       <summary>Gets the primary group associated with the specified owner.</summary>
       <param name="targetType">The owner for which to get the primary group.</param>
@@ -1399,13 +1357,13 @@
     <member name="M:System.Security.AccessControl.ObjectSecurity.GetOwner(System.Type)">
       <summary>Gets the owner associated with the specified primary group.</summary>
       <param name="targetType">The primary group for which to get the owner.</param>
-      <returns>The owner associated with the specified group.</returns>
       <exception cref="T:System.ArgumentNullException">
         <paramref name="targetType" /> is <see langword="null" />.</exception>
       <exception cref="T:System.ArgumentException">
         <paramref name="targetType" /> is not an <see cref="T:System.Security.Principal.IdentityReference" /> type.</exception>
       <exception cref="T:System.Security.Principal.IdentityNotMappedException">Some or all identity references could not be translated.</exception>
       <exception cref="T:System.SystemException">A Win32 error code was returned.</exception>
+      <returns>The owner associated with the specified group.</returns>
     </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity.GetSecurityDescriptorBinaryForm">
       <summary>Returns an array of byte values that represents the security descriptor information for this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</summary>
@@ -1415,21 +1373,6 @@
       <summary>Returns the Security Descriptor Definition Language (SDDL) representation of the specified sections of the security descriptor associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</summary>
       <param name="includeSections">Specifies which sections (access rules, audit rules, primary group, owner) of the security descriptor to get.</param>
       <returns>The SDDL representation of the specified sections of the security descriptor associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.GroupModified">
-      <summary>Gets or sets a Boolean value that specifies whether the group associated with the securable object has been modified.</summary>
-      <returns>
-        <see langword="true" /> if the group associated with the securable object has been modified; otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.IsContainer">
-      <summary>Gets a Boolean value that specifies whether this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is a container object.</summary>
-      <returns>
-        <see langword="true" /> if the <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is a container object; otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.IsDS">
-      <summary>Gets a Boolean value that specifies whether this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is a directory object.</summary>
-      <returns>
-        <see langword="true" /> if the <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is a directory object; otherwise, <see langword="false" />.</returns>
     </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity.IsSddlConversionSupported">
       <summary>Returns a Boolean value that specifies whether the security descriptor associated with this  <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object can be converted to the Security Descriptor Definition Language (SDDL) format.</summary>
@@ -1450,7 +1393,7 @@
       <param name="modification">The modification to apply to the DACL.</param>
       <param name="rule">The access rule to modify.</param>
       <param name="modified">
-        <see langword="true" /> if the DACL is successfully modified; otherwise, <see langword="false" />.</param>
+        <see langword="true" /> if the DACL is actually modified; otherwise, <see langword="false" />.</param>
       <returns>
         <see langword="true" /> if the DACL is successfully modified; otherwise, <see langword="false" />.</returns>
     </member>
@@ -1459,7 +1402,7 @@
       <param name="modification">The modification to apply to the SACL.</param>
       <param name="rule">The audit rule to modify.</param>
       <param name="modified">
-        <see langword="true" /> if the SACL is successfully modified; otherwise, <see langword="false" />.</param>
+        <see langword="true" /> if the SACL is actually modified; otherwise, <see langword="false" />.</param>
       <returns>
         <see langword="true" /> if the SACL is successfully modified; otherwise, <see langword="false" />.</returns>
     </member>
@@ -1471,11 +1414,6 @@
         <see langword="true" /> if the SACL is successfully modified; otherwise, <see langword="false" />.</param>
       <returns>
         <see langword="true" /> if the SACL is successfully modified; otherwise, <see langword="false" />.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.OwnerModified">
-      <summary>Gets or sets a Boolean value that specifies whether the owner of the securable object has been modified.</summary>
-      <returns>
-        <see langword="true" /> if the owner of the securable object has been modified; otherwise, <see langword="false" />.</returns>
     </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity.Persist(System.Boolean,System.String,System.Security.AccessControl.AccessControlSections)">
       <summary>Saves the specified sections of the security descriptor associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object to permanent storage. We recommend that the values of the <paramref name="includeSections" /> parameters passed to the constructor and persist methods be identical.</summary>
@@ -1509,10 +1447,6 @@
     </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity.ReadUnlock">
       <summary>Unlocks this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object for read access.</summary>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity.SecurityDescriptor">
-      <summary>Gets the security descriptor for this instance.</summary>
-      <returns>The security descriptor for this instance.</returns>
     </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity.SetAccessRuleProtection(System.Boolean,System.Boolean)">
       <summary>Sets or removes protection of the access rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object. Protected access rules cannot be modified by parent objects through inheritance.</summary>
@@ -1562,6 +1496,72 @@
     <member name="M:System.Security.AccessControl.ObjectSecurity.WriteUnlock">
       <summary>Unlocks this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object for write access.</summary>
     </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.AccessRightType">
+      <summary>Gets the <see cref="T:System.Type" /> of the securable object associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</summary>
+      <returns>The type of the securable object associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.AccessRulesModified">
+      <summary>Gets or sets a Boolean value that specifies whether the access rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object have been modified.</summary>
+      <returns>
+        <see langword="true" /> if the access rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object have been modified; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.AccessRuleType">
+      <summary>Gets the <see cref="T:System.Type" /> of the object associated with the access rules of this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object. The <see cref="T:System.Type" /> object must be an object that can be cast as a <see cref="T:System.Security.Principal.SecurityIdentifier" /> object.</summary>
+      <returns>The type of the object associated with the access rules of this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.AreAccessRulesCanonical">
+      <summary>Gets a Boolean value that specifies whether the access rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object are in canonical order.</summary>
+      <returns>
+        <see langword="true" /> if the access rules are in canonical order; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.AreAccessRulesProtected">
+      <summary>Gets a Boolean value that specifies whether the Discretionary Access Control List (DACL) associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is protected.</summary>
+      <returns>
+        <see langword="true" /> if the DACL is protected; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.AreAuditRulesCanonical">
+      <summary>Gets a Boolean value that specifies whether the audit rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object are in canonical order.</summary>
+      <returns>
+        <see langword="true" /> if the audit rules are in canonical order; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.AreAuditRulesProtected">
+      <summary>Gets a Boolean value that specifies whether the System Access Control List (SACL) associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is protected.</summary>
+      <returns>
+        <see langword="true" /> if the SACL is protected; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.AuditRulesModified">
+      <summary>Gets or sets a Boolean value that specifies whether the audit rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object have been modified.</summary>
+      <returns>
+        <see langword="true" /> if the audit rules associated with this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object have been modified; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.AuditRuleType">
+      <summary>Gets the <see cref="T:System.Type" /> object associated with the audit rules of this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object. The <see cref="T:System.Type" /> object must be an object that can be cast as a <see cref="T:System.Security.Principal.SecurityIdentifier" /> object.</summary>
+      <returns>The type of the object associated with the audit rules of this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.GroupModified">
+      <summary>Gets or sets a Boolean value that specifies whether the group associated with the securable object has been modified.</summary>
+      <returns>
+        <see langword="true" /> if the group associated with the securable object has been modified; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.IsContainer">
+      <summary>Gets a Boolean value that specifies whether this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is a container object.</summary>
+      <returns>
+        <see langword="true" /> if the <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is a container object; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.IsDS">
+      <summary>Gets a Boolean value that specifies whether this <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is a directory object.</summary>
+      <returns>
+        <see langword="true" /> if the <see cref="T:System.Security.AccessControl.ObjectSecurity" /> object is a directory object; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.OwnerModified">
+      <summary>Gets or sets a Boolean value that specifies whether the owner of the securable object has been modified.</summary>
+      <returns>
+        <see langword="true" /> if the owner of the securable object has been modified; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity.SecurityDescriptor">
+      <summary>Gets the security descriptor for this instance.</summary>
+      <returns>The security descriptor for this instance.</returns>
+    </member>
     <member name="T:System.Security.AccessControl.ObjectSecurity`1">
       <summary>Provides the ability to control access to objects without direct manipulation of Access Control Lists (ACLs); also grants the ability to type-cast access rights.</summary>
       <typeparam name="T">The access rights for the object.</typeparam>
@@ -1608,10 +1608,6 @@
       <param name="exceptionFromErrorCode">A delegate implemented by integrators that provides custom exceptions.</param>
       <param name="exceptionContext">An object that contains contextual information about the source or destination of the exception.</param>
     </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity`1.AccessRightType">
-      <summary>Gets the Type of the securable object associated with this ObjectSecurity`1 object.</summary>
-      <returns>The type of the securable object associated with the current instance.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity`1.AccessRuleFactory(System.Security.Principal.IdentityReference,System.Int32,System.Boolean,System.Security.AccessControl.InheritanceFlags,System.Security.AccessControl.PropagationFlags,System.Security.AccessControl.AccessControlType)">
       <summary>Initializes a new instance of the ObjectAccessRule class that represents a new access control rule for the associated security object.</summary>
       <param name="identityReference">Represents a user account.</param>
@@ -1622,10 +1618,6 @@
       <param name="propagationFlags">Specifies how to propagate Access Control Entries (ACEs) to child objects.</param>
       <param name="type">Specifies whether access is allowed or denied.</param>
       <returns>Represents a new access control rule for the specified user, with the specified access rights, access control, and flags.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity`1.AccessRuleType">
-      <summary>Gets the Type of the object associated with the access rules of this ObjectSecurity`1 object.</summary>
-      <returns>The Type of the object associated with the access rules of the current instance.</returns>
     </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity`1.AddAccessRule(System.Security.AccessControl.AccessRule{`0})">
       <summary>Adds the specified access rule to the Discretionary Access Control List (DACL) associated with this ObjectSecurity`1 object.</summary>
@@ -1645,10 +1637,6 @@
       <param name="propagationFlags">Specifies how to propagate Access Control Entries (ACEs) to child objects.</param>
       <param name="flags">Describes the type of auditing to perform.</param>
       <returns>The specified audit rule for the specified user.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.ObjectSecurity`1.AuditRuleType">
-      <summary>Gets the Type object associated with the audit rules of this ObjectSecurity`1 object.</summary>
-      <returns>The Type object associated with the audit rules of the current instance.</returns>
     </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity`1.Persist(System.Runtime.InteropServices.SafeHandle)">
       <summary>Saves the security descriptor associated with this ObjectSecurity`1 object to permanent storage, using the specified handle.</summary>
@@ -1674,7 +1662,7 @@
     </member>
     <member name="M:System.Security.AccessControl.ObjectSecurity`1.RemoveAuditRule(System.Security.AccessControl.AuditRule{`0})">
       <summary>Removes audit rules that contain the same security identifier and access mask as the specified audit rule from the System Access Control List (SACL) associated with this ObjectSecurity`1 object.</summary>
-      <param name="rule">The audit rule to remove</param>
+      <param name="rule">The audit rule to remove.</param>
       <returns>
         <see langword="true" /> if the object was removed; otherwise, <see langword="false" />.</returns>
     </member>
@@ -1697,6 +1685,18 @@
     <member name="M:System.Security.AccessControl.ObjectSecurity`1.SetAuditRule(System.Security.AccessControl.AuditRule{`0})">
       <summary>Removes all audit rules that contain the same security identifier and qualifier as the specified audit rule in the System Access Control List (SACL) associated with this ObjectSecurity`1 object and then adds the specified audit rule.</summary>
       <param name="rule">The audit rule to set.</param>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity`1.AccessRightType">
+      <summary>Gets the Type of the securable object associated with this ObjectSecurity`1 object.</summary>
+      <returns>The type of the securable object associated with the current instance.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity`1.AccessRuleType">
+      <summary>Gets the Type of the object associated with the access rules of this ObjectSecurity`1 object.</summary>
+      <returns>The Type of the object associated with the access rules of the current instance.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.ObjectSecurity`1.AuditRuleType">
+      <summary>Gets the Type object associated with the audit rules of this ObjectSecurity`1 object.</summary>
+      <returns>The Type object associated with the audit rules of the current instance.</returns>
     </member>
     <member name="T:System.Security.AccessControl.PrivilegeNotHeldException">
       <summary>The exception that is thrown when a method in the <see cref="N:System.Security.AccessControl" /> namespace attempts to enable a privilege that it does not have.</summary>
@@ -1737,13 +1737,17 @@
     <member name="T:System.Security.AccessControl.QualifiedAce">
       <summary>Represents an Access Control Entry (ACE) that contains a qualifier. The qualifier, represented by an <see cref="T:System.Security.AccessControl.AceQualifier" /> object, specifies whether the ACE allows access, denies access, causes system audits, or causes system alarms. The <see cref="T:System.Security.AccessControl.QualifiedAce" /> class is the abstract base class for the <see cref="T:System.Security.AccessControl.CommonAce" /> and <see cref="T:System.Security.AccessControl.ObjectAce" /> classes.</summary>
     </member>
-    <member name="P:System.Security.AccessControl.QualifiedAce.AceQualifier">
-      <summary>Gets a value that specifies whether the ACE allows access, denies access, causes system audits, or causes system alarms.</summary>
-      <returns>A value that specifies whether the ACE allows access, denies access, causes system audits, or causes system alarms.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.QualifiedAce.GetOpaque">
       <summary>Returns the opaque callback data associated with this <see cref="T:System.Security.AccessControl.QualifiedAce" /> object.</summary>
       <returns>An array of byte values that represents the opaque callback data associated with this <see cref="T:System.Security.AccessControl.QualifiedAce" /> object.</returns>
+    </member>
+    <member name="M:System.Security.AccessControl.QualifiedAce.SetOpaque(System.Byte[])">
+      <summary>Sets the opaque callback data associated with this <see cref="T:System.Security.AccessControl.QualifiedAce" /> object.</summary>
+      <param name="opaque">An array of byte values that represents the opaque callback data for this <see cref="T:System.Security.AccessControl.QualifiedAce" /> object.</param>
+    </member>
+    <member name="P:System.Security.AccessControl.QualifiedAce.AceQualifier">
+      <summary>Gets a value that specifies whether the ACE allows access, denies access, causes system audits, or causes system alarms.</summary>
+      <returns>A value that specifies whether the ACE allows access, denies access, causes system audits, or causes system alarms.</returns>
     </member>
     <member name="P:System.Security.AccessControl.QualifiedAce.IsCallback">
       <summary>Specifies whether this <see cref="T:System.Security.AccessControl.QualifiedAce" /> object contains callback data.</summary>
@@ -1753,10 +1757,6 @@
     <member name="P:System.Security.AccessControl.QualifiedAce.OpaqueLength">
       <summary>Gets the length of the opaque callback data associated with this <see cref="T:System.Security.AccessControl.QualifiedAce" /> object. This property is valid only for callback Access Control Entries (ACEs).</summary>
       <returns>The length of the opaque callback data.</returns>
-    </member>
-    <member name="M:System.Security.AccessControl.QualifiedAce.SetOpaque(System.Byte[])">
-      <summary>Sets the opaque callback data associated with this <see cref="T:System.Security.AccessControl.QualifiedAce" /> object.</summary>
-      <param name="opaque">An array of byte values that represents the opaque callback data for this <see cref="T:System.Security.AccessControl.QualifiedAce" /> object.</param>
     </member>
     <member name="T:System.Security.AccessControl.RawAcl">
       <summary>Represents an Access Control List (ACL).</summary>
@@ -1770,14 +1770,6 @@
       <summary>Initializes a new instance of the <see cref="T:System.Security.AccessControl.RawAcl" /> class from the specified binary form.</summary>
       <param name="binaryForm">An array of byte values that represent an Access Control List (ACL).</param>
       <param name="offset">The offset in the <paramref name="binaryForm" /> parameter at which to begin unmarshaling data.</param>
-    </member>
-    <member name="P:System.Security.AccessControl.RawAcl.BinaryLength">
-      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.RawAcl" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.RawAcl.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
-      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.RawAcl" /> object.</returns>
-    </member>
-    <member name="P:System.Security.AccessControl.RawAcl.Count">
-      <summary>Gets the number of access control entries (ACEs) in the current <see cref="T:System.Security.AccessControl.RawAcl" /> object.</summary>
-      <returns>The number of ACEs in the current <see cref="T:System.Security.AccessControl.RawAcl" /> object.</returns>
     </member>
     <member name="M:System.Security.AccessControl.RawAcl.GetBinaryForm(System.Byte[],System.Int32)">
       <summary>Marshals the contents of the <see cref="T:System.Security.AccessControl.RawAcl" /> object into the specified byte array beginning at the specified offset.</summary>
@@ -1793,15 +1785,23 @@
       <exception cref="T:System.ArgumentOutOfRangeException">
         <paramref name="offset" /> is negative or too high to allow the entire <see cref="T:System.Security.AccessControl.GenericAcl" /> to be copied into <paramref name="array" />.</exception>
     </member>
-    <member name="P:System.Security.AccessControl.RawAcl.Item(System.Int32)">
-      <summary>Gets or sets the Access Control Entry (ACE) at the specified index.</summary>
-      <param name="index">The zero-based index of the ACE to get or set.</param>
-      <returns>The ACE at the specified index.</returns>
-    </member>
     <member name="M:System.Security.AccessControl.RawAcl.RemoveAce(System.Int32)">
       <summary>Removes the Access Control Entry (ACE) at the specified location.</summary>
       <param name="index">The zero-based index of the ACE to remove.</param>
       <exception cref="T:System.ArgumentOutOfRangeException">The value of the <paramref name="index" /> parameter is higher than the value of the <see cref="P:System.Security.AccessControl.RawAcl.Count" /> property minus one or is negative.</exception>
+    </member>
+    <member name="P:System.Security.AccessControl.RawAcl.BinaryLength">
+      <summary>Gets the length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.RawAcl" /> object. This length should be used before marshaling the ACL into a binary array with the <see cref="M:System.Security.AccessControl.RawAcl.GetBinaryForm(System.Byte[],System.Int32)" /> method.</summary>
+      <returns>The length, in bytes, of the binary representation of the current <see cref="T:System.Security.AccessControl.RawAcl" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.RawAcl.Count">
+      <summary>Gets the number of access control entries (ACEs) in the current <see cref="T:System.Security.AccessControl.RawAcl" /> object.</summary>
+      <returns>The number of ACEs in the current <see cref="T:System.Security.AccessControl.RawAcl" /> object.</returns>
+    </member>
+    <member name="P:System.Security.AccessControl.RawAcl.Item(System.Int32)">
+      <summary>Gets or sets the Access Control Entry (ACE) at the specified index.</summary>
+      <param name="index">The zero-based index of the ACE to get or set.</param>
+      <returns>The ACE at the specified index.</returns>
     </member>
     <member name="P:System.Security.AccessControl.RawAcl.Revision">
       <summary>Gets the revision level of the <see cref="T:System.Security.AccessControl.RawAcl" />.</summary>
@@ -1826,6 +1826,11 @@
     <member name="M:System.Security.AccessControl.RawSecurityDescriptor.#ctor(System.String)">
       <summary>Initializes a new instance of the <see cref="T:System.Security.AccessControl.RawSecurityDescriptor" /> class from the specified Security Descriptor Definition Language (SDDL) string.</summary>
       <param name="sddlForm">The SDDL string from which to create the new <see cref="T:System.Security.AccessControl.RawSecurityDescriptor" /> object.</param>
+      <exception cref="T:System.ArgumentException">The SDDL form of a security descriptor object is invalid.</exception>
+    </member>
+    <member name="M:System.Security.AccessControl.RawSecurityDescriptor.SetFlags(System.Security.AccessControl.ControlFlags)">
+      <summary>Sets the <see cref="P:System.Security.AccessControl.RawSecurityDescriptor.ControlFlags" /> property of this <see cref="T:System.Security.AccessControl.RawSecurityDescriptor" /> object to the specified value.</summary>
+      <param name="flags">One or more values of the <see cref="T:System.Security.AccessControl.ControlFlags" /> enumeration combined with a logical OR operation.</param>
     </member>
     <member name="P:System.Security.AccessControl.RawSecurityDescriptor.ControlFlags">
       <summary>Gets values that specify behavior of the <see cref="T:System.Security.AccessControl.RawSecurityDescriptor" /> object.</summary>
@@ -1846,10 +1851,6 @@
     <member name="P:System.Security.AccessControl.RawSecurityDescriptor.ResourceManagerControl">
       <summary>Gets or sets a byte value that represents the resource manager control bits associated with this <see cref="T:System.Security.AccessControl.RawSecurityDescriptor" /> object.</summary>
       <returns>A byte value that represents the resource manager control bits associated with this <see cref="T:System.Security.AccessControl.RawSecurityDescriptor" /> object.</returns>
-    </member>
-    <member name="M:System.Security.AccessControl.RawSecurityDescriptor.SetFlags(System.Security.AccessControl.ControlFlags)">
-      <summary>Sets the <see cref="P:System.Security.AccessControl.RawSecurityDescriptor.ControlFlags" /> property of this <see cref="T:System.Security.AccessControl.RawSecurityDescriptor" /> object to the specified value.</summary>
-      <param name="flags">One or more values of the <see cref="T:System.Security.AccessControl.ControlFlags" /> enumeration combined with a logical OR operation.</param>
     </member>
     <member name="P:System.Security.AccessControl.RawSecurityDescriptor.SystemAcl">
       <summary>Gets or sets the System Access Control List (SACL) for this <see cref="T:System.Security.AccessControl.RawSecurityDescriptor" /> object. The SACL contains audit rules.</summary>
@@ -2041,6 +2042,144 @@
       <summary>Sets the specified audit rule for the specified <see cref="T:System.Security.Principal.SecurityIdentifier" /> object.</summary>
       <param name="sid">The <see cref="T:System.Security.Principal.SecurityIdentifier" /> for which to set an audit rule.</param>
       <param name="rule">The <see cref="T:System.Security.AccessControl.ObjectAuditRule" /> for which to set an audit rule.</param>
+    </member>
+    <member name="T:System.Security.Policy.Evidence">
+      <summary>Defines the set of information that constitutes input to security policy decisions. This class cannot be inherited.</summary>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.#ctor">
+      <summary>Initializes a new empty instance of the <see cref="T:System.Security.Policy.Evidence" /> class.</summary>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.#ctor(System.Object[],System.Object[])">
+      <summary>Initializes a new instance of the <see cref="T:System.Security.Policy.Evidence" /> class from multiple sets of host and assembly evidence.</summary>
+      <param name="hostEvidence">The host evidence from which to create the new instance.</param>
+      <param name="assemblyEvidence">The assembly evidence from which to create the new instance.</param>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.#ctor(System.Security.Policy.Evidence)">
+      <summary>Initializes a new instance of the <see cref="T:System.Security.Policy.Evidence" /> class from a shallow copy of an existing one.</summary>
+      <param name="evidence">The <see cref="T:System.Security.Policy.Evidence" /> instance from which to create the new instance. This instance is not deep-copied.</param>
+      <exception cref="T:System.ArgumentException">The <paramref name="evidence" /> parameter is not a valid instance of <see cref="T:System.Security.Policy.Evidence" />.</exception>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.#ctor(System.Security.Policy.EvidenceBase[],System.Security.Policy.EvidenceBase[])">
+      <summary>Initializes a new instance of the <see cref="T:System.Security.Policy.Evidence" /> class from multiple sets of host and assembly evidence.</summary>
+      <param name="hostEvidence">The host evidence from which to create the new instance.</param>
+      <param name="assemblyEvidence">The assembly evidence from which to create the new instance.</param>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.AddAssembly(System.Object)">
+      <summary>Adds the specified assembly evidence to the evidence set.</summary>
+      <param name="id">Any evidence object.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="id" /> is null.</exception>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="id" /> is not serializable.</exception>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.AddAssemblyEvidence``1(``0)">
+      <summary>Adds an evidence object of the specified type to the assembly-supplied evidence list.</summary>
+      <param name="evidence">The assembly evidence to add.</param>
+      <typeparam name="T">The type of the object in <paramref name="evidence" />.</typeparam>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="evidence" /> is <see langword="null" />.</exception>
+      <exception cref="T:System.InvalidOperationException">Evidence of type <paramref name="T" /> is already in the list.</exception>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="evidence" /> is not serializable.</exception>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.AddHost(System.Object)">
+      <summary>Adds the specified evidence supplied by the host to the evidence set.</summary>
+      <param name="id">Any evidence object.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="id" /> is null.</exception>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="id" /> is not serializable.</exception>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.AddHostEvidence``1(``0)">
+      <summary>Adds host evidence of the specified type to the host evidence collection.</summary>
+      <param name="evidence">The host evidence to add.</param>
+      <typeparam name="T">The type of the object in <paramref name="evidence" />.</typeparam>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="evidence" /> is <see langword="null" />.</exception>
+      <exception cref="T:System.InvalidOperationException">Evidence of type <paramref name="T" /> is already in the list.</exception>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.Clear">
+      <summary>Removes the host and assembly evidence from the evidence set.</summary>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.Clone">
+      <summary>Returns a duplicate copy of this evidence object.</summary>
+      <returns>A duplicate copy of this evidence object.</returns>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.CopyTo(System.Array,System.Int32)">
+      <summary>Copies evidence objects to an <see cref="T:System.Array" />.</summary>
+      <param name="array">The target array to which to copy evidence objects.</param>
+      <param name="index">The zero-based position in the array to which to begin copying evidence objects.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="array" /> is null.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="index" /> is outside the range of the target array.</exception>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.GetAssemblyEnumerator">
+      <summary>Enumerates evidence provided by the assembly.</summary>
+      <returns>An enumerator for evidence added by the <see cref="M:System.Security.Policy.Evidence.AddAssembly(System.Object)" /> method.</returns>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.GetAssemblyEvidence``1">
+      <summary>Gets assembly evidence of the specified type from the collection.</summary>
+      <typeparam name="T">The type of the evidence to get.</typeparam>
+      <returns>Evidence of type <paramref name="T" /> in the assembly evidence collection.</returns>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.GetEnumerator">
+      <summary>Enumerates all evidence in the set, both that provided by the host and that provided by the assembly.</summary>
+      <returns>An enumerator for evidence added by both the <see cref="M:System.Security.Policy.Evidence.AddHost(System.Object)" /> method and the <see cref="M:System.Security.Policy.Evidence.AddAssembly(System.Object)" /> method.</returns>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.GetHostEnumerator">
+      <summary>Enumerates evidence supplied by the host.</summary>
+      <returns>An enumerator for evidence added by the <see cref="M:System.Security.Policy.Evidence.AddHost(System.Object)" /> method.</returns>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.GetHostEvidence``1">
+      <summary>Gets host evidence of the specified type from the collection.</summary>
+      <typeparam name="T">The type of the evidence to get.</typeparam>
+      <returns>Evidence of type <paramref name="T" /> in the host evidence collection.</returns>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.Merge(System.Security.Policy.Evidence)">
+      <summary>Merges the specified evidence set into the current evidence set.</summary>
+      <param name="evidence">The evidence set to be merged into the current evidence set.</param>
+      <exception cref="T:System.ArgumentException">The <paramref name="evidence" /> parameter is not a valid instance of <see cref="T:System.Security.Policy.Evidence" />.</exception>
+      <exception cref="T:System.Security.SecurityException">
+        <see cref="P:System.Security.Policy.Evidence.Locked" /> is <see langword="true" />, the code that calls this method does not have <see cref="F:System.Security.Permissions.SecurityPermissionFlag.ControlEvidence" />, and the <paramref name="evidence" /> parameter has a host list that is not empty.</exception>
+    </member>
+    <member name="M:System.Security.Policy.Evidence.RemoveType(System.Type)">
+      <summary>Removes the evidence for a given type from the host and assembly enumerations.</summary>
+      <param name="t">The type of the evidence to be removed.</param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="t" /> is null.</exception>
+    </member>
+    <member name="P:System.Security.Policy.Evidence.Count">
+      <summary>Gets the number of evidence objects in the evidence set.</summary>
+      <returns>The number of evidence objects in the evidence set.</returns>
+    </member>
+    <member name="P:System.Security.Policy.Evidence.IsReadOnly">
+      <summary>Gets a value indicating whether the evidence set is read-only.</summary>
+      <returns>Always <see langword="false" />, because read-only evidence sets are not supported.</returns>
+    </member>
+    <member name="P:System.Security.Policy.Evidence.IsSynchronized">
+      <summary>Gets a value indicating whether the evidence set is thread-safe.</summary>
+      <returns>Always <see langword="false" /> because thread-safe evidence sets are not supported.</returns>
+    </member>
+    <member name="P:System.Security.Policy.Evidence.Locked">
+      <summary>Gets or sets a value indicating whether the evidence is locked.</summary>
+      <returns>
+        <see langword="true" /> if the evidence is locked; otherwise, <see langword="false" />. The default is <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Security.Policy.Evidence.SyncRoot">
+      <summary>Gets the synchronization root.</summary>
+      <returns>Always <see langword="this" /> (<see langword="Me" /> in Visual Basic), because synchronization of evidence sets is not supported.</returns>
+    </member>
+    <member name="T:System.Security.Policy.EvidenceBase">
+      <summary>Provides a base class from which all objects to be used as evidence must derive.</summary>
+    </member>
+    <member name="M:System.Security.Policy.EvidenceBase.#ctor">
+      <summary>Initializes a new instance of the <see cref="T:System.Security.Policy.EvidenceBase" /> class.</summary>
+      <exception cref="T:System.InvalidOperationException">An object to be used as evidence is not serializable.</exception>
+    </member>
+    <member name="M:System.Security.Policy.EvidenceBase.Clone">
+      <summary>Creates a new object that is a complete copy of the current instance.</summary>
+      <returns>A duplicate copy of this evidence object.</returns>
     </member>
   </members>
 </doc>

@@ -13,13 +13,10 @@ namespace OneShot_ModLoader
     public static class ChangesManage
     {
         // i am actually going to cry
-        public static void MultithreadStuff(bool directApply, DirectoryInfo mod = null, bool uninstallExisting = true, object sender = null)
+        public static void MultithreadStuff(bool directApply, LoadingBar loadingBar, DirectoryInfo mod = null, bool uninstallExisting = true)
         {
             try
             {
-                // start by creating the loading bar
-                LoadingBar loadingBar = new LoadingBar(Form1.instance);
-
                 // then the background worker
                 BackgroundWorker pleaseSpareMyLife = new BackgroundWorker();
                 pleaseSpareMyLife.WorkerReportsProgress = true;
@@ -80,7 +77,7 @@ namespace OneShot_ModLoader
                 Logger.WriteLine("ActiveMods tree only has 1 mod, switching to DirectApply instead");
                 loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Dispose));
 
-                MultithreadStuff(true, new DirectoryInfo(Static.modsPath + ActiveMods.instance.Nodes[0].Text));
+                MultithreadStuff(true, loadingBar, new DirectoryInfo(Static.modsPath + ActiveMods.instance.Nodes[0].Text));
                 return;
             }
 

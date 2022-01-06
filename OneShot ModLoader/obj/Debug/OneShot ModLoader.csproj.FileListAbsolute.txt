@@ -46,3 +46,5 @@ C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.ValueTuple.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Kaitai.Struct.Runtime.dll
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Kaitai.Struct.Runtime.xml
