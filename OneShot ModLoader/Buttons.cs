@@ -158,9 +158,7 @@ namespace OneShot_ModLoader
             Size = new Size(55, 50);
             Text = "Done";
 
-            PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
-            Font = new Font(f.Families[0], 8, FontStyle.Bold);
+            Font = Static.GetTerminusFont(8);
 
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderColor = Color.MediumPurple;
@@ -209,9 +207,7 @@ namespace OneShot_ModLoader
             Size = new Size(65, 50);
             Text = "Back";
 
-            PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
-            Font = new Font(f.Families[0], 8, FontStyle.Bold);
+            Font = Static.GetTerminusFont(8);
 
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderColor = Color.MediumPurple;
@@ -242,10 +238,8 @@ namespace OneShot_ModLoader
             Location = new Point(125, 230);
             Size = new Size(50, 50);
             Text = "Add to List";
-
-            PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
-            Font = new Font(f.Families[0], 8, FontStyle.Bold);
+            
+            Font = Static.GetTerminusFont(8);
 
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderColor = Color.MediumPurple;
@@ -282,9 +276,7 @@ namespace OneShot_ModLoader
             Size = new Size(55, 50);
             Text = "Remove from List";
 
-            PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
-            Font = new Font(f.Families[0], 8, FontStyle.Bold);
+            Font = Static.GetTerminusFont(8);
 
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderColor = Color.MediumPurple;
@@ -322,9 +314,7 @@ namespace OneShot_ModLoader
             Size = new Size(65, 50);
             Text = "Apply\nChanges";
 
-            PrivateFontCollection f = new PrivateFontCollection();
-            f.AddFontFile(Static.fontsPath + "TerminusTTF-Bold.ttf");
-            Font = new Font(f.Families[0], 8, FontStyle.Bold);
+            Font = Static.GetTerminusFont(8);
 
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderColor = Color.MediumPurple;

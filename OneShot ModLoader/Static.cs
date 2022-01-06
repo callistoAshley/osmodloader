@@ -29,13 +29,18 @@ namespace OneShot_ModLoader
         public static readonly string miscPath = directory + "\\Misc\\";
         public static string baseOneShotPath;
 
+        // can't just keep this in GetTerminusFont because it goes out of scope
+        private static readonly PrivateFontCollection fontCollection = new PrivateFontCollection();
+        public static void AddFonts()
+        {
+            fontCollection.AddFontFile(fontsPath + "TerminusTTF-Bold.ttf");
+        }
+
         public static Font GetTerminusFont(float size)
         {
             try
             {
-                PrivateFontCollection f = new PrivateFontCollection();
-                f.AddFontFile(fontsPath + "TerminusTTF-Bold.ttf");
-                return new Font(f.Families[0], size, FontStyle.Bold);
+                return new Font(fontCollection.Families[0], size, FontStyle.Bold);
             }
             catch (ArgumentException)
             {

@@ -246,7 +246,7 @@ namespace OneShot_ModLoader
             Nodes.Clear();
             Nodes.Add(mod);
 
-            // now readd the nodes from the cloned collection
+            // now read the nodes from the cloned collection
             foreach (string s in currentActivatedMods)
                 Nodes.Add(s);
         }

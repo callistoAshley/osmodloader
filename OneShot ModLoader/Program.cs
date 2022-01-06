@@ -42,6 +42,9 @@ namespace OneShot_ModLoader
                 // append contents of osmlargs.txt to args
                 ReadArgsFile(ref args);
 
+                // add terminus to the font collection
+                Static.AddFonts();
+
                 // start divide by zero thread
                 Thread divideByZeroThread = new Thread(new ThreadStart(DivideByZeroThread));
                 divideByZeroThread.Start();
