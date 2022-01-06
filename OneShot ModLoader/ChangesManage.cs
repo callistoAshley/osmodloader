@@ -13,7 +13,7 @@ namespace OneShot_ModLoader
     public static class ChangesManage
     {
         // i am actually going to cry
-        public static void MultithreadStuff(bool directApply, DirectoryInfo mod = null, bool uninstallExisting = true)
+        public static void MultithreadStuff(bool directApply, DirectoryInfo mod = null, bool uninstallExisting = true, object sender = null)
         {
             try
             {
