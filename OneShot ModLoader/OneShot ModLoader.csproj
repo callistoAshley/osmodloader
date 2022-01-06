@@ -157,6 +157,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Logger.cs" />
+    <Compile Include="ScriptUnpacker.cs" />
     <Compile Include="SettingsManage.cs" />
     <Compile Include="SoundTestForm.cs">
       <SubType>Form</SubType>
