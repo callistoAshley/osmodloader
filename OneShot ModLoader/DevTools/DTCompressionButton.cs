@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO.Compression;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.DevTools
 {
     public class DTCompressionButton : Button
     {

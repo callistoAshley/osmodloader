@@ -12,7 +12,7 @@ using OneShot_ModLoader.Kaitai;
 // here's where i found it if you want to look at it yourself: https://formats.kaitai.io/ruby_marshal/index.html
 // i'm still kinda tweaking this and learning how it works so it won't come out in the next update
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.Backend
 {
     public static class RubyMarshalWrapper
     {

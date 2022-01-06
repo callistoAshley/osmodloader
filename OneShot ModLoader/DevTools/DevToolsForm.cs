@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.DevTools
 {
     public class DevToolsForm : Form
     {

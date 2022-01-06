@@ -9,6 +9,8 @@ using System.Drawing.Text;
 using System.IO;
 using System.Threading;
 using System.Windows.Input;
+using OneShot_ModLoader.Backend;
+using OneShot_ModLoader.DevTools;
 
 namespace OneShot_ModLoader
 {

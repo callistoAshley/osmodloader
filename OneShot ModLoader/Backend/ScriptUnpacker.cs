@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO.Compression;
 using Kaitai;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.Backend
 {
     public static class ScriptUnpacker
     {

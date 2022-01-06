@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.Backend
 {
     /// <summary>
     /// Stream for looping playback

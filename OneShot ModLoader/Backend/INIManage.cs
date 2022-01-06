@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using IniParser;
 using IniParser.Model;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.Backend
 {
     public class INIManage
     {

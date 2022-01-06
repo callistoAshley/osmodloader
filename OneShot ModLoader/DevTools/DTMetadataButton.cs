@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.DevTools
 {
     public class DTMetadataButton : Button
     {

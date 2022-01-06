@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.DevTools
 {
     public class DTUnpiracyButton : Button
     {

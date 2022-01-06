@@ -149,29 +149,29 @@
   <ItemGroup>
     <Compile Include="Audio.cs" />
     <Compile Include="Buttons.cs" />
-    <Compile Include="ChangesManage.cs" />
-    <Compile Include="DTCompressionButton.cs">
+    <Compile Include="Backend\ChangesManage.cs" />
+    <Compile Include="DevTools\DTCompressionButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DTMetadataButton.cs">
+    <Compile Include="DevTools\DTMetadataButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DTUnpiracyButton.cs">
+    <Compile Include="DevTools\DTUnpiracyButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Kaitai\RubyMarshal.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="RubyMarshalWrapper.cs" />
-    <Compile Include="ScriptUnpacker.cs" />
+    <Compile Include="Backend\RubyMarshalWrapper.cs" />
+    <Compile Include="Backend\ScriptUnpacker.cs" />
     <Compile Include="SettingsManage.cs" />
     <Compile Include="SoundTestForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Static.cs" />
-    <Compile Include="DevToolsForm.cs">
+    <Compile Include="DevTools\DevToolsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LoopStream.cs" />
+    <Compile Include="Backend\LoopStream.cs" />
     <Compile Include="MMDForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,7 +182,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="INIManage.cs" />
+    <Compile Include="Backend\INIManage.cs" />
     <Compile Include="LoadingBar.cs" />
     <Compile Include="ModBox.cs">
       <SubType>Component</SubType>
@@ -195,7 +195,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SetupManage.cs" />
+    <Compile Include="Backend\SetupManage.cs" />
     <Compile Include="TestFormLol.cs">
       <SubType>Form</SubType>
     </Compile>

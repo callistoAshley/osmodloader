@@ -7,7 +7,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.ComponentModel;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.Backend
 {
     public static class SetupManage
     {
