@@ -75,7 +75,6 @@ namespace OneShot_ModLoader
             if (ActiveMods.instance.Nodes.Count == 1)
             {
                 Logger.WriteLine("ActiveMods tree only has 1 mod, switching to DirectApply instead");
-                loadingBar.ReportProgress(sender, new ProgressChangedEventArgs(0, LoadingBar.ProgressType.Dispose));
 
                 MultithreadStuff(true, loadingBar, new DirectoryInfo(Static.modsPath + ActiveMods.instance.Nodes[0].Text));
                 return;
