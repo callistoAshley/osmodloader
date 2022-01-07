@@ -1,9 +1,10 @@
 .vs/
 
-OneShot ModLoader/bin/Debug/Mods/
-OneShot ModLoader/bin/Debug/temp DO NOT OPEN/
-OneShot ModLoader/bin/Debug/osmlargs.txt
-OneShot ModLoader/bin/Release/
-OneShot ModLoader/bin/Debug/
 OneShot ModLoader/obj
 OneShot ModLoader/Properties
+
+# everything in bin except audio/sprites/fonts
+OneShot ModLoader/bin/
+!OneShot ModLoader/bin/Audio
+!OneShot ModLoader/bin/Sprites
+!OneShot ModLoader/bin/Fonts
