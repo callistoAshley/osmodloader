@@ -12,8 +12,12 @@ using System.Media;
 using System.IO.Compression;
 using OneShot_ModLoader.Backend;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.OCI
 {
+    //////////////////////////////////////////////////////////////
+    // Main One-Click Install Form
+    //////////////////////////////////////////////////////////////
+    
     public class OCIForm : Form
     {
         public FileInfo modPath;
@@ -55,13 +59,15 @@ namespace OneShot_ModLoader
                 Audio.PlaySound("bgm_oci", false);
 
                 // text
-                Label text = new Label();
-                text.Text = "OneShot ModLoader\nOne-Click Install\n" + modPath.Name;
-                text.Location = new Point(10, 10);
-                text.Font = Static.GetTerminusFont(16);
-                text.AutoSize = true;
-                text.ForeColor = Color.White;
-                text.BackColor = Color.Transparent;
+                Label text = new Label
+                {
+                    Text = "OneShot ModLoader\nOne-Click Install\n" + modPath.Name,
+                    Location = new Point(10, 10),
+                    Font = Static.GetTerminusFont(16),
+                    AutoSize = true,
+                    ForeColor = Color.White,
+                    BackColor = Color.Transparent,
+                };
 
                 Controls.Add(new OCIDoneButton());
                 Controls.Add(new OCIDirectApply());
@@ -80,84 +86,24 @@ namespace OneShot_ModLoader
             Logger.ToFile();
         }
 
-        private void SetTheme ()
+        private void SetTheme()
         {
-            int bonk = new Random().Next(1, 4);
-            string themeString = "blue";
-
-            switch (bonk)
-            {
-                case 1:
-                    themeString = "blue";
-                    break;
-                case 2:
-                    themeString = "green";
-                    break;
-                case 3:
-                    themeString = "red";
-                    break;
-                    /*
-                default:
-                    themeString = "twm";
-                    break;
-                    */
-            }
-
-            // i have no idea if this is any better than just using a string but i'm doing it anyway
-            OCILoadingBuddy.Theme theme = (OCILoadingBuddy.Theme)Enum.Parse(typeof(OCILoadingBuddy.Theme), themeString, true);
-
+            // here we pick a random theme, create a lil guy in the corner (fren :] ) and set the background image
+            // to the corresponding theme
+            OCILoadingBuddy.Theme theme = (OCILoadingBuddy.Theme)new Random().Next(1, 4);
             new OCILoadingBuddy(theme);
 
-            BackgroundImage = Image.FromFile($"{Static.spritesPath}oci_bg_{themeString}.png");
+            BackgroundImage = Image.FromFile($"{Static.spritesPath}oci_bg_{theme}.png");
             BackgroundImageLayout = ImageLayout.Stretch;
         }
     }
 
-    public class OCIDoneButton : Button
-    {
-        public OCIDoneButton()
-        {
-            Location = new Point(200, 300);
-
-            Font = Static.GetTerminusFont(8);
-            Text = "Ready";
-        }
-
-        protected override async void OnClick(EventArgs e)
-        {
-            OCIForm.instance.Controls.Clear();
-
-            Audio.Stop();
-            LoadingBar loadingBar = new LoadingBar(OCIForm.instance);
-            loadingBar.SetLoadingStatus(string.Format("Extracting {0}, please wait...", OCIForm.instance.modPath.Name));
-            Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
-
-            string zipDestination = Static.modsPath + OCIForm.instance.modPath.Name;
-            try
-            {
-                if (!Directory.Exists(zipDestination))
-                {
-                    await Task.Run(() =>
-                    {
-                        ZipFile.ExtractToDirectory(OCIForm.instance.modPath.FullName, zipDestination);
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                string message = "An exception was encountered:\n---------------\n"
-                    + ex.Message + "\n---------------\n" + ex.ToString();
-
-                MessageBox.Show(message);
-            }
-
-            if (OCIDirectApply.instance.Checked)
-            {
-                ChangesManage.MultithreadStuff(true, loadingBar, new DirectoryInfo(Static.modsPath + OCIForm.instance.modPath.Name), OCIDeleteExisting.instance.Checked);
-            }
-        }
-    }
-
+    //////////////////////////////////////////////////////////////
+    // Checkboxes (Config UI)
+    //////////////////////////////////////////////////////////////
+    // these checkboxes are basically just config stuff
+    // the first one, "OCIDirectApply," tells OCI to install the mod after extracting the zip
+    // and the second one tells OCI whether to uninstall any existing mods
     public class OCIDirectApply : CheckBox
     {
         public static OCIDirectApply instance;
@@ -219,6 +165,61 @@ namespace OneShot_ModLoader
         protected override void OnCheckedChanged(EventArgs e)
         {
             Audio.PlaySound(Checked ? "sfx_decision" : "sfx_back", false);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////
+    // Checkboxes (Config UI)
+    //////////////////////////////////////////////////////////////
+    // this button is displayed below the checkboxes
+    // and starts the actual one-click install process when it's clicked
+    public class OCIDoneButton : Button
+    {
+        public OCIDoneButton()
+        {
+            Location = new Point(200, 300);
+
+            Font = Static.GetTerminusFont(8);
+            Text = "Ready";
+        }
+
+        protected override async void OnClick(EventArgs e)
+        {
+            // start by clearing all of the controls in the ociform and stopping the audio
+            OCIForm.instance.Controls.Clear();
+            Audio.Stop();
+
+            // then initialize the loading bar, show the extracting message and play the loading bgm
+            LoadingBar loadingBar = new LoadingBar(OCIForm.instance);
+            loadingBar.SetLoadingStatus(string.Format("Extracting {0}, please wait...", OCIForm.instance.modPath.Name));
+            Audio.PlaySound(loadingBar.GetLoadingBGM(), false);
+
+            // extract the zip archive
+            try
+            {
+                string zipDestination = Static.modsPath + OCIForm.instance.modPath.Name;
+
+                if (!Directory.Exists(zipDestination))
+                {
+                    await Task.Run(() =>
+                    {
+                        ZipFile.ExtractToDirectory(OCIForm.instance.modPath.FullName, zipDestination);
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = "An exception was encountered:\n---------------\n"
+                    + ex.Message + "\n---------------\n" + ex.ToString();
+
+                MessageBox.Show(message);
+            }
+
+            // then if we've been told by the checkboxes to directly apply the zip archive to oneshot, install the mod
+            if (OCIDirectApply.instance.Checked)
+            {
+                ChangesManage.MultithreadStuff(true, loadingBar, new DirectoryInfo(Static.modsPath + OCIForm.instance.modPath.Name), OCIDeleteExisting.instance.Checked);
+            }
         }
     }
 }

@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.OCI
 {
+    // and OCILoadingBuddy is just a gif that shows in the corner of the main oci form
+    // they're just a lil friend
     public class OCILoadingBuddy : PictureBox
     {
         private Theme theme;
@@ -60,9 +62,9 @@ namespace OneShot_ModLoader
         
         public enum Theme
         {
-            Blue,
-            Green,
-            Red
+            Blue = 1,
+            Green = 2,
+            Red = 3,
         }
     }
 }

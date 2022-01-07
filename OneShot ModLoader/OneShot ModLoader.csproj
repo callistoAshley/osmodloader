@@ -189,10 +189,10 @@
     <Compile Include="ModBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="OCIForm.cs">
+    <Compile Include="OCI\OCIForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OCILoadingBuddy.cs">
+    <Compile Include="OCI\OCILoadingBuddy.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />

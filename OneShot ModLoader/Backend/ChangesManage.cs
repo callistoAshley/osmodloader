@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using System.ComponentModel;
+using OneShot_ModLoader.OCI;
 
 namespace OneShot_ModLoader.Backend
 {

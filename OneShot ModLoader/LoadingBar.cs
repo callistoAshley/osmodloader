@@ -9,6 +9,7 @@ using System.Drawing.Text;
 using System.Threading;
 using System.IO;
 using System.ComponentModel;
+using OneShot_ModLoader.OCI;
 
 namespace OneShot_ModLoader
 {
