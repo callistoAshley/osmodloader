@@ -31,7 +31,7 @@ namespace OneShot_ModLoader.Backend
             try
             {
                 // start by creating the loading bar
-                LoadingBar loadingBar = new LoadingBar(Form1.instance);
+                LoadingBar loadingBar = new LoadingBar(MainForm.instance);
 
                 // then the background worker
                 BackgroundWorker pleaseSpareMyLife = new BackgroundWorker();
@@ -46,10 +46,10 @@ namespace OneShot_ModLoader.Backend
             {
                 ExceptionMessage.New(ex, true, "OneShot ModLoader will now close.");
 
-                if (Form1.instance.InvokeRequired)
-                    Form1.instance.Invoke(new Action(() => Form1.instance.Close()));
+                if (MainForm.instance.InvokeRequired)
+                    MainForm.instance.Invoke(new Action(() => MainForm.instance.Close()));
                 else
-                    Form1.instance.Close();
+                    MainForm.instance.Close();
             }
         }
 

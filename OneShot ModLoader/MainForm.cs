@@ -9,11 +9,11 @@ using OneShot_ModLoader.Backend;
 
 namespace OneShot_ModLoader
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public static Form1 instance;
+        public static MainForm instance;
 
-        public Form1() 
+        public MainForm() 
         {
             InitializeComponent();
             Init();
@@ -35,7 +35,7 @@ namespace OneShot_ModLoader
         {
             Logger.WriteLine("drawing start menu");
 
-            // logo
+            // create the logo
             Image image = Image.FromFile(Static.spritesPath + "logo2.png");
             PictureBox logo = new PictureBox
             {
@@ -46,25 +46,10 @@ namespace OneShot_ModLoader
             };
             Controls.Add(logo);
 
-            // buttons
+            // buttons; these are all stored in Buttons.cs
             Controls.Add(new ModsButton());
-            //new BrowseMods();
             Controls.Add(new SetupButton());
-            //Controls.Add(new SettingsButton());
             Controls.Add(new DevToolsButton());
-            Controls.Add(new Label
-            {
-                Text = Static.ver,
-                ForeColor = Color.White,
-                Size = new Size(50, 50),
-                Font = new Font(FontFamily.GenericSansSerif, 8),
-            });
-
-            //Controls.Add(new MoveScreen(new Point(390, 225), MoveScreen.Direction.Right));
-            //Controls.Add(new MoveScreen(new Point(430, 225), MoveScreen.Direction.Left));
-
-            // secret
-            Controls.Add(new CloverSecret());
         }
 
         public void InitModsMenu()
@@ -128,7 +113,7 @@ namespace OneShot_ModLoader
                 Location = new Point(120, 35),
                 Size = new Size(100, 15)
             };
-            Form1.instance.Controls.Add(title);
+            MainForm.instance.Controls.Add(title);
 
             // then the treeview
             Enabled = true;
@@ -149,15 +134,15 @@ namespace OneShot_ModLoader
             if (!Program.doneSetup)
             {
                 MessageBox.Show("A base oneshot could not be found. Please open the setup page and follow the instructions.");
-                Form1.instance.Controls.Clear();
-                Form1.instance.InitStartMenu();
+                MainForm.instance.Controls.Clear();
+                MainForm.instance.InitStartMenu();
                 return;
             }
 
             Static.baseOneShotPath = File.ReadAllText(Static.appDataPath + "path.molly");
             Logger.WriteLine("oneshot path is " + Static.baseOneShotPath);
 
-            LoadingBar loadingBar = new LoadingBar(Form1.instance, showProgressBar: false);
+            LoadingBar loadingBar = new LoadingBar(MainForm.instance, showProgressBar: false);
 
             // now we extract any existing zip files
             foreach (FileInfo zip in new DirectoryInfo(Static.modsPath).GetFiles()) 
@@ -225,7 +210,7 @@ namespace OneShot_ModLoader
             title.Font = new Font(title.Font, FontStyle.Bold);
             title.Location = new Point(330, 35);
             title.Size = new Size(100, 15);
-            Form1.instance.Controls.Add(title);
+            MainForm.instance.Controls.Add(title);
 
             // then the treeview
             Enabled = true;

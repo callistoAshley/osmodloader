@@ -9,7 +9,7 @@ using System.IO;
 using IniParser.Model;
 using OneShot_ModLoader.Backend;
 
-namespace OneShot_ModLoader
+namespace OneShot_ModLoader.DevTools
 {
     public class MMDForm : Form 
     {
@@ -117,14 +117,16 @@ namespace OneShot_ModLoader
             SizeMode = PictureBoxSizeMode.StretchImage;
             BackColor = Color.Transparent;
 
-            Label l = new Label();
-            l.Text = "Click to change icon";
-            l.Location = new Point(200, 95);
-            l.AutoSize = true;
-            l.ForeColor = Color.White;
-            l.BackColor = Color.Transparent;
-            l.Font = Static.GetTerminusFont(10);
-            MMDForm.instance.Controls.Add(l);
+            // add the text
+            MMDForm.instance.Controls.Add(new Label
+            {
+                Text = "Click to change icon",
+                Location = new Point(200, 95),
+                AutoSize = true,
+                ForeColor = Color.White,
+                BackColor = Color.Transparent,
+                Font = Static.GetTerminusFont(10),
+            });
         }
 
 
@@ -163,7 +165,7 @@ namespace OneShot_ModLoader
             Text = "Generate";
         }
 
-        protected override async void OnClick(EventArgs e)
+        protected override void OnClick(EventArgs e)
         {
             try
             {
@@ -204,12 +206,15 @@ namespace OneShot_ModLoader
 
                 loadingBar.SetLoadingStatus("saving icon");
 
+                // save the icon to the icon path
                 MMDForm.icon.Image.Save(MMDForm.modPath + "\\.osml\\icon.png");
 
                 loadingBar.SetLoadingStatus("almost done!");
 
                 Console.Beep();
                 MessageBox.Show("All done!");
+
+                // close MMDForm and tidy up
                 loadingBar.Dispose();
                 MMDForm.instance.Close();
                 Audio.Stop();

@@ -14,118 +14,84 @@ using OneShot_ModLoader.DevTools;
 
 namespace OneShot_ModLoader
 {
-    public class ButtonsStaticStuff
+    // class for the fancy buttons in the menu that glow when you hover over them
+    public class GlowButton : PictureBox
     {
-        public static void Glow (PictureBox picture, string name)
+        protected string spriteName;
+
+        protected GlowButton(string spriteName)
         {
-            picture.Image.Dispose();
-            picture.Image = Image.FromFile(Static.spritesPath + name + "_glow.png");
+            this.spriteName = spriteName;
         }
-        public static void GlowOut (PictureBox picture, string name)
+
+        protected void Glow(PictureBox picture)
+        {
+            // dispose the original image
+            picture.Image.Dispose();
+            // wow! glow!
+            picture.Image = Image.FromFile($"{Static.spritesPath}{spriteName}_glow.png");
+        }
+
+        protected void GlowOut(PictureBox picture)
         {
             picture.Image.Dispose();
-            picture.Image = Image.FromFile(Static.spritesPath + name + ".png");
+            picture.Image = Image.FromFile($"{Static.spritesPath}{spriteName}.png");
+        }
+
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            Glow(this);
+            Audio.PlaySound("sfx_select", false);
+        }
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            GlowOut(this);
         }
     }
-    public class ModsButton : PictureBox
+
+    public class ModsButton : GlowButton
     {
-        public ModsButton()
+        public ModsButton() : base("button_mods")
         {
-            Image button = Image.FromFile(Static.spritesPath + "button_mods.png");
+            Image button = Image.FromFile($"{Static.spritesPath}{spriteName}.png");
             Image = button;
             Size = button.Size;
             Location = new Point(30, 130);
         }
 
-        protected override void OnMouseEnter(EventArgs e) 
-        {
-            ButtonsStaticStuff.Glow(this, "button_mods");
-            Audio.PlaySound("sfx_select", false); 
-        }
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            ButtonsStaticStuff.GlowOut(this, "button_mods");
-        }
-
         protected override void OnClick(EventArgs e)
         {
             Audio.PlaySound("sfx_decision", false);
-            Form1.instance.Controls.Clear();
-            Form1.instance.InitModsMenu();
+            MainForm.instance.Controls.Clear();
+            MainForm.instance.InitModsMenu();
         }
     }
-    public class BrowseMods : PictureBox
+
+    public class SetupButton : GlowButton
     {
-        public BrowseMods()
+        public SetupButton() : base("button_setup")
         {
-            Image button = Image.FromFile(Static.spritesPath + "button_browse.png");
+            Image button = Image.FromFile($"{Static.spritesPath}{spriteName}.png");
             Image = button;
             Size = button.Size;
             Location = new Point(200, 130);
-            Form1.instance.Controls.Add(this);
-        }
-
-        protected override void OnMouseEnter(EventArgs e)
-        {
-            ButtonsStaticStuff.Glow(this, "button_browse");
-            Audio.PlaySound("sfx_select", false);
-        }
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            ButtonsStaticStuff.GlowOut(this, "button_browse");
         }
 
         protected override void OnClick(EventArgs e)
         {
             Audio.PlaySound("sfx_decision", false);
-            
-            MessageBox.Show("browse mods button also this isn't done yet");
+            MainForm.instance.Controls.Clear();
+            MainForm.instance.InitSetupMenu();
         }
     }
-    public class SetupButton : PictureBox
-    {
-        public SetupButton()
-        {
-            Image button = Image.FromFile(Static.spritesPath + "button_setup.png");
-            Image = button;
-            Size = button.Size;
-            Location = new Point(200, 130);//new Point(370, 130); use this when browse mods is added
-        }
 
-        protected override void OnMouseEnter(EventArgs e)
-        {
-            ButtonsStaticStuff.Glow(this, "button_setup");
-            Audio.PlaySound("sfx_select", false);
-        }
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            ButtonsStaticStuff.GlowOut(this, "button_setup");
-        }
-
-        protected override void OnClick(EventArgs e)
-        {
-            Audio.PlaySound("sfx_decision", false);
-            Form1.instance.Controls.Clear();
-            Form1.instance.InitSetupMenu();
-        }
-    }
-    public class DevToolsButton : PictureBox
+    public class DevToolsButton : GlowButton
     {
-        public DevToolsButton()
+        public DevToolsButton() : base("button_tools")
         {
-            Image = Image.FromFile(Static.spritesPath + "button_tools.png");
+            Image = Image.FromFile($"{Static.spritesPath}{spriteName}.png");
             Size = Image.Size;
             Location = new Point(390, 10);
-        }
-
-        protected override void OnMouseEnter(EventArgs e)
-        {
-            ButtonsStaticStuff.Glow(this, "button_tools");
-            Audio.PlaySound("sfx_select", false);
-        }
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            ButtonsStaticStuff.GlowOut(this, "button_tools");
         }
 
         protected override void OnClick(EventArgs e)
@@ -151,6 +117,7 @@ namespace OneShot_ModLoader
             Size = new Size(600, 200);
         }
     }
+
     public class SetupDone : Button
     {
         public SetupDone()
@@ -171,18 +138,19 @@ namespace OneShot_ModLoader
         protected override void OnClick(EventArgs e)
         {
             string path = SetupPrompt.instance.Text;
-            Form1.instance.Controls.Clear();
+            MainForm.instance.Controls.Clear();
 
             // initialize loading box
             PictureBox pb = new PictureBox();
             pb.Image = Image.FromFile(Static.spritesPath + "loading.png");
             pb.Size = pb.Image.Size;
             pb.Location = new Point(20, 20);
-            Form1.instance.Controls.Add(pb);
+            MainForm.instance.Controls.Add(pb);
 
             SetupManage.ActuallyDoStuff(path);
         }
     }
+
     public class BackButton : Button
     {
         private bool stopAudio;
@@ -222,8 +190,8 @@ namespace OneShot_ModLoader
         protected override void OnClick(EventArgs e)
         {
             Audio.PlaySound("sfx_back", false);
-            Form1.instance.Controls.Clear();
-            Form1.instance.InitStartMenu();
+            MainForm.instance.Controls.Clear();
+            MainForm.instance.InitStartMenu();
 
             if (stopAudio) Audio.Stop();
         }
@@ -331,112 +299,25 @@ namespace OneShot_ModLoader
 
         protected override async void OnClick(EventArgs e)
         {
-            Form1.instance.Controls.Clear();
+            MainForm.instance.Controls.Clear();
 
             // initialize loading box
             PictureBox pb = new PictureBox();
             pb.Image = Image.FromFile(Static.spritesPath + "loading.png");
             pb.Size = pb.Image.Size;
             pb.Location = new Point(20, 20);
-            Form1.instance.Controls.Add(pb);
+            MainForm.instance.Controls.Add(pb);
 
             await Task.Delay(1);
 
             try // why is this in a try catch i can't remember
             {
-                ChangesManage.MultithreadStuff(false, new LoadingBar(Form1.instance));
+                ChangesManage.MultithreadStuff(false, new LoadingBar(MainForm.instance));
             }
             catch { }
 
             //Form1.instance.Controls.Clear();
             //Form1.instance.InitStartMenu();
-        }
-    }
-    public class RefreshMods : Button
-    {
-        public static RefreshMods instance;
-        public RefreshMods()
-        {
-            instance = this;
-
-            Enabled = true;
-            Location = new Point(5, 100);
-            Size = new Size(60, 50);
-            Text = "Refresh Mods";
-        }
-
-        protected override void OnClick(EventArgs e)
-        {
-            InactiveMods.instance.RefreshMods();
-        }
-    }
-    public class CloverSecret : PictureBox
-    {
-        public CloverSecret()
-        {
-            Image = Image.FromFile(Static.spritesPath + "clover.png");
-            Size = Image.Size;
-            Location = new Point(500, 350);
-            Enabled = true;
-            BackColor = Color.Transparent;
-        }
-
-        protected override void OnClick(EventArgs e)
-        {
-            Form1.instance.Controls.Clear();
-
-            Label text = new Label();
-            text.Text = "Perhaps you should return here later.\nYou'll know when you need to.";
-            text.TextAlign = ContentAlignment.MiddleCenter;
-            text.Location = new Point(120, 140);
-            text.BackColor = Color.Transparent;
-            text.ForeColor = Color.MediumPurple;
-            text.AutoSize = true;
-            text.Font = Static.GetTerminusFont(12);
-
-            Form1.instance.Controls.Add(text);
-            Form1.instance.Controls.Add(new BackButton(true));
-
-            Audio.PlaySound("bgm_countdown", false);
-        }
-    }
-    public class MoveScreen : PictureBox
-    {
-        public Direction direction;
-        public MoveScreen(Point pos, Direction direction)
-        {
-            Location = pos;
-            this.direction = direction;
-
-            if (direction == Direction.Right)
-                Image = Image.FromFile(Static.spritesPath + "oci_friend_blue.gif");
-            else
-                Image = Image.FromFile(Static.spritesPath + "oci_friend_green.gif");
-        }
-        protected override async void OnClick(EventArgs e)
-        {
-            for (int i = 0; i < Form1.instance.Width; i++)
-            {
-                foreach (Control c in Form1.instance.Controls)
-                {
-                    Point newLocation = new Point(
-                        direction == Direction.Right ? c.Location.X - 10 // if the direction is right, subtract 10 from the location
-                            : c.Location.X + 10, // otherwise, add 10
-                            0
-                        );
-
-                    // set the new location of the control
-                    c.Location = newLocation;
-                }
-
-                await Task.Delay(1);
-            }
-        }
-
-        public enum Direction // which direction should the picture box move the screen to?
-        {
-            Left,
-            Right
         }
     }
 }

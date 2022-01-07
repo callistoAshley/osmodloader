@@ -48,10 +48,10 @@ namespace OneShot_ModLoader.Backend
             {
                 ExceptionMessage.New(ex, true, "OneShot ModLoader will now close.");
 
-                if (Form1.instance.InvokeRequired)
-                    Form1.instance.Invoke(new Action(() => Form1.instance.Close()));
+                if (MainForm.instance.InvokeRequired)
+                    MainForm.instance.Invoke(new Action(() => MainForm.instance.Close()));
                 else
-                    Form1.instance.Close();
+                    MainForm.instance.Close();
             }
         }
 
@@ -229,8 +229,8 @@ namespace OneShot_ModLoader.Backend
 
                 Audio.Stop();
 
-                Form1.instance.Invoke(new Action(() => { Form1.instance.ClearControls(true); }));
-                Form1.instance.Invoke(new Action(() => { Form1.instance.InitStartMenu(); }));
+                MainForm.instance.Invoke(new Action(() => { MainForm.instance.ClearControls(true); }));
+                MainForm.instance.Invoke(new Action(() => { MainForm.instance.InitStartMenu(); }));
             }
             catch (Exception ex)
             {

@@ -109,33 +109,33 @@ namespace OneShot_ModLoader
                             OCIForm.instance.Close();
                         break;
                     case ProgressType.ReturnToMenu:
-                        if (Form1.instance.InvokeRequired)
+                        if (MainForm.instance.InvokeRequired)
                         {
-                            Form1.instance.Invoke(new Action(() =>
+                            MainForm.instance.Invoke(new Action(() =>
                             {
-                                Form1.instance.Controls.Clear();
-                                Form1.instance.InitStartMenu();
+                                MainForm.instance.Controls.Clear();
+                                MainForm.instance.InitStartMenu();
                             }));
                         }
                         else
                         {
-                            Form1.instance.Controls.Clear();
-                            Form1.instance.InitStartMenu();
+                            MainForm.instance.Controls.Clear();
+                            MainForm.instance.InitStartMenu();
                         }
                         break;
                     case ProgressType.ReturnToSetupMenu:
-                        if (Form1.instance.InvokeRequired)
+                        if (MainForm.instance.InvokeRequired)
                         {
-                            Form1.instance.Invoke(new Action(() =>
+                            MainForm.instance.Invoke(new Action(() =>
                             {
-                                Form1.instance.Controls.Clear();
-                                Form1.instance.InitSetupMenu();
+                                MainForm.instance.Controls.Clear();
+                                MainForm.instance.InitSetupMenu();
                             }));
                         }
                         else
                         {
-                            Form1.instance.Controls.Clear();
-                            Form1.instance.InitSetupMenu();
+                            MainForm.instance.Controls.Clear();
+                            MainForm.instance.InitSetupMenu();
                         }
                         break;
                 }

@@ -89,22 +89,13 @@ namespace OneShot_ModLoader
 
         }
 
-        public class PlayButton : PictureBox
+        public class PlayButton : GlowButton
         {
-            public PlayButton()
+            public PlayButton() : base("st_play")
             {
                 Location = new Point(195, 440);
                 AutoSize = true;
-                Image = Image.FromFile(Static.spritesPath + "\\st_play.png");
-            }
-
-            protected override void OnMouseEnter(EventArgs e)
-            {
-                ButtonsStaticStuff.Glow(this, "st_play");
-            }
-            protected override void OnMouseLeave(EventArgs e)
-            {
-                ButtonsStaticStuff.GlowOut(this, "st_play");
+                Image = Image.FromFile($"{Static.spritesPath}{spriteName}.png");
             }
 
             // play

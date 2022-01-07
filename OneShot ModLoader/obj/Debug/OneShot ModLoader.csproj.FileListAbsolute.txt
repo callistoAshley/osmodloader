@@ -7,7 +7,6 @@ C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneSho
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.exe
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.pdb
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot ModLoader.csprojAssemblyReference.cache
-C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot_ModLoader.Form1.resources
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Microsoft.Win32.Registry.dll
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.Asio.dll
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\NAudio.Core.dll
@@ -48,3 +47,4 @@ C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\System.ValueTuple.xml
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Kaitai.Struct.Runtime.dll
 C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\bin\Debug\Kaitai.Struct.Runtime.xml
+C:\Users\maste\source\repos\OneShot ModLoader\OneShot ModLoader\obj\Debug\OneShot_ModLoader.MainForm.resources
