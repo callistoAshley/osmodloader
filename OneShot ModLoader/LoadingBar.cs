@@ -76,6 +76,14 @@ namespace OneShot_ModLoader
             }
         }
 
+        // the way changes handles cross-threading stuff is by calling this method
+        // which is basically some monolithic nuclear method for telling osml what to do on the main thread
+        // it uses the user state passed through the "e" parameter, which is ProgressChangedEventArgs
+        // and checks whether it's a string or a ProgressType enum
+        // if it's a ProgressType enum, it does stuff
+        // if it's a string, it sets the label text to the string
+        // if it's any other type, it does nothing
+        // i forgot why it's structured like an event handler but i guess that's not my problem right now :p
         public void ReportProgress(object sender, ProgressChangedEventArgs e)
         {
             if (e.UserState is ProgressType)
@@ -174,7 +182,6 @@ namespace OneShot_ModLoader
 
         public void SetLoadingStatus(string status)
         {
-            //return;
             // create the delegate for what we're actually doing
             Action thingimabob = new Action(() =>
             {
